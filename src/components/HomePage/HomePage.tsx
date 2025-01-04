@@ -1,104 +1,175 @@
-import React, { useState } from "react";
-import "./HomePage.css";
-import ListItem from "../ListItem/ListItem";
-import PlusSolid from "../../Assets/PlusSolid";
+import React, { useState, useEffect, useRef } from 'react';
+import './HomePage.css';
+import { FaTrash } from 'react-icons/fa';
 
+interface ListItem {
+  name: string;
+  count: number;
+}
 
 const HomePage = () => {
-  let [min, setMin] = useState("");
-  let [max, setMax] = useState("");
+  const [title, setTitle] = useState<string>('Your list');
+  const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
+  const [items, setItems] = useState<ListItem[]>(() => {
+    const savedItems = localStorage.getItem('items');
+    return savedItems ? JSON.parse(savedItems) : [];
+  });
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [modalInput, setModalInput] = useState<string>('');
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const modalInputRef = useRef<HTMLInputElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
-  const peoples = [
-    {
-      id: 0, // Used in JSX as a key
-      name: "Creola Katherine Johnson",
-      profession: "mathematician",
-      accomplishment: "spaceflight calculations",
-      imageId: "MK3eW3A",
-    },
-    {
-      id: 1, // Used in JSX as a key
-      name: "Mario José Molina-Pasquel Henríquez",
-      profession: "chemist",
-      accomplishment: "discovery of Arctic ozone hole",
-      imageId: "mynHUSa",
-    },
-    {
-      id: 2, // Used in JSX as a key
-      name: "Mohammad Abdus Salam",
-      profession: "physicist",
-      accomplishment: "electromagnetism theory",
-      imageId: "bE7W1ji",
-    },
-    {
-      id: 3, // Used in JSX as a key
-      name: "Percy Lavon Julian",
-      profession: "chemist",
-      accomplishment:
-        "pioneering cortisone drugs, steroids and birth control pills",
-      imageId: "IOjWm71",
-    },
-    {
-      id: 4, // Used in JSX as a key
-      name: "Subrahmanyan Chandrasekhar",
-      profession: "astrophysicist",
-      accomplishment: "white dwarf star mass calculations",
-      imageId: "lrWQx8l",
-    },
-  ];
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-  const outputField = document.getElementById("output") as HTMLDivElement;
+  const handleOk = () => {
+    if (modalInput.trim() !== '') {
+      const newItems = [...items, { name: modalInput, count: 0 }];
+      setItems(newItems);
+      localStorage.setItem('items', JSON.stringify(newItems));
+      setModalInput('');
+    }
+    setIsModalVisible(false);
+  };
 
-  function generateRandom() {
-    const maxNumber = Number(max);
-    const random = Math.floor(Math.random() * maxNumber);
-    outputField.innerText = `${random}`;
-  }
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
-  const onAddClick = () => {
-    
-  }
+  const increaseCount = (index: number) => {
+    const newItems = [...items];
+    newItems[index].count += 1;
+    setItems(newItems);
+    localStorage.setItem('items', JSON.stringify(newItems));
+  };
+
+  const decreaseCount = (index: number) => {
+    const newItems = [...items];
+    if (newItems[index].count > 0) {
+      newItems[index].count -= 1;
+      setItems(newItems);
+      localStorage.setItem('items', JSON.stringify(newItems));
+    }
+  };
+
+  const deleteItem = (index: number) => {
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    localStorage.setItem('items', JSON.stringify(newItems));
+  };
+
+  const handleTitleDoubleClick = () => {
+    setIsEditingTitle(true);
+  };
+
+  const handleTitleBlur = () => {
+    setIsEditingTitle(false);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && isModalVisible) {
+        handleOk();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalVisible, modalInput]);
+
+  useEffect(() => {
+    if (isModalVisible && modalInputRef.current) {
+      modalInputRef.current.focus();
+    }
+  }, [isModalVisible]);
+
+  useEffect(() => {
+    if (isEditingTitle && titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, [isEditingTitle]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectedIndex !== null && !event.composedPath().some(el => (el as HTMLElement).classList?.contains('list-item'))) {
+        setSelectedIndex(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [selectedIndex]);
 
   return (
-    <div className="parent">
-      <header>
-        <div className="header-title">
-          <h1>Randomizer</h1>
-        </div>
-        <div className="header-add" onClick={onAddClick}>
-          <PlusSolid width={30} height={30} />
-        </div>
-      </header>
-      <div className="input-block">
-        <input
-          id="field1"
-          type="number"
-          value={min}
-          onChange={(e) => setMin(e.target.value)}
-          placeholder="0"
-        />
-        <input
-          id="field2"
-          type="number"
-          value={max}
-          onChange={(e) => setMax(e.target.value)}
-          placeholder="50"
-        />
-      </div>
-      <button id="generateBtn" onClick={generateRandom}>
-        Generate
-      </button>
-      <div id="output" />
-      <div>
-        {peoples.map((val) => (
-          <ListItem
-            key={val.id}
-            index={val.id}
-            isChecked={false}
-            title={val.name}
+    <div className="homepage-container">
+      <div className="header">
+        {isEditingTitle ? (
+          <input 
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+            onBlur={handleTitleBlur}
+            className="header-title" 
+            ref={titleInputRef}
           />
-        ))}
+        ) : (
+          <h1 onDoubleClick={handleTitleDoubleClick} className="header-title">{title}</h1>
+        )}
+        <button onClick={showModal} className="header-add">+</button>
       </div>
+      <ul className="item-list">
+        {items.length === 0 ? (
+          <li className="list-item placeholder">
+            <span>No items in the list. Click the + button to add new items.</span>
+          </li>
+        ) : (
+          items.map((item, index) => (
+            <li 
+              key={index} 
+              className={`list-item ${selectedIndex === index ? 'selected' : ''}`} 
+              onClick={() => setSelectedIndex(index)}
+            >
+              <span>{index + 1}. {item.name}</span>
+              <div className="item-controls">
+                {selectedIndex === index && (
+                  <>
+                    <button onClick={() => decreaseCount(index)} className="control-button">-</button>
+                    <span className="item-count">{item.count}</span>
+                    <button onClick={() => increaseCount(index)} className="control-button">+</button>
+                    <FaTrash onClick={() => deleteItem(index)} className="control-button delete-icon" />
+                  </>
+                )}
+              </div>
+            </li>
+          ))
+        )}
+      </ul>
+      {isModalVisible && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Add New Item</h2>
+            <input 
+              value={modalInput} 
+              onChange={(e) => setModalInput(e.target.value)} 
+              placeholder="Enter item name" 
+              className="modal-input" 
+              ref={modalInputRef} 
+            />
+            <div className="modal-actions">
+              <button onClick={handleCancel} className="modal-button cancel">Cancel</button>
+              <button onClick={handleOk} className="modal-button ok">Ok</button>
+            </div>
+          </div>
+        </div>
+      )}
+      <footer className="footer">
+        <p>&copy; 2023 Your Company. All rights reserved.</p>
+      </footer>
     </div>
   );
 };

@@ -1,15 +1,189 @@
-header {
+body {
+    font-family: 'Arial', sans-serif; /* Set a professional font */
+    background-color: #f8f9fa; /* Light background color */
+    margin: 0;
+    padding: 0;
+}
+
+.header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px; /* Adjust padding */
+    background-color: #343a40; /* Dark background color */
+    color: white; /* White text color */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
-div.header-title {
-    text-align: center;
+input.header-title {
+    text-align: left; /* Left align the title */
     flex: 1;
+    font-size: 24px; /* Set to a standard heading size */
+    font-weight: bold;
+    border: none;
+    background: none;
+    color: white; /* White text color */
+    outline: none; /* Remove outline */
 }
 
-div.header-add {
-    text-align: right;
-    align-content: center;
-    /* background-color: blue; */
-    margin-right: 25px;
+button.header-add {
+    font-size: 24px;
+    background-color: #007bff; /* Add background color */
+    color: white; /* Change text color to white */
+    border: none; /* Remove border */
+    border-radius: 50%; /* Make it circular */
+    width: 40px; /* Set width */
+    height: 40px; /* Set height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s ease; /* Add transition */
+}
+
+button.header-add:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+
+.homepage-container {
+    margin: 20px auto; /* Center align and add margin */
+    padding: 20px;
+    background-color: white; /* White background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
+    border-radius: 10px; /* Add border radius */
+}
+
+.item-list {
+    margin-top: 20px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.3s ease; /* Add transition for smooth highlighting */
+}
+
+.list-item.selected {
+    background-color: #d1ecf1; /* Change highlight color */
+    border-left: 5px solid #007bff; /* Add left border for better visibility */
+}
+
+.list-item.placeholder {
+    justify-content: center; /* Center align placeholder text */
+    color: #999; /* Set placeholder text color */
+    font-style: italic; /* Italicize placeholder text */
+    padding: 20px; /* Add padding */
+    border: 2px dashed #ccc; /* Add dashed border */
+    background-color: #f9f9f9; /* Light background color */
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+}
+
+.control-button {
+    background-color: #007bff; /* Set background color */
+    color: white; /* Set text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add border radius */
+    padding: 5px 10px; /* Add padding */
+    margin: 0 5px; /* Add margin */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s ease; /* Add transition */
+}
+
+.control-button:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+
+.control-button.delete-icon {
+    background: none; /* Remove background */
+    color: #dc3545; /* Set color for trash icon */
+    cursor: pointer; /* Change cursor to pointer */
+    font-size: 20px; /* Set font size */
+    margin: 0 5px; /* Add margin */
+    transition: color 0.3s ease; /* Add transition */
+}
+
+.control-button.delete-icon:hover {
+    color: #a71d2a; /* Darken on hover */
+}
+
+.item-count {
+    margin-left: 10px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px; /* Increase padding */
+    border-radius: 10px; /* Increase border radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    max-width: 500px; /* Set max width */
+    width: 100%; /* Set width to 100% */
+}
+
+.modal-input {
+    width: 100%; /* Set input width to 100% */
+    padding: 10px; /* Add padding */
+    margin-top: 10px; /* Add margin */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border radius */
+}
+
+.modal-actions {
+    margin-top: 20px; /* Increase margin */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-button {
+    padding: 10px 20px; /* Add padding */
+    margin-left: 10px; /* Add margin */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add border radius */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s ease; /* Add transition */
+}
+
+.modal-button.cancel {
+    background-color: #ccc; /* Set background color for cancel button */
+    color: #333; /* Set text color for cancel button */
+}
+
+.modal-button.ok {
+    background-color: #007bff; /* Set background color for ok button */
+    color: white; /* Set text color for ok button */
+}
+
+.modal-button:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+
+.footer {
+    text-align: center;
+    padding: 20px 40px; /* Adjust padding */
+    background-color: #343a40; /* Dark background color */
+    color: white; /* White text color */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
