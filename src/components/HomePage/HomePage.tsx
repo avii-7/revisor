@@ -74,7 +74,7 @@ const HomePage = () => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalVisible, modalInput]);
+  });
 
   useEffect(() => {
     if (isModalVisible && modalInputRef.current) {
