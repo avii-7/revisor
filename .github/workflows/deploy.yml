@@ -23,7 +23,7 @@ jobs:
           cache-dependency-path: 'package-lock.json'
 
       - name: List files in Components directory
-        run: ls -R ./Components
+        run: ls -R ./src/Components
   
       - name: Clear npm cache
         run: npm cache clean --force
