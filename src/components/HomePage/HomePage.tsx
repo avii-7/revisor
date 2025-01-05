@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './HomePage.css';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaPlusCircle } from 'react-icons/fa';
 
 interface ListItem {
   name: string;
@@ -8,7 +8,6 @@ interface ListItem {
 }
 
 const HomePage = () => {
-  const [title, setTitle] = useState<string>('Your list');
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
   const [items, setItems] = useState<ListItem[]>(() => {
     const savedItems = localStorage.getItem('items');
@@ -64,10 +63,6 @@ const HomePage = () => {
     setIsEditingTitle(true);
   };
 
-  const handleTitleBlur = () => {
-    setIsEditingTitle(false);
-  };
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Enter' && isModalVisible) {
@@ -108,19 +103,10 @@ const HomePage = () => {
 
   return (
     <div className="homepage-container">
+      <div className='header-content'> 
       <div className="header">
-        {isEditingTitle ? (
-          <input 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            onBlur={handleTitleBlur}
-            className="header-title" 
-            ref={titleInputRef}
-          />
-        ) : (
-          <h1 onDoubleClick={handleTitleDoubleClick} className="header-title">{title}</h1>
-        )}
-        <button onClick={showModal} className="header-add">+</button>
+        <h1 contentEditable={isEditingTitle} onDoubleClick={handleTitleDoubleClick} className="header-title">Your List</h1>
+        <FaPlusCircle className="header-add" onClick={showModal}/>
       </div>
       <ul className="item-list">
         {items.length === 0 ? (
@@ -134,12 +120,13 @@ const HomePage = () => {
               className={`list-item ${selectedIndex === index ? 'selected' : ''}`} 
               onClick={() => setSelectedIndex(index)}
             >
-              <span>{index + 1}. {item.name}</span>
+              <span>{index + 1}. {item.name}</span> 
               <div className="item-controls">
-                {selectedIndex === index && (
-                  <>
-                    <button onClick={() => decreaseCount(index)} className="control-button">-</button>
-                    <span className="item-count">{item.count}</span>
+              {selectedIndex === index && (
+                  <button onClick={() => decreaseCount(index)} className="control-button">-</button>)}
+                  <span className="item-count">{item.count}</span>
+                  {selectedIndex === index && (
+                    <>    
                     <button onClick={() => increaseCount(index)} className="control-button">+</button>
                     <FaTrash onClick={() => deleteItem(index)} className="control-button delete-icon" />
                   </>
@@ -149,6 +136,7 @@ const HomePage = () => {
           ))
         )}
       </ul>
+      </div>
       {isModalVisible && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -168,7 +156,7 @@ const HomePage = () => {
         </div>
       )}
       <footer className="footer">
-        <p>&copy; 2023 Your Company. All rights reserved.</p>
+        <p>&copy; 2024 Randomizer. All rights reserved.</p>
       </footer>
     </div>
   );

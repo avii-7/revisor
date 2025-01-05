@@ -5,6 +5,12 @@ body {
     padding: 0;
 }
 
+div.header-content {
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
+    border-radius: 10px; /* Add border radius */
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -13,47 +19,24 @@ body {
     background-color: #343a40; /* Dark background color */
     color: white; /* White text color */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
+    border-radius: 10px; /* Add border radius */
 }
 
-input.header-title {
-    text-align: left; /* Left align the title */
-    flex: 1;
-    font-size: 24px; /* Set to a standard heading size */
-    font-weight: bold;
-    border: none;
-    background: none;
-    color: white; /* White text color */
-    outline: none; /* Remove outline */
-}
-
-button.header-add {
-    font-size: 24px;
-    background-color: #007bff; /* Add background color */
-    color: white; /* Change text color to white */
-    border: none; /* Remove border */
-    border-radius: 50%; /* Make it circular */
-    width: 40px; /* Set width */
-    height: 40px; /* Set height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.header-add {
+    font-size: x-large;
     cursor: pointer; /* Change cursor to pointer */
     transition: background-color 0.3s ease; /* Add transition */
 }
 
-button.header-add:hover {
-    background-color: #0056b3; /* Darken on hover */
+.header-add:hover {
+    color: lightgray; 
 }
 
 .homepage-container {
-    margin: 20px auto; /* Center align and add margin */
-    padding: 20px;
     background-color: white; /* White background */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
-    border-radius: 10px; /* Add border radius */
 }
 
-.item-list {
+ul.item-list {
     margin-top: 20px;
     list-style-type: none;
     padding: 0;
@@ -179,7 +162,7 @@ button.header-add:hover {
 
 .footer {
     text-align: center;
-    padding: 20px 40px; /* Adjust padding */
+    padding: 10px 40px; /* Adjust padding */
     background-color: #343a40; /* Dark background color */
     color: white; /* White text color */
     position: fixed;
