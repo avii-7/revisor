@@ -1,0 +1,58 @@
+name: React App Deployment # name of the workflo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+      branches: ["master"]
+  pull_request:
+        branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repository content to github runner
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # setup nodejs environment
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'package.json'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      # install dependencies
+      - name: Install dependencies
+        run: npm i
+
+      # build the react app
+      - name: Build
+        run: npm run build
+
+        # upload the build outputs as artifact
+      - name: Upload static files as artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "build/"
+
+ # Deployment job
+  deploy:
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

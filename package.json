@@ -1,7 +1,12 @@
 {
   "name": "randomizer",
   "version": "0.1.0",
+  "engines": { 
+    "node": ">=22.12.0",
+    "npm": ">=10.9.0"
+  },
   "private": true,
+  "homepage": "https://avii-7.github.io/randomizer/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
