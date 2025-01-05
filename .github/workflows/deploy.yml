@@ -28,7 +28,7 @@ jobs:
 
       # build the react app
       - name: Build
-        run: npm run build
+        run: npm run build --verbose
 
         # upload the build outputs as artifact
       - name: Upload static files as artifact
