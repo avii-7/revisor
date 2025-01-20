@@ -1,7 +1,7 @@
 {
   "name": "randomizer",
   "version": "0.1.0",
-  "engines": { 
+  "engines": {
     "node": ">=22.12.0",
     "npm": ">=10.9.0"
   },
@@ -20,6 +20,7 @@
     "react-icons": "^5.4.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
+    "uuid": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
