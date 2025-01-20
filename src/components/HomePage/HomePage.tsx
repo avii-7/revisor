@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './HomePage.css';
 import { FaTrash, FaPlusCircle } from 'react-icons/fa';
-
-interface ListItem {
-  name: string;
-  count: number;
-}
+import { RevisionItemsManager } from '../../Database/RevisionItemManager';
+import { RevisionItem } from '../../Database/RevisionItem';
 
 const HomePage = () => {
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
-  const [items, setItems] = useState<ListItem[]>(() => {
-    const savedItems = localStorage.getItem('items');
-    return savedItems ? JSON.parse(savedItems) : [];
-  });
+  const [items, setItems] = useState<RevisionItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [modalInput, setModalInput] = useState<string>('');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const modalInputRef = useRef<HTMLInputElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const revisionItemManager = new RevisionItemsManager();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -25,9 +20,10 @@ const HomePage = () => {
 
   const handleOk = () => {
     if (modalInput.trim() !== '') {
-      const newItems = [...items, { name: modalInput, count: 0 }];
+      const item = new RevisionItem(modalInput);
+      const newItems: RevisionItem[] = [...items, item];
       setItems(newItems);
-      localStorage.setItem('items', JSON.stringify(newItems));
+      revisionItemManager.insert(item)
       setModalInput('');
     }
     setIsModalVisible(false);
@@ -39,29 +35,52 @@ const HomePage = () => {
 
   const increaseCount = (index: number) => {
     const newItems = [...items];
-    newItems[index].count += 1;
+    const itemToUpdate = newItems[index];
+    itemToUpdate.count += 1;
     setItems(newItems);
-    localStorage.setItem('items', JSON.stringify(newItems));
+    revisionItemManager.update(itemToUpdate)
+    // localStorage.setItem('items', JSON.stringify(newItems));
   };
 
   const decreaseCount = (index: number) => {
     const newItems = [...items];
     if (newItems[index].count > 0) {
-      newItems[index].count -= 1;
+      const itemToUpdate = newItems[index];
+      itemToUpdate.count -= 1;
       setItems(newItems);
-      localStorage.setItem('items', JSON.stringify(newItems));
+      revisionItemManager.update(itemToUpdate)
+      // localStorage.setItem('items', JSON.stringify(newItems));
     }
   };
 
   const deleteItem = (index: number) => {
-    const newItems = items.filter((_, i) => i !== index);
-    setItems(newItems);
-    localStorage.setItem('items', JSON.stringify(newItems));
+    let id: string | undefined;
+
+    const filterItems = items.filter((item, i) => { 
+      if (i === index) {
+        id = item.id;
+        return false;
+      }
+      else {
+        return i !== index 
+      }
+    });
+    setItems(filterItems);
+    // localStorage.setItem('items', JSON.stringify(newItems));
+    if (id) {
+      revisionItemManager.delete(id);
+    }
   };
 
   const handleTitleDoubleClick = () => {
     setIsEditingTitle(true);
   };
+
+  useEffect(()=> {
+    revisionItemManager.getAll().then(revisionItems => {
+      setItems(revisionItems);
+    });
+  });
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
