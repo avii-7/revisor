@@ -1,25 +1,25 @@
 body {
-    font-family: 'Arial', sans-serif; /* Set a professional font */
-    background-color: #f8f9fa; /* Light background color */
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
 }
 
 div.header-content {
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
-    border-radius: 10px; /* Add border radius */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px; /* Adjust padding */
-    background-color: #343a40; /* Dark background color */
-    color: white; /* White text color */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
-    border-radius: 10px; /* Add border radius */
+    padding: 20px 40px;
+    background-color: #343a40;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 .header-controls {
@@ -28,28 +28,28 @@ div.header-content {
 }
 
 .header-button {
-    background-color: #007bff; /* Set background color */
-    color: white; /* Set text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Add border radius */
-    padding: 10px 20px; /* Add padding */
-    cursor: pointer; /* Change cursor to pointer */
-    transition: background-color 0.3s ease; /* Add transition */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     margin-right: 15px;
 }
 
 .header-add {
     font-size: x-large;
-    cursor: pointer; /* Change cursor to pointer */
-    transition: background-color 0.3s ease; /* Add transition */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .header-add:hover {
-    color: lightgray; 
+    color: lightgray;
 }
 
 .homepage-container {
-    background-color: white; /* White background */
+    background-color: white;
 }
 
 ul.item-list {
@@ -64,26 +64,26 @@ ul.item-list {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ccc;
-    transition: background-color 0.3s ease; /* Add transition for smooth highlighting */
+    transition: background-color 0.3s ease;
 }
 
 .list-item.selected {
-    background-color: #d1ecf1; /* Change highlight color */
-    border-left: 5px solid #007bff; /* Add left border for better visibility */
+    background-color: #d1ecf1;
+    border-left: 5px solid #007bff;
 }
 
 .list-item.highlighted {
-    background-color: #f8d7da; /* Change highlight color */
-    border-left: 5px solid #dc3545; /* Add left border for better visibility */
+    background-color: #f8d7da;
+    border-left: 5px solid #dc3545;
 }
 
 .list-item.placeholder {
-    justify-content: center; /* Center align placeholder text */
-    color: #999; /* Set placeholder text color */
-    font-style: italic; /* Italicize placeholder text */
-    padding: 20px; /* Add padding */
-    border: 2px dashed #ccc; /* Add dashed border */
-    background-color: #f9f9f9; /* Light background color */
+    justify-content: center;
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
 }
 
 .item-controls {
@@ -92,31 +92,31 @@ ul.item-list {
 }
 
 .control-button {
-    background-color: #007bff; /* Set background color */
-    color: white; /* Set text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Add border radius */
-    padding: 5px 10px; /* Add padding */
-    margin: 0 5px; /* Add margin */
-    cursor: pointer; /* Change cursor to pointer */
-    transition: background-color 0.3s ease; /* Add transition */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .control-button:hover {
-    background-color: #0056b3; /* Darken on hover */
+    background-color: #0056b3;
 }
 
 .control-button.delete-icon {
-    background: none; /* Remove background */
-    color: #dc3545; /* Set color for trash icon */
-    cursor: pointer; /* Change cursor to pointer */
-    font-size: 20px; /* Set font size */
-    margin: 0 5px; /* Add margin */
-    transition: color 0.3s ease; /* Add transition */
+    background: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0 5px;
+    transition: color 0.3s ease;
 }
 
 .control-button.delete-icon:hover {
-    color: #a71d2a; /* Darken on hover */
+    color: #a71d2a;
 }
 
 .item-count {
@@ -137,55 +137,55 @@ ul.item-list {
 
 .modal-content {
     background-color: white;
-    padding: 30px; /* Increase padding */
-    border-radius: 10px; /* Increase border radius */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
-    max-width: 500px; /* Set max width */
-    width: 100%; /* Set width to 100% */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
 }
 
 .modal-input {
-    width: 100%; /* Set input width to 100% */
-    padding: 10px; /* Add padding */
-    margin-top: 10px; /* Add margin */
-    border: 1px solid #ccc; /* Add border */
-    border-radius: 5px; /* Add border radius */
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .modal-actions {
-    margin-top: 20px; /* Increase margin */
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
 }
 
 .modal-button {
-    padding: 10px 20px; /* Add padding */
-    margin-left: 10px; /* Add margin */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Add border radius */
-    cursor: pointer; /* Change cursor to pointer */
-    transition: background-color 0.3s ease; /* Add transition */
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .modal-button.cancel {
-    background-color: #ccc; /* Set background color for cancel button */
-    color: #333; /* Set text color for cancel button */
+    background-color: #ccc;
+    color: #333;
 }
 
 .modal-button.ok {
-    background-color: #007bff; /* Set background color for ok button */
-    color: white; /* Set text color for ok button */
+    background-color: #007bff;
+    color: white;
 }
 
 .modal-button:hover {
-    background-color: #0056b3; /* Darken on hover */
+    background-color: #0056b3;
 }
 
 .footer {
     text-align: center;
-    padding: 10px 40px; /* Adjust padding */
-    background-color: #343a40; /* Dark background color */
-    color: white; /* White text color */
+    padding: 10px 40px;
+    background-color: #343a40;
+    color: white;
     position: fixed;
     bottom: 0;
     width: 100%;
