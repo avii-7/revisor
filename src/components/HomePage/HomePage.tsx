@@ -213,7 +213,7 @@ const HomePage = () => {
         </div>
       )}
       <footer className="footer">
-        <p>&copy; 2024 Randomizer. All rights reserved.</p>
+        <p>&copy; 2024 Revisor. All rights reserved.</p>
       </footer>
     </div>
   );
