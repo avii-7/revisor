@@ -69,6 +69,7 @@ const HomePage = () => {
     revisionItemManager.getAll().then((revisionItems) => {
       setItems(revisionItems);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
