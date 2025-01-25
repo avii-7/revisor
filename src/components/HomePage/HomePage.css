@@ -22,6 +22,22 @@ div.header-content {
     border-radius: 10px; /* Add border radius */
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+}
+
+.header-button {
+    background-color: #007bff; /* Set background color */
+    color: white; /* Set text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add border radius */
+    padding: 10px 20px; /* Add padding */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s ease; /* Add transition */
+    margin-right: 15px;
+}
+
 .header-add {
     font-size: x-large;
     cursor: pointer; /* Change cursor to pointer */
@@ -54,6 +70,11 @@ ul.item-list {
 .list-item.selected {
     background-color: #d1ecf1; /* Change highlight color */
     border-left: 5px solid #007bff; /* Add left border for better visibility */
+}
+
+.list-item.highlighted {
+    background-color: #f8d7da; /* Change highlight color */
+    border-left: 5px solid #dc3545; /* Add left border for better visibility */
 }
 
 .list-item.placeholder {
