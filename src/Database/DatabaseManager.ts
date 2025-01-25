@@ -15,7 +15,8 @@ export class DatabaseManager {
         let db = openRequest.result;
 
         if (!db.objectStoreNames.contains("RevisionItems")) {
-          db.createObjectStore("RevisionItems", { keyPath: "id" });
+          let store = db.createObjectStore("RevisionItems", { keyPath: "id" });
+          store.createIndex("revision_item", ["count", "dateAdded"], { unique: false });          
         }
       };
 
