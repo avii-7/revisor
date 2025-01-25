@@ -2,7 +2,7 @@
 
 **Revisor** is a simple app designed to keeping track of tasks to review and revise.
 
-🎉 Try it live: [Click Here](https://avii-7.github.io/randomizer/)
+🎉 Try it live: [Click Here](https://avii-7.github.io/revisor/)
 
 ✨ Features
 1. Add Items to your revision list.
