@@ -1,5 +1,5 @@
 export class DatabaseManager {
-  private dbName = "randomizerDB";
+  private dbName = "RevisorDB";
 
   private dbVersion = 1;
 
