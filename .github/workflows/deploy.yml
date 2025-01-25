@@ -1,4 +1,4 @@
-name: React App Deployment # name of the workflo
+name: Prod Deployment # name of the workflow
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
