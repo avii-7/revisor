@@ -1,39 +1,36 @@
-import { DatabaseManager } from "./DatabaseManager";
 import { RevisionItem } from "./RevisionItem";
+import { RevisionItemDB } from "./RevisionItemDB";
 
 export class RevisionItemsManager {
-  private db: DatabaseManager;
+
+  private genericDB = new RevisionItemDB();
 
   private objectStore = "RevisionItems";
-
-  constructor() {
-    this.db = new DatabaseManager();
+  
+  async insert(item: RevisionItem) {
+    return await this.genericDB.insert<RevisionItem>(this.objectStore, item);
   }
 
-  insert(item: RevisionItem) {
-    console.log("Inserting Item", item);
-    return this.db.insert<RevisionItem>(this.objectStore, item);
-  }
-
-  getAll() {
+  async getAll() {
     console.log("Getting All the Items");
-    return this.db.getAll<RevisionItem>(this.objectStore);
+    return await this.genericDB.getAll<RevisionItem>(this.objectStore);
   }
 
-  get(id: string) {
+  async get(id: string) {
     console.log("Getting item by Id: ", id);
-    return this.db.get(this.objectStore, id);
+    return await this.genericDB.get(this.objectStore, id);
   }
 
-  update(item: RevisionItem) {
-    console.log("Updating item: ", item);
-    const result = this.db.update(this.objectStore, item);
-    console.log(result);
+  async update(item: RevisionItem) {
+    const result = await this.genericDB.update(this.objectStore, item);
     return result;
   }
   
-  delete(id: string) {
-    console.log("Deleting item: ", id);
-    return this.db.delete(this.objectStore, id);
+  async delete(id: string) {
+    return await this.genericDB.delete(this.objectStore, id);
+  }
+
+  async getAnItemToRevise() {
+    return await this.genericDB.getAnItemToRevise();
   }
 }
