@@ -1,6 +1,8 @@
 import "./ListItem.css";
-import { RevisionItem } from "../../Database/RevisionItem";
+import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
 import { FaTrash, FaPlusCircle, FaMinusCircle } from "react-icons/fa";
+import TagsMenu from "../TagsMenu/TagsMenu";
+import Tag from "../TagsMenu/Tag";
 
 type ListItemProps = {
   index: number;
@@ -11,6 +13,7 @@ type ListItemProps = {
   onTapIncreaseCount: (index: number) => void;
   onTapDecreaseCount: (index: number) => void;
   onTapDelete: (index: number) => void;
+  onTagChange: (tag: Tag, index: number) => void;
 };
 
 const ListItem = (props: ListItemProps) => {
@@ -23,6 +26,7 @@ const ListItem = (props: ListItemProps) => {
     onTapIncreaseCount: onIncreaseCount,
     onTapDecreaseCount: onDecreaseCount,
     onTapDelete,
+    onTagChange
   } = props;
 
   return (
@@ -31,12 +35,12 @@ const ListItem = (props: ListItemProps) => {
         ${isSelected ? "selected" : ""} 
         ${isHighlighted ? "highlighted" : ""}
       `}
-      onClick={() => onClick(index)}
-    >
+      onClick={() => onClick(index)}>
       <span>
         {index + 1}. {item.name}
       </span>
       <div className="item-controls">
+      <TagsMenu selectedTag={item.tag} onTagChange={(tag: Tag) => onTagChange(tag, index)} />
         {isSelected && (
           <FaMinusCircle
             onClick={() => onDecreaseCount(index)}

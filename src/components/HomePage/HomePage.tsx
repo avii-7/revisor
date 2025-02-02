@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./HomePage.css";
 import { FaPlusCircle } from "react-icons/fa";
-import { RevisionItemsManager } from "../../Database/RevisionItemManager";
-import { RevisionItem } from "../../Database/RevisionItem";
+import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
+import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
 import ListItem from "../ListItem/ListItem";
+import Tag from "../TagsMenu/Tag";
 
 const HomePage = () => {
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
@@ -58,6 +59,14 @@ const HomePage = () => {
     revisionItemManager.delete(id);
     const filterItems = items.filter((item) => item.id !== id);
     setItems(filterItems);
+  };
+
+  const onTagChange = (tag: Tag, index: number) => {
+    const newItems = [...items];
+    const itemToUpdate = newItems[index];
+    itemToUpdate.tag = tag;
+    revisionItemManager.update(itemToUpdate);
+    setItems(newItems);
   };
 
   const handleTitleDoubleClick = () => {
@@ -127,14 +136,9 @@ const HomePage = () => {
           <h1
             contentEditable={isEditingTitle}
             onDoubleClick={handleTitleDoubleClick}
-            className="header-title"
-          >
-            Your List
-          </h1>
+            className="header-title"> Your List </h1>
           <div className="header-controls">
-            <button className="header-button" onClick={onReviseButtonClick}>
-              Revise
-            </button>
+            <button className="header-button" onClick={onReviseButtonClick}> Revise </button>
             <FaPlusCircle className="header-add" onClick={showModal} />
           </div>
         </div>
@@ -157,6 +161,7 @@ const HomePage = () => {
                 onTapIncreaseCount={increaseCount}
                 onTapDecreaseCount={decreaseCount}
                 onTapDelete={deleteItem}
+                onTagChange={onTagChange}
               />
             ))
           )}
