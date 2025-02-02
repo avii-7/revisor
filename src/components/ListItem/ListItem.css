@@ -27,7 +27,7 @@
     align-items: center;
 }
 .control-button {
-    color: black;
+    color:  #343a40;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
@@ -37,7 +37,7 @@
 }
 
 .control-button:hover {
-    scale: 1.1;
+    scale: 1.2;
 }
 
 .control-button.delete-icon {

@@ -115,13 +115,9 @@ const HomePage = () => {
   }, [selectedIndex]);
 
   const onReviseButtonClick = () => {
-    // 1. Get an item to revise.
     revisionItemManager.getAnItemToRevise().then((item) => {
       setHighlightedItemId(item.id);
     });
-
-    // 2. Show the item in a modal.
-    // 3. Bookmarked the item or similar so that user later increase the revision count of item.
   };
 
   return (
