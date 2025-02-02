@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./HomePage.css";
-import { FaTrash, FaPlusCircle } from "react-icons/fa";
-import { RevisionItemsManager } from "../../Database/RevisionItemManager";
-import { RevisionItem } from "../../Database/RevisionItem";
+import { FaPlusCircle } from "react-icons/fa";
+import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
+import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
+import ListItem from "../ListItem/ListItem";
+import Tag from "../TagsMenu/Tag";
 
 const HomePage = () => {
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
@@ -13,7 +15,7 @@ const HomePage = () => {
   const modalInputRef = useRef<HTMLInputElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const revisionItemManager = new RevisionItemsManager();
-  const [highlighted, setHighlightedItem] = useState<RevisionItem | null>(null);
+  const [highlightedItemId, setHighlightedItemId] = useState<string | null>(null);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -40,7 +42,6 @@ const HomePage = () => {
     itemToUpdate.count += 1;
     setItems(newItems);
     revisionItemManager.update(itemToUpdate);
-    // localStorage.setItem('items', JSON.stringify(newItems));
   };
 
   const decreaseCount = (index: number) => {
@@ -50,7 +51,6 @@ const HomePage = () => {
       itemToUpdate.count -= 1;
       setItems(newItems);
       revisionItemManager.update(itemToUpdate);
-      // localStorage.setItem('items', JSON.stringify(newItems));
     }
   };
 
@@ -59,6 +59,14 @@ const HomePage = () => {
     revisionItemManager.delete(id);
     const filterItems = items.filter((item) => item.id !== id);
     setItems(filterItems);
+  };
+
+  const onTagChange = (tag: Tag, index: number) => {
+    const newItems = [...items];
+    const itemToUpdate = newItems[index];
+    itemToUpdate.tag = tag;
+    revisionItemManager.update(itemToUpdate);
+    setItems(newItems);
   };
 
   const handleTitleDoubleClick = () => {
@@ -116,13 +124,9 @@ const HomePage = () => {
   }, [selectedIndex]);
 
   const onReviseButtonClick = () => {
-    // 1. Get an item to revise.
     revisionItemManager.getAnItemToRevise().then((item) => {
-      setHighlightedItem(item);
+      setHighlightedItemId(item.id);
     });
-
-    // 2. Show the item in a modal.
-    // 3. Bookmarked the item or similar so that user later increase the revision count of item.
   };
 
   return (
@@ -132,60 +136,33 @@ const HomePage = () => {
           <h1
             contentEditable={isEditingTitle}
             onDoubleClick={handleTitleDoubleClick}
-            className="header-title"
-          >
-            Your List
-          </h1>
+            className="header-title"> Your List </h1>
           <div className="header-controls">
-            <button className="header-button" onClick={onReviseButtonClick}>
-              Revise
-            </button>
+            <button className="header-button" onClick={onReviseButtonClick}> Revise </button>
             <FaPlusCircle className="header-add" onClick={showModal} />
           </div>
         </div>
         <ul className="item-list">
           {items.length === 0 ? (
-            <li className="list-item placeholder">
+            <li className="list-placeholder">
               <span>
                 No items in the list. Click the + button to add new items.
               </span>
             </li>
           ) : (
             items.map((item, index) => (
-              <li key={index}
-                className={`list-item 
-                ${selectedIndex === index ? "selected" : ""} 
-                ${highlighted && highlighted.id === item.id ? "highlighted" : ""}
-              `} onClick={() => setSelectedIndex(index)}>
-                <span>
-                  {index + 1}. {item.name}
-                </span>
-                <div className="item-controls">
-                  {selectedIndex === index && (
-                    <button
-                      onClick={() => decreaseCount(index)}
-                      className="control-button"
-                    >
-                      -
-                    </button>
-                  )}
-                  <span className="item-count">{item.count}</span>
-                  {selectedIndex === index && (
-                    <>
-                      <button
-                        onClick={() => increaseCount(index)}
-                        className="control-button"
-                      >
-                        +
-                      </button>
-                      <FaTrash
-                        onClick={() => deleteItem(index)}
-                        className="control-button delete-icon"
-                      />
-                    </>
-                  )}
-                </div>
-              </li>
+              <ListItem
+                key={item.id}
+                index={index}
+                item={item}
+                isSelected={selectedIndex === index}
+                isHighlighted={highlightedItemId === item.id}
+                onClick={(index) => setSelectedIndex(index)}
+                onTapIncreaseCount={increaseCount}
+                onTapDecreaseCount={decreaseCount}
+                onTapDelete={deleteItem}
+                onTagChange={onTagChange}
+              />
             ))
           )}
         </ul>

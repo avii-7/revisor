@@ -1,3 +1,54 @@
-ol.list {
+.item-list {
+    margin-top: 20px;
     list-style-type: none;
+    padding: 0;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+}
+
+.list-item.selected {
+    background-color: #d1ecf1;
+    border-left: 5px solid #007bff;
+}
+
+.list-item.highlighted {
+    background-color: #f8d7da;
+    border-left: 5px solid #dc3545;
+}
+.item-controls {
+    display: flex;
+    align-items: center;
+}
+.control-button {
+    color:  #343a40;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.control-button:hover {
+    scale: 1.2;
+}
+
+.control-button.delete-icon {
+    background: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+.control-button.delete-icon:hover {
+    color: #a71d2a;
 }

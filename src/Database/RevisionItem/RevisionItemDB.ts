@@ -1,4 +1,4 @@
-import { DatabaseManager } from "./DatabaseManager";
+import { DatabaseManager } from "../DatabaseManager";
 import { RevisionItem } from "./RevisionItem";
 
 export class RevisionItemDB extends DatabaseManager {
