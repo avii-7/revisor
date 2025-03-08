@@ -25,7 +25,14 @@
 .item-controls {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
+
+.item-count-controls  {
+    display: flex;
+    align-items: center;
+}
+
 .control-button {
     color:  #343a40;
     border: none;
@@ -40,6 +47,12 @@
     scale: 1.2;
 }
 
+.control-button.edit-icon {
+    background: none;
+    color: grey;
+    font-size: 20px;
+}
+
 .control-button.delete-icon {
     background: none;
     color: #dc3545;
@@ -51,4 +64,24 @@
 
 .control-button.delete-icon:hover {
     color: #a71d2a;
+}
+
+.item-highlighted-button {
+    color: grey;
+    font-size: 15px;
+    padding: 0 9px;
+}
+
+.item-highlighted-button:hover {
+    color: black;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+
+    .item-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
 }

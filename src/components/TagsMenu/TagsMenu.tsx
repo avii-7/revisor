@@ -30,10 +30,13 @@ const TagsMenu = (props: TagsMenuProps) => {
   }, [showMenu]);
 
   return (
-    <span>
+    <span className="tags-dropdown-control">
       <button
         className="tags-dropdown-button"
-        onClick={() => setShowMenu(!showMenu)}>
+        onClick={(e) => { 
+          e.stopPropagation();
+          setShowMenu(!showMenu); 
+          }}>
         {currentTag}
       </button>
       {showMenu && (

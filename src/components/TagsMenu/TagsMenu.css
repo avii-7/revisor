@@ -1,3 +1,7 @@
+.tags-dropdown-control {
+  position:relative;
+}
+
 .tags-dropdown-button {
     color: #007bff;
     background-color: transparent;
@@ -9,10 +13,9 @@
   }
 
 .tags-dropdown-menu {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
   position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: #f9f9f9;
   min-width: 150px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

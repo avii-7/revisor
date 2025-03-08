@@ -6,6 +6,11 @@ import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
 import ListItem from "../ListItem/ListItem";
 import Tag from "../TagsMenu/Tag";
 
+interface Modal<T> {
+  isVisible: boolean;
+  input: T;
+}
+
 const HomePage = () => {
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
   const [items, setItems] = useState<RevisionItem[]>([]);
@@ -16,6 +21,9 @@ const HomePage = () => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const revisionItemManager = new RevisionItemsManager();
   const [highlightedItemId, setHighlightedItemId] = useState<string | null>(null);
+
+  const [editModal, setEditModal] = useState<Modal<number>>({ isVisible: false, input: 0 });
+  const [editModalInput, setEditModalInput] = useState("");
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -31,6 +39,21 @@ const HomePage = () => {
     }
     setIsModalVisible(false);
   };
+
+  const handleSave = (index: number, text: string) => {
+      const itemToUpdate = items[index];
+
+      if (itemToUpdate.name === text) {
+        return;
+      }
+
+      itemToUpdate.name = text;
+      console.log("Updated Text: ", text);
+      revisionItemManager.update(itemToUpdate);
+      setEditModal({ isVisible: false, input: -1 });
+      setEditModalInput("");
+    
+  }
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -71,6 +94,12 @@ const HomePage = () => {
 
   const handleTitleDoubleClick = () => {
     setIsEditingTitle(true);
+  };
+
+  const onEdit = (index: number) => {
+    setEditModalInput(items[index].name);
+    console.log("tapped index: ", index);
+    setEditModal({ isVisible: true, input: index });
   };
 
   useEffect(() => {
@@ -161,12 +190,14 @@ const HomePage = () => {
                 onTapIncreaseCount={increaseCount}
                 onTapDecreaseCount={decreaseCount}
                 onTapDelete={deleteItem}
-                onTagChange={onTagChange}
-              />
+                onTagChange={onTagChange} onEdit={onEdit} 
+                onHighlightedItemAcknowledge={() => { setHighlightedItemId(null); }}
+                />
             ))
           )}
         </ul>
       </div>
+
       {isModalVisible && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -182,13 +213,41 @@ const HomePage = () => {
               <button onClick={handleCancel} className="modal-button cancel">
                 Cancel
               </button>
-              <button onClick={handleOk} className="modal-button ok">
+              <button onClick={handleOk} className="modal-button primary">
                 Ok
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {editModal.isVisible && (
+        <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Edit an item</h2>
+          <input
+            value={editModalInput}
+            onChange={(e) => setEditModalInput(e.target.value)}
+            placeholder="Enter item name"
+            className="modal-input"
+            type="text"
+            ref={modalInputRef}
+          />
+          <div className="modal-actions">
+            <button onClick={() => { 
+              setEditModalInput("");
+              setEditModal({ isVisible: false, input: -1 }); 
+              }} className="modal-button cancel">
+              Cancel
+            </button>
+            <button onClick={() => handleSave(editModal.input, editModalInput)} disabled={editModalInput.trim() === ""} className="modal-button primary">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      )}
+      
       <footer className="footer">
         <p>&copy; 2024 Revisor. All rights reserved.</p>
       </footer>
