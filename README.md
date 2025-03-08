@@ -1,10 +1,13 @@
+### Note: This app is not production ready.
+
 # Revisor 
 
 **Revisor** is a simple app designed to keeping track of tasks to review and revise.
 
-🎉 Try it live: [Click Here](https://avii-7.github.io/revisor/)
+# Motivation
+It's not easy for someone like me to remember things for a long time—we tend to forget them after a few days.
+I believe that revision is the key.
 
-✨ Features
-1. Add Items to your revision list.
-2. Increase or decrease the revision count for any item based on how many times you've revised it.
-3. Use the Revise button to let Revisor determine the next item you should prioritize for review.
+I developed this app to help manage a list of tasks that you are progressively completing one by one while also setting aside time to revise old tasks. In such situations, this app will be a perfect fit.
+
+🎉 Try it live: [Click Here](https://avii-7.github.io/revisor/)
