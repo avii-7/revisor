@@ -1,6 +1,12 @@
 import "./ListItem.css";
 import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
-import { FaTrash, FaPlusCircle, FaMinusCircle } from "react-icons/fa";
+import {
+  FaTrash,
+  FaPlusCircle,
+  FaMinusCircle,
+  FaPencilAlt,
+  FaCheck,
+} from "react-icons/fa";
 import TagsMenu from "../TagsMenu/TagsMenu";
 import Tag from "../TagsMenu/Tag";
 
@@ -14,6 +20,8 @@ type ListItemProps = {
   onTapDecreaseCount: (index: number) => void;
   onTapDelete: (index: number) => void;
   onTagChange: (tag: Tag, index: number) => void;
+  onEdit: (index: number) => void;
+  onHighlightedItemAcknowledge: () => void;
 };
 
 const ListItem = (props: ListItemProps) => {
@@ -26,7 +34,9 @@ const ListItem = (props: ListItemProps) => {
     onTapIncreaseCount: onIncreaseCount,
     onTapDecreaseCount: onDecreaseCount,
     onTapDelete,
-    onTagChange
+    onTagChange,
+    onEdit,
+    onHighlightedItemAcknowledge: onHighlightAcknowledge,
   } = props;
 
   return (
@@ -35,31 +45,58 @@ const ListItem = (props: ListItemProps) => {
         ${isSelected ? "selected" : ""} 
         ${isHighlighted ? "highlighted" : ""}
       `}
-      onClick={() => onClick(index)}>
+      onClick={() => onClick(index)}
+    >
       <span>
         {index + 1}. {item.name}
       </span>
-      <div className="item-controls">
-      <TagsMenu selectedTag={item.tag} onTagChange={(tag: Tag) => onTagChange(tag, index)} />
-        {isSelected && (
-          <FaMinusCircle
-            onClick={() => onDecreaseCount(index)}
-            className="control-button" />
-        )}
-        <span className="item-count">{item.count}</span>
-        {isSelected && (
-          <>
-            <FaPlusCircle
-              onClick={() => onIncreaseCount(index)} 
-              className="control-button"/> 
-              
+
+      {!isHighlighted ? (
+        <div className="item-controls">
+          <FaPencilAlt
+            className="control-button edit-icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(index);
+            }}
+          />
+          <TagsMenu
+            selectedTag={item.tag}
+            onTagChange={(tag: Tag) => onTagChange(tag, index)}
+          />
+          <div className="item-count-controls">
+            {isSelected && (
+              <FaMinusCircle
+                onClick={() => onDecreaseCount(index)}
+                className="control-button"
+              />
+            )}
+            <span className="item-count">{item.count}</span>
+            {isSelected && (
+              <FaPlusCircle
+                onClick={() => onIncreaseCount(index)}
+                className="control-button"
+              />
+            )}
+          </div>
+          {isSelected && (
             <FaTrash
               onClick={() => onTapDelete(index)}
               className="control-button delete-icon"
             />
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="item-highlighted">
+          <FaCheck
+            className="item-highlighted-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onHighlightAcknowledge();
+            }}
+          />
+        </div>
+      )}
     </li>
   );
 };
