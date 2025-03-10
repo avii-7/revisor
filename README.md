@@ -10,4 +10,4 @@ I believe that revision is the key.
 
 I developed this app to help manage a list of tasks that you are progressively completing one by one while also setting aside time to revise old tasks. In such situations, this app will be a perfect fit.
 
-🎉 Try it live: [Click Here](https://avii-7.github.io/revisor/)
+🎉 Try it live: [Click Here](https://revisor-free.web.app/)
