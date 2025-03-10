@@ -1,8 +1,8 @@
-name: Prod Deployment # name of the workflow
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Dev Deployment # name of the workflow
+run-name: Uploading on Github pages 🚀
 on:
   push:
-      branches: ["master"]
+      branches: ["dev"]
       paths-ignore:
         - '**/README.md'
 
