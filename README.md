@@ -1,4 +1,4 @@
-### Note: This app is not production ready.
+### Note: Development is going on.
 
 # Revisor 
 
