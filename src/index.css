@@ -29,21 +29,21 @@ code {
 
 @font-face {
   font-family: "Regular";
-  src: local("Inter24pt-Regular"), url("./Fonts/Inter-Regular.ttf")
+  src: local("Inter24pt-Regular"), url("Assets/Fonts/Inter-Regular.ttf")
 }
 
 @font-face {
   font-family: "Medium";
-  src: local("Inter24pt-Medium"), url("./Fonts/Inter-Medium.ttf");
+  src: local("Inter24pt-Medium"), url("Assets/Fonts/Inter-Medium.ttf");
 }
 
 @font-face {
   font-family: "SemiBold";
-  src: local("Inter24pt-SemiBold"), url("./Fonts/Inter-SemiBold.ttf");
+  src: local("Inter24pt-SemiBold"), url("Assets/Fonts/Inter-SemiBold.ttf");
 }
 
 @font-face {
   font-family: "Bold";
-  src: local("Inter24pt-Bold"), url("./Fonts/Inter-Bold.ttf");
+  src: local("Inter24pt-Bold"), url("Assets/Fonts/Inter-Bold.ttf");
 }
 

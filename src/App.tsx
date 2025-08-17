@@ -1,13 +1,21 @@
-import LoginPage from "./components/Onboarding/LoginPage"
-import "./Fonts/Inter-Regular.ttf";
-import "./Fonts/Inter-Medium.ttf";
-import "./Fonts/Inter-SemiBold.ttf";
-import "./Fonts/Inter-Bold.ttf";
+import AuthPage from "./Components/Authentication/AuthPage"
+import { BrowserRouter, Routes, Route } from "react-router"
+import HomePage from "./Components/HomePage/HomePage";
+import CallbackHandlePage from "./Components/Authentication/GoogleAuthCallback";
 
 function App() {
 
   return (
-    <LoginPage/>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        
+        <Route path="auth" >
+          <Route index element={<AuthPage />} />
+          <Route path="google/callback" element={<CallbackHandlePage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
