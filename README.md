@@ -14,3 +14,10 @@ Currently, it primarily focuses on revising DSA questions.
 🎉 Try it live: [Click Here](https://revisor-free.web.app/)
 
 🎨 Figma: [Click Here](https://www.figma.com/design/KmWzP7fq976b9738Aujdy6/Revisor)
+
+## Docs & Practises:
+
+I'm not a Web Developer but still tried to use best practises and naming convensions.
+
+1. CSS naming convensions: [Link 🔗](https://www.freecodecamp.org/news/css-naming-conventions-that-will-save-you-hours-of-debugging-35cea737d849/)
+2. Absolute vs relative units: [Link 🔗](https://codedamn.com/news/frontend/difference-between-em-rem-px-and-percentage-units-in-css) 
