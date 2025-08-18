@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import Tag from "../../components/TagsMenu/Tag";
+import Tag from "../../Components/TagsMenu/Tag";
 
 export class RevisionItem {
   id: string = uuidv4();
