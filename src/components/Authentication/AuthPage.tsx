@@ -6,8 +6,6 @@ import getOauthUrl from "../../Services/googleOauth";
 
 const AuthPage = () => {
 
-    const googleOauthSession = uuidv4();
-
     const handleAuthWithGoogle = () => {
         window.open(getOauthUrl(), "_self");
     }
