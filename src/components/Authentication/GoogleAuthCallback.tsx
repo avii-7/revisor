@@ -3,10 +3,10 @@ import { useEffect } from "react";
 
 const GoogleAuthCallback = () => {
 
-useEffect(() => {
+  useEffect(() => {
     const hash = window.location.hash;
-    console.log("Google OAuth Callback:", hash);
-}, []);
+    const params = new URLSearchParams(hash.substring(1));
+  }, []);
 
   return (
     <div>

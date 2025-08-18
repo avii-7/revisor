@@ -8,8 +8,8 @@ const AuthPage = () => {
 
     const googleOauthSession = uuidv4();
 
-    const handleLoginWithGoogle = () => {
-        window.open(getOauthUrl(googleOauthSession), "_self");
+    const handleAuthWithGoogle = () => {
+        window.open(getOauthUrl(), "_self");
     }
 
     return (
@@ -24,7 +24,7 @@ const AuthPage = () => {
                     <div className="login-description">Revisor is a simple app designed to keeping track of tasks to review and revise.</div>
                 </div>
                 <div className="login-button-container">
-                    <button id="login-google" className="login-button" onClick={handleLoginWithGoogle}>
+                    <button id="login-google" className="login-button" onClick={handleAuthWithGoogle}>
                         <FaGoogle /> Login with Google
                     </button>
                 </div>
