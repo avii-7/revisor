@@ -2,12 +2,13 @@ import { v4 as uuidv4 } from "uuid";
 
 import "./AuthPage.css";
 import { FaGoogle } from "react-icons/fa";
-import getOauthUrl from "../../Services/googleOauth";
+import AuthService from "../../Network/Authentication/AuthService";
 
 const AuthPage = () => {
 
-    const handleAuthWithGoogle = () => {
-        window.open(getOauthUrl(), "_self");
+    const handleAuthWithGoogle = async () => {
+        const oauthUrl = await AuthService.getGoogleOauthUrl();
+        window.open(oauthUrl, "_self");
     }
 
     return (
