@@ -1,15 +1,25 @@
-import { useEffect } from "react";
-
+import { useNavigate, useSearchParams } from 'react-router'
+import CookieConstant from '../../Utilities/CookieConstant';
+import { useCookies } from 'react-cookie';
+import { useEffect } from 'react';
 
 const GoogleAuthCallback = () => {
+
+  const [_, setCookie] = useCookies([CookieConstant.jwtToken]);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const hash = window.location.hash;
-    const params = new URLSearchParams(hash.substring(1));
+    if (token) {
+      setCookie(CookieConstant.jwtToken, token)
+      navigate("/");
+    }
   }, []);
 
   return (
     <div>
-      <h1>Google OAuth Callback Page</h1>
+      <h1>Redirecting to Home...</h1>
     </div>
   );
 };

@@ -5,6 +5,9 @@ import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemMa
 import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
 import ListItem from "../ListItem/ListItem";
 import Tag from "../TagsMenu/Tag";
+import { useCookies } from "react-cookie";
+import { useNavigate } from 'react-router'
+import CookieConstant from "../../Utilities/CookieConstant";
 
 interface Modal<T> {
   isVisible: boolean;
@@ -12,6 +15,9 @@ interface Modal<T> {
 }
 
 const HomePage = () => {
+  const [cookies] = useCookies([CookieConstant.jwtToken]);
+  const navigate = useNavigate();
+
   const [isEditingTitle, setIsEditingTitle] = useState<boolean>(false);
   const [items, setItems] = useState<RevisionItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -41,18 +47,18 @@ const HomePage = () => {
   };
 
   const handleSave = (index: number, text: string) => {
-      const itemToUpdate = items[index];
+    const itemToUpdate = items[index];
 
-      if (itemToUpdate.name === text) {
-        return;
-      }
+    if (itemToUpdate.name === text) {
+      return;
+    }
 
-      itemToUpdate.name = text;
-      console.log("Updated Text: ", text);
-      revisionItemManager.update(itemToUpdate);
-      setEditModal({ isVisible: false, input: -1 });
-      setEditModalInput("");
-    
+    itemToUpdate.name = text;
+    console.log("Updated Text: ", text);
+    revisionItemManager.update(itemToUpdate);
+    setEditModal({ isVisible: false, input: -1 });
+    setEditModalInput("");
+
   }
 
   const handleCancel = () => {
@@ -103,6 +109,12 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+
+    if (!cookies.jwtToken) {
+      navigate("/auth");
+      return
+    }
+
     revisionItemManager.getAll().then((revisionItems) => {
       setItems(revisionItems);
     });
@@ -190,9 +202,9 @@ const HomePage = () => {
                 onTapIncreaseCount={increaseCount}
                 onTapDecreaseCount={decreaseCount}
                 onTapDelete={deleteItem}
-                onTagChange={onTagChange} onEdit={onEdit} 
+                onTagChange={onTagChange} onEdit={onEdit}
                 onHighlightedItemAcknowledge={() => { setHighlightedItemId(null); }}
-                />
+              />
             ))
           )}
         </ul>
@@ -223,31 +235,31 @@ const HomePage = () => {
 
       {editModal.isVisible && (
         <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Edit an item</h2>
-          <input
-            value={editModalInput}
-            onChange={(e) => setEditModalInput(e.target.value)}
-            placeholder="Enter item name"
-            className="modal-input"
-            type="text"
-            ref={modalInputRef}
-          />
-          <div className="modal-actions">
-            <button onClick={() => { 
-              setEditModalInput("");
-              setEditModal({ isVisible: false, input: -1 }); 
+          <div className="modal-content">
+            <h2>Edit an item</h2>
+            <input
+              value={editModalInput}
+              onChange={(e) => setEditModalInput(e.target.value)}
+              placeholder="Enter item name"
+              className="modal-input"
+              type="text"
+              ref={modalInputRef}
+            />
+            <div className="modal-actions">
+              <button onClick={() => {
+                setEditModalInput("");
+                setEditModal({ isVisible: false, input: -1 });
               }} className="modal-button cancel">
-              Cancel
-            </button>
-            <button onClick={() => handleSave(editModal.input, editModalInput)} disabled={editModalInput.trim() === ""} className="modal-button primary">
-              Save
-            </button>
+                Cancel
+              </button>
+              <button onClick={() => handleSave(editModal.input, editModalInput)} disabled={editModalInput.trim() === ""} className="modal-button primary">
+                Save
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       )}
-      
+
       <footer className="footer">
         <p>&copy; 2024 Revisor. All rights reserved.</p>
       </footer>

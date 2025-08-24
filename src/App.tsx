@@ -9,7 +9,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        
         <Route path="auth" >
           <Route index element={<AuthPage />} />
           <Route path="google/callback" element={<CallbackHandlePage />} />
