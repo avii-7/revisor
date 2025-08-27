@@ -8,6 +8,8 @@ import Tag from "../TagsMenu/Tag";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
 import CookieConstant from "../../Utilities/CookieConstant";
+import apiClient  from "../../Network/ApiClient";
+import ProfileService from "../Profile/Network/ProfileService";
 
 interface Modal<T> {
   isVisible: boolean;
@@ -30,10 +32,30 @@ const HomePage = () => {
 
   const [editModal, setEditModal] = useState<Modal<number>>({ isVisible: false, input: 0 });
   const [editModalInput, setEditModalInput] = useState("");
+  const profileService = new ProfileService();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
+
+    useEffect(() => {
+
+    if (!cookies.jwtToken) {
+      navigate("/auth");
+      return
+    }
+
+    // Get Profile
+    profileService.getProfile().then(profile => { 
+      console.log(profile);
+    }).catch((error) => { 
+      console.log(error);
+    });
+
+    // Get revision items.
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOk = () => {
     if (modalInput.trim() !== "") {
@@ -54,7 +76,6 @@ const HomePage = () => {
     }
 
     itemToUpdate.name = text;
-    console.log("Updated Text: ", text);
     revisionItemManager.update(itemToUpdate);
     setEditModal({ isVisible: false, input: -1 });
     setEditModalInput("");
@@ -104,22 +125,8 @@ const HomePage = () => {
 
   const onEdit = (index: number) => {
     setEditModalInput(items[index].name);
-    console.log("tapped index: ", index);
     setEditModal({ isVisible: true, input: index });
   };
-
-  useEffect(() => {
-
-    if (!cookies.jwtToken) {
-      navigate("/auth");
-      return
-    }
-
-    revisionItemManager.getAll().then((revisionItems) => {
-      setItems(revisionItems);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -165,9 +172,11 @@ const HomePage = () => {
   }, [selectedIndex]);
 
   const onReviseButtonClick = () => {
-    revisionItemManager.getAnItemToRevise().then((item) => {
-      setHighlightedItemId(item.id);
-    });
+    // revisionItemManager.getAnItemToRevise().then((item) => {
+    //   setHighlightedItemId(item.id);
+    // });
+
+    // getAPIClientWithJWT();
   };
 
   return (

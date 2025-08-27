@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 const GoogleAuthCallback = () => {
 
-  const [_, setCookie] = useCookies([CookieConstant.jwtToken]);
+  const [_, setCookie] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const navigate = useNavigate();

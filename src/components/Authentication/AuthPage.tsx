@@ -1,6 +1,6 @@
 import "./AuthPage.css";
 import { FaGoogle } from "react-icons/fa";
-import AuthService from "../../Network/Authentication/AuthService";
+import { getGoogleOauthUrl } from "../../Network/Authentication/AuthService";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
@@ -8,7 +8,7 @@ import CookieConstant from "../../Utilities/CookieConstant";
 
 const AuthPage = () => {
 
-    const [cookies] = useCookies([CookieConstant.jwtToken]);
+    const [cookies] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,11 +17,10 @@ const AuthPage = () => {
             navigate("/");
             return
         }
-        
     }, []);
 
     const handleAuthWithGoogle = async () => {
-        const oauthUrl = await AuthService.getGoogleOauthUrl();
+        const oauthUrl = await getGoogleOauthUrl();
         window.open(oauthUrl, "_self");
     }
 

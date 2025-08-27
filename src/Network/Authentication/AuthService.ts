@@ -1,8 +1,9 @@
-import { apiClient } from "../ApiClient";
+import apiClient from "../ApiClient";
+import Endpoint from "../Endpoints";
 
 async function getGoogleOauthUrl() {
-    const response = await apiClient.get<string>("auth/google");
+    const response = await apiClient.get<string>(Endpoint.oauthGoogle);
     return response.data;
 }
 
-export default { getGoogleOauthUrl }
+export { getGoogleOauthUrl };
