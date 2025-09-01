@@ -1,5 +1,5 @@
 import "./ListItem.css";
-import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
+import { RevisionItem } from "../Models/RevisionItem";
 import {
   FaTrash,
   FaPlusCircle,
@@ -8,7 +8,7 @@ import {
   FaCheck,
 } from "react-icons/fa";
 import TagsMenu from "../TagsMenu/TagsMenu";
-import Tag from "../TagsMenu/Tag";
+import Tag from "../TagsMenu/Difficulty";
 
 type ListItemProps = {
   index: number;
@@ -48,7 +48,7 @@ const ListItem = (props: ListItemProps) => {
       onClick={() => onClick(index)}
     >
       <span>
-        {index + 1}. {item.name}
+        {index + 1}. {item.title}
       </span>
 
       {!isHighlighted ? (
@@ -61,7 +61,7 @@ const ListItem = (props: ListItemProps) => {
             }}
           />
           <TagsMenu
-            selectedTag={item.tag}
+            selectedTag={item.difficulty}
             onTagChange={(tag: Tag) => onTagChange(tag, index)}
           />
           <div className="item-count-controls">
@@ -71,7 +71,7 @@ const ListItem = (props: ListItemProps) => {
                 className="control-button"
               />
             )}
-            <span className="item-count">{item.count}</span>
+            <span className="item-count">{item.revisionCount}</span>
             {isSelected && (
               <FaPlusCircle
                 onClick={() => onIncreaseCount(index)}

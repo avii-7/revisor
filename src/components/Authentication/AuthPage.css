@@ -48,6 +48,14 @@
     transform: rotate(90deg);
 }
 
+.login-background .traingle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 50px solid #000;
+}
+
 .login-button-container {
     margin-top: 4rem;
 }

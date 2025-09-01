@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Tag from "./Tag";
+import Difficulty from "./Difficulty";
 import "./TagsMenu.css";
 
 type TagsMenuProps = {
-  selectedTag: Tag;
-  onTagChange: (tag: Tag) => void;
+  selectedTag: Difficulty;
+  onTagChange: (tag: Difficulty) => void;
 };
 
 const TagsMenu = (props: TagsMenuProps) => {
@@ -41,7 +41,7 @@ const TagsMenu = (props: TagsMenuProps) => {
       </button>
       {showMenu && (
         <div className="tags-dropdown-menu">
-          {[Tag.default, Tag.easy, Tag.medium, Tag.hard].map((tag) => (
+          {[Difficulty.default, Difficulty.easy, Difficulty.medium, Difficulty.hard].map((tag) => (
             <button
               key={tag}
               className={`tag-dropdown-button ${

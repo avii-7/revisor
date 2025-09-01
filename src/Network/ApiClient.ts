@@ -16,11 +16,9 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   config => {
-
     if (config.url) {
       if (!nonJWTEndpoints.includes(config.url)) {
         const token = cookies.get(CookieConstant.jwtToken);
-        console.log("token", token);
         config.headers.Authorization = `Bearer ${token}`;
       }
     }

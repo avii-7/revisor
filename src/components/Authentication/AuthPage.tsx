@@ -12,7 +12,6 @@ const AuthPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         if (cookies.jwtToken) {
             navigate("/");
             return
@@ -27,7 +26,8 @@ const AuthPage = () => {
     return (
         <div className="login-page">
             <div className="login-background">
-                <div className="left-semi-circle"></div>
+                <div className="left-semi-circle"/>
+                <div className="traingle" />
             </div>
 
             <div className="login-content">

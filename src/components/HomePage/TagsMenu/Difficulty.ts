@@ -1,8 +1,8 @@
-enum Tag {
+enum Difficulty {
   default = "Default",
   easy = "Easy",
   medium = "Medium",
   hard = "Hard",
 }
 
-export default Tag;
+export default Difficulty;

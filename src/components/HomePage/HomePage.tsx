@@ -2,14 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import "./HomePage.css";
 import { FaPlusCircle } from "react-icons/fa";
 import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
-import { RevisionItem } from "../../Database/RevisionItem/RevisionItem";
-import ListItem from "../ListItem/ListItem";
-import Tag from "../TagsMenu/Tag";
+import { RevisionItem, NewRevisionItem } from "./Models/RevisionItem";
+import ListItem from "./ListItem/ListItem";
+import Difficulty from "./TagsMenu/Difficulty";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
 import CookieConstant from "../../Utilities/CookieConstant";
 import apiClient  from "../../Network/ApiClient";
 import ProfileService from "../Profile/Network/ProfileService";
+import { v4 as uuidv4 } from "uuid";
+import RevisionItemService from "./Services/RevisionItemService";
+
 
 interface Modal<T> {
   isVisible: boolean;
@@ -33,6 +36,7 @@ const HomePage = () => {
   const [editModal, setEditModal] = useState<Modal<number>>({ isVisible: false, input: 0 });
   const [editModalInput, setEditModalInput] = useState("");
   const profileService = new ProfileService();
+  const itemsService = new RevisionItemService();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -52,17 +56,27 @@ const HomePage = () => {
       console.log(error);
     });
 
-    // Get revision items.
+    // TODO: Get revision items.
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOk = () => {
+
     if (modalInput.trim() !== "") {
-      const item = new RevisionItem(modalInput, new Date());
+
+      const item: RevisionItem =  { 
+        id: uuidv4(), 
+        title: modalInput, 
+        content: "", 
+        revisionCount: 0, 
+        difficulty: Difficulty.default 
+      }
+
       const newItems: RevisionItem[] = [...items, item];
       setItems(newItems);
-      revisionItemManager.insert(item);
+      itemsService.create(item);
+      // revisionItemManager.insert(item);
       setModalInput("");
     }
     setIsModalVisible(false);
@@ -71,11 +85,11 @@ const HomePage = () => {
   const handleSave = (index: number, text: string) => {
     const itemToUpdate = items[index];
 
-    if (itemToUpdate.name === text) {
+    if (itemToUpdate.title === text) {
       return;
     }
 
-    itemToUpdate.name = text;
+    itemToUpdate.title = text;
     revisionItemManager.update(itemToUpdate);
     setEditModal({ isVisible: false, input: -1 });
     setEditModalInput("");
@@ -89,16 +103,16 @@ const HomePage = () => {
   const increaseCount = (index: number) => {
     const newItems = [...items];
     const itemToUpdate = newItems[index];
-    itemToUpdate.count += 1;
+    itemToUpdate.revisionCount += 1;
     setItems(newItems);
     revisionItemManager.update(itemToUpdate);
   };
 
   const decreaseCount = (index: number) => {
     const newItems = [...items];
-    if (newItems[index].count > 0) {
+    if (newItems[index].revisionCount > 0) {
       const itemToUpdate = newItems[index];
-      itemToUpdate.count -= 1;
+      itemToUpdate.revisionCount -= 1;
       setItems(newItems);
       revisionItemManager.update(itemToUpdate);
     }
@@ -111,10 +125,10 @@ const HomePage = () => {
     setItems(filterItems);
   };
 
-  const onTagChange = (tag: Tag, index: number) => {
+  const onTagChange = (tag: Difficulty, index: number) => {
     const newItems = [...items];
     const itemToUpdate = newItems[index];
-    itemToUpdate.tag = tag;
+    itemToUpdate.difficulty = tag;
     revisionItemManager.update(itemToUpdate);
     setItems(newItems);
   };
@@ -124,7 +138,7 @@ const HomePage = () => {
   };
 
   const onEdit = (index: number) => {
-    setEditModalInput(items[index].name);
+    setEditModalInput(items[index].title);
     setEditModal({ isVisible: true, input: index });
   };
 
