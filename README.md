@@ -21,3 +21,4 @@ Trying my best to use best practises and naming convensions.
 2. Absolute vs relative units: [Link](https://codedamn.com/news/frontend/difference-between-em-rem-px-and-percentage-units-in-css)
 3. Network Layer: [Link](https://profy.dev/article/react-architecture-api-layer-and-fetch-functions)
 4. Cors: [Link](https://www.youtube.com/watch?v=PNtFSVU-YTI)
+5. Debounce: [Link](https://medium.com/@philip.andrewweedewang/debounce-hook-in-react-typescript-in-20-lines-of-code-9cde26254d10)

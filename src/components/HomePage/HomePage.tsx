@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./HomePage.css";
 import { FaPlusCircle } from "react-icons/fa";
 import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
-import { RevisionItem, NewRevisionItem } from "./Models/RevisionItem";
+import { RevisionItem } from "./Models/RevisionItem";
 import ListItem from "./ListItem/ListItem";
 import Difficulty from "./TagsMenu/Difficulty";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
 import CookieConstant from "../../Utilities/CookieConstant";
-import apiClient  from "../../Network/ApiClient";
 import ProfileService from "../Profile/Network/ProfileService";
 import { v4 as uuidv4 } from "uuid";
 import RevisionItemService from "./Services/RevisionItemService";
-
+import { useDebounce } from "../../Utilities/useDebounce";
 
 interface Modal<T> {
   isVisible: boolean;
@@ -38,11 +37,17 @@ const HomePage = () => {
   const profileService = new ProfileService();
   const itemsService = new RevisionItemService();
 
+  const _updateItem = (item: RevisionItem) => {
+    itemsService.update(item).then(s => { console.log("Success Update") });
+  }
+
+  const updateItem = useDebounce(_updateItem, 1000);
+
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-    useEffect(() => {
+  useEffect(() => {
 
     if (!cookies.jwtToken) {
       navigate("/auth");
@@ -50,14 +55,17 @@ const HomePage = () => {
     }
 
     // Get Profile
-    profileService.getProfile().then(profile => { 
+    profileService.getProfile().then(profile => {
       console.log(profile);
-    }).catch((error) => { 
+    }).catch((error) => {
       console.log(error);
     });
 
-    // TODO: Get revision items.
-    
+    // Get revision items.
+    itemsService.getRevisionItems().then(items => {
+      setItems(items);
+    })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -65,18 +73,17 @@ const HomePage = () => {
 
     if (modalInput.trim() !== "") {
 
-      const item: RevisionItem =  { 
-        id: uuidv4(), 
-        title: modalInput, 
-        content: "", 
-        revisionCount: 0, 
-        difficulty: Difficulty.default 
+      const item: RevisionItem = {
+        id: uuidv4(),
+        title: modalInput,
+        content: "",
+        revisionCount: 0,
+        difficulty: Difficulty.default
       }
 
       const newItems: RevisionItem[] = [...items, item];
       setItems(newItems);
       itemsService.create(item);
-      // revisionItemManager.insert(item);
       setModalInput("");
     }
     setIsModalVisible(false);
@@ -90,10 +97,10 @@ const HomePage = () => {
     }
 
     itemToUpdate.title = text;
-    revisionItemManager.update(itemToUpdate);
+
+    itemsService.update(itemToUpdate);
     setEditModal({ isVisible: false, input: -1 });
     setEditModalInput("");
-
   }
 
   const handleCancel = () => {
@@ -105,7 +112,7 @@ const HomePage = () => {
     const itemToUpdate = newItems[index];
     itemToUpdate.revisionCount += 1;
     setItems(newItems);
-    revisionItemManager.update(itemToUpdate);
+    updateItem(itemToUpdate);
   };
 
   const decreaseCount = (index: number) => {
@@ -114,13 +121,13 @@ const HomePage = () => {
       const itemToUpdate = newItems[index];
       itemToUpdate.revisionCount -= 1;
       setItems(newItems);
-      revisionItemManager.update(itemToUpdate);
+      updateItem(itemToUpdate);
     }
   };
 
   const deleteItem = (index: number) => {
     let id = items[index].id;
-    revisionItemManager.delete(id);
+    itemsService.delete(id);
     const filterItems = items.filter((item) => item.id !== id);
     setItems(filterItems);
   };

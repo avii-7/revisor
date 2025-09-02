@@ -18,7 +18,7 @@ const RevisionItemSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   content: z.string(),
-  revisionCount: z.number(),
+  revision_count: z.number(),
   difficulty: z.nativeEnum(Difficulty)
 });
 
