@@ -1,3 +1,7 @@
+@import "./DesignSystem/colors.css";
+@import "./DesignSystem/typography.css";
+@import "tailwindcss";
+
 :root {
   --brand-color: #4044ED;
   --background-color: #27262C;
@@ -26,24 +30,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-@font-face {
-  font-family: "Regular";
-  src: local("Inter24pt-Regular"), url("Assets/Fonts/Inter-Regular.ttf")
-}
-
-@font-face {
-  font-family: "Medium";
-  src: local("Inter24pt-Medium"), url("Assets/Fonts/Inter-Medium.ttf");
-}
-
-@font-face {
-  font-family: "SemiBold";
-  src: local("Inter24pt-SemiBold"), url("Assets/Fonts/Inter-SemiBold.ttf");
-}
-
-@font-face {
-  font-family: "Bold";
-  src: local("Inter24pt-Bold"), url("Assets/Fonts/Inter-Bold.ttf");
-}
-

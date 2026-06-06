@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "Inter";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  src: local("Inter24pt-Regular"), url("../Assets/Fonts/Inter-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  src: local("Inter24pt-Medium"), url("../Assets/Fonts/Inter-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+  src: local("Inter24pt-SemiBold"), url("../Assets/Fonts/Inter-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+  src: local("Inter24pt-Bold"), url("../Assets/Fonts/Inter-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Regular";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  src: local("Inter24pt-Regular"), url("../Assets/Fonts/Inter-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Medium";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  src: local("Inter24pt-Medium"), url("../Assets/Fonts/Inter-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "SemiBold";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 600;
+  src: local("Inter24pt-SemiBold"), url("../Assets/Fonts/Inter-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Bold";
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+  src: local("Inter24pt-Bold"), url("../Assets/Fonts/Inter-Bold.ttf") format("truetype");
+}
+
+:root {
+  --revisor-font-family-primary: "Hanken Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --revisor-font-family-fallback: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --revisor-typography-display-lg-font-family: var(--revisor-font-family-primary);
+  --revisor-typography-display-lg-font-size: 48px;
+  --revisor-typography-display-lg-font-weight: 700;
+  --revisor-typography-display-lg-line-height: 56px;
+  --revisor-typography-display-lg-letter-spacing: -0.02em;
+
+  --revisor-typography-display-lg-mobile-font-family: var(--revisor-font-family-primary);
+  --revisor-typography-display-lg-mobile-font-size: 32px;
+  --revisor-typography-display-lg-mobile-font-weight: 700;
+  --revisor-typography-display-lg-mobile-line-height: 40px;
+  --revisor-typography-display-lg-mobile-letter-spacing: -0.01em;
+
+  --revisor-typography-headline-md-font-family: var(--revisor-font-family-primary);
+  --revisor-typography-headline-md-font-size: 24px;
+  --revisor-typography-headline-md-font-weight: 600;
+  --revisor-typography-headline-md-line-height: 32px;
+  --revisor-typography-headline-md-letter-spacing: -0.01em;
+
+  --revisor-typography-body-lg-font-family: var(--revisor-font-family-primary);
+  --revisor-typography-body-lg-font-size: 18px;
+  --revisor-typography-body-lg-font-weight: 400;
+  --revisor-typography-body-lg-line-height: 28px;
+  --revisor-typography-body-lg-letter-spacing: 0;
+
+  --revisor-typography-body-md-font-family: var(--revisor-font-family-primary);
+  --revisor-typography-body-md-font-size: 16px;
+  --revisor-typography-body-md-font-weight: 400;
+  --revisor-typography-body-md-line-height: 24px;
+  --revisor-typography-body-md-letter-spacing: 0;
+
+  --revisor-typography-label-sm-font-family: var(--revisor-font-family-primary);
+  --revisor-typography-label-sm-font-size: 12px;
+  --revisor-typography-label-sm-font-weight: 500;
+  --revisor-typography-label-sm-line-height: 16px;
+  --revisor-typography-label-sm-letter-spacing: 0.05em;
+}
