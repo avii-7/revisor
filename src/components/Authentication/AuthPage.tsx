@@ -1,6 +1,6 @@
 import "./AuthPage.css";
 import { FaGoogle } from "react-icons/fa";
-import { getGoogleOauthUrl } from "../../Network/Authentication/AuthService";
+import { getGoogleOauthUrl } from "./AuthService";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'

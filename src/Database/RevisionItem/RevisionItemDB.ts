@@ -1,5 +1,5 @@
 import { DatabaseManager } from "../DatabaseManager";
-import  { RevisionItem } from "../../Components/HomePage/Models/RevisionItem";
+import  { RevisionItem } from "../../Components/Dashboard/Models/RevisionItem";
 
 export class RevisionItemDB extends DatabaseManager {
   private objectStore = "RevisionItems";
