@@ -1,7 +1,7 @@
 import "./AuthPage.css";
 import { FaMicrochip } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { getGoogleOauthUrl } from "../../Network/Authentication/AuthService";
+import { getGoogleOauthUrl } from "./AuthService";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
