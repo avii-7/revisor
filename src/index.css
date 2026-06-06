@@ -1,6 +1,5 @@
 @import "./DesignSystem/colors.css";
 @import "./DesignSystem/typography.css";
-@import "tailwindcss";
 
 :root {
   --brand-color: #4044ED;
