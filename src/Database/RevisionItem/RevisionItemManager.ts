@@ -1,4 +1,4 @@
-import  { RevisionItem } from "../../Components/HomePage/Models/RevisionItem";
+import  { RevisionItem } from "../../components/HomePage/Models/RevisionItem";
 import { RevisionItemDB } from "./RevisionItemDB";
 
 export class RevisionItemsManager {

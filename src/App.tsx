@@ -1,7 +1,7 @@
-import AuthPage from "./Components/Authentication/AuthPage"
+import AuthPageV2 from "./components/Authentication/AuthPageV2"
 import { BrowserRouter, Routes, Route } from "react-router"
-import HomePage from "./Components/HomePage/HomePage";
-import CallbackHandlePage from "./Components/Authentication/GoogleAuthCallback";
+import HomePage from "./components/HomePage/HomePage";
+import CallbackHandlePage from "./components/Authentication/GoogleAuthCallback";
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="auth" >
-          <Route index element={<AuthPage />} />
+          <Route index element={<AuthPageV2 />} />
           <Route path="google/callback" element={<CallbackHandlePage />} />
         </Route>
       </Routes>
