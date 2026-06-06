@@ -1,12 +1,18 @@
-enum Endpoint {
-
-    oauthGoogle = "auth/google",
-
-    // Profile
-    profile = "profile",
-
-    // Get All & Create
-    revisionItems = "revise-items"
+enum AuthenticationEndpoint {
+  oauthGoogle = "auth/google"
 }
 
-export default Endpoint;
+enum ProfileEndpoint {
+  profile = "profile"
+}
+
+enum RevisionItemEndpoint {
+  // Get All & Create
+  revisionItems = "revise-items"
+}
+
+enum DashboardEndpoint {
+  dashboard = "dashboard",
+}
+
+export { DashboardEndpoint, AuthenticationEndpoint, ProfileEndpoint, RevisionItemEndpoint };

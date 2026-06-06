@@ -1,9 +1,9 @@
 import axios from "axios";
 import CookieConstant from "../Utilities/CookieConstant";
 import { Cookies } from "react-cookie";
-import Endpoint from './Endpoints'
+import { AuthenticationEndpoint } from './Endpoints'
 
-const nonJWTEndpoints: string[] = [Endpoint.oauthGoogle];
+const nonJWTEndpoints: string[] = [AuthenticationEndpoint.oauthGoogle];
 
 const cookies = new Cookies();
 

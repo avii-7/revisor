@@ -1,6 +1,6 @@
 import AuthPage from "./Components/Authentication/AuthPage"
 import { BrowserRouter, Routes, Route } from "react-router"
-import HomePage from "./Components/HomePage/HomePage";
+import HomePage from "./Components/Dashboard/HomePage";
 import CallbackHandlePage from "./Components/Authentication/GoogleAuthCallback";
 
 function App() {

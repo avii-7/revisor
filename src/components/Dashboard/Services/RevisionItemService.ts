@@ -1,5 +1,5 @@
 import apiClient from "../../../Network/ApiClient";
-import Endpoint from "../../../Network/Endpoints";
+import { RevisionItemEndpoint } from "../../../Network/Endpoints";
 import { NewRevisionItem, RevisionItemSchema, RevisionItem } from "../Models/RevisionItem";
 import z from 'zod';
 
@@ -7,7 +7,7 @@ export default class RevisionItemService {
 
     async getRevisionItems() {
         type schema = z.infer<typeof RevisionItemSchema>
-        const response = await apiClient.get<schema[]>(Endpoint.revisionItems);
+        const response = await apiClient.get<schema[]>(RevisionItemEndpoint.revisionItems);
 
         const items = response.data.map<RevisionItem>(item => {
              return {
@@ -23,18 +23,18 @@ export default class RevisionItemService {
     }
 
     async create(item: NewRevisionItem) {
-        const response = await apiClient.post<NewRevisionItem>(Endpoint.revisionItems, item);
+        const response = await apiClient.post<NewRevisionItem>(RevisionItemEndpoint.revisionItems, item);
         console.log(response.status);
     }
 
     async update(item: RevisionItem) {
         console.log("Execute !!");
-        const response = await apiClient.patch(Endpoint.revisionItems, item);
+        const response = await apiClient.patch(RevisionItemEndpoint.revisionItems, item);
         console.log(response.status);
     }
 
     async delete(itemId: string) {
-        const response = await apiClient.delete(`${Endpoint.revisionItems}/${itemId}`);
+        const response = await apiClient.delete(`${RevisionItemEndpoint.revisionItems}/${itemId}`);
         console.log(response.status);
     }
 }
