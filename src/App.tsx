@@ -1,14 +1,14 @@
-import AuthPage from "./Components/Authentication/AuthPage"
+import AuthPage from "./components/Authentication/AuthPage"
 import { BrowserRouter, Routes, Route } from "react-router"
-import HomePage from "./Components/Dashboard/HomePage";
-import CallbackHandlePage from "./Components/Authentication/GoogleAuthCallback";
+import DashboardPage from "./components/Dashboard/DashboardPage";
+import CallbackHandlePage from "./components/Authentication/GoogleAuthCallback";
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<DashboardPage />} />
         <Route path="auth" >
           <Route index element={<AuthPage />} />
           <Route path="google/callback" element={<CallbackHandlePage />} />

@@ -1,5 +1,11 @@
 import z from "zod";
-import ProfileResponse from "../../Profile/Models/Profile";
+
+const ProfileResponseSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  profilePicture: z.string(),
+});
 
 const RevisionStatSchema = z.object({
   id: z.string(),
@@ -14,10 +20,24 @@ const RevisionInfoSchema = z.object({
   topText: z.string(),
 });
 
-const DashboardResponse = z.object({
-  profile: ProfileResponse,
-  revisionInfo: RevisionInfoSchema.nullish(),
-  revisionStats: z.array(RevisionStatSchema),
+const RecentMasterySchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  subtitle: z.string(),
+  streak: z.string(),
 });
 
-export { DashboardResponse, RevisionInfoSchema, RevisionStatSchema };
+const DashboardResponse = z.object({
+  profile: ProfileResponseSchema,
+  revisionInfo: RevisionInfoSchema.nullish(),
+  revisionStats: z.array(RevisionStatSchema),
+  recentMastery: z.array(RecentMasterySchema),
+});
+
+export {
+  DashboardResponse,
+  ProfileResponseSchema,
+  RecentMasterySchema,
+  RevisionInfoSchema,
+  RevisionStatSchema,
+};

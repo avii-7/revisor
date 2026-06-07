@@ -4,7 +4,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
 import type { RevisionItem } from "./Models/RevisionItem";
 import ListItem from "./ListItem/ListItem";
-import Difficulty from "./TagsMenu/Difficulty";
+import Difficulty, { type Difficulty as DifficultyValue } from "./TagsMenu/Difficulty";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
 import CookieConstant from "../../Utilities/CookieConstant";
@@ -38,7 +38,7 @@ const HomePage = () => {
   const itemsService = new RevisionItemService();
 
   const _updateItem = (item: RevisionItem) => {
-    itemsService.update(item).then(s => { console.log("Success Update") });
+    itemsService.update(item).then(() => { console.log("Success Update") });
   }
 
   const updateItem = useDebounce(_updateItem, 1000);
@@ -132,7 +132,7 @@ const HomePage = () => {
     setItems(filterItems);
   };
 
-  const onTagChange = (tag: Difficulty, index: number) => {
+  const onTagChange = (tag: DifficultyValue, index: number) => {
     const newItems = [...items];
     const itemToUpdate = newItems[index];
     itemToUpdate.difficulty = tag;

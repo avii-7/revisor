@@ -1,8 +1,6 @@
 export class DatabaseManager {
   private dbName = "RevisorDB";
 
-  private dbVersion = 1;
-
   constructor() {
     this.openConnection();
   }

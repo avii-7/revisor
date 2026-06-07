@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import CookieConstant from "../../Utilities/CookieConstant";
 
 const AuthPage = () => {
-  const [cookies] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
+  const [cookies] = useCookies([CookieConstant.jwtToken]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 

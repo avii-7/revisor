@@ -1,4 +1,4 @@
-import  { type RevisionItem } from "../../Components/Dashboard/Models/RevisionItem";
+import  { type RevisionItem } from "../../components/Dashboard/Models/RevisionItem";
 import { RevisionItemDB } from "./RevisionItemDB";
 
 export class RevisionItemsManager {
