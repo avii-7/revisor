@@ -1,7 +1,8 @@
 import "./AuthPage.css";
-import { FaGoogle } from "react-icons/fa";
+import { FaMicrochip } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { getGoogleOauthUrl } from "./AuthService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
 import CookieConstant from "../../Utilities/CookieConstant";
@@ -10,35 +11,60 @@ const AuthPage = () => {
 
     const [cookies] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (cookies.jwtToken) {
             navigate("/");
             return
         }
-    }, []);
+    }, [cookies.jwtToken, navigate]);
 
     const handleAuthWithGoogle = async () => {
-        const oauthUrl = await getGoogleOauthUrl();
-        window.open(oauthUrl, "_self");
+        if (isLoading) {
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+             const oauthUrl = await getGoogleOauthUrl()
+
+            window.open(
+                oauthUrl,
+                "oauthWindow",
+                "popup=yes,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=700"
+            );
+        } 
+        catch (error) {
+            setIsLoading(false);
+        }
     }
 
     return (
         <div className="login-page">
-            <div className="login-background">
-                <div className="left-semi-circle"/>
-                <div className="traingle" />
-            </div>
-
             <div className="login-content">
                 <div className="login-content-header">
-                    <h1 className="login-title">Revisor</h1>
-                    <div className="login-description">Revisor is a simple app designed to keeping track of tasks to review and revise.</div>
+                    <h1 className="login-title">
+                        <FaMicrochip className="login-logo" />
+                        Revisor
+                    </h1>
+                    <div className="login-description">Secure access to your workspace</div>
                 </div>
                 <div className="login-button-container">
-                    <button id="login-google" className="login-button" onClick={handleAuthWithGoogle}>
-                        <FaGoogle /> Login with Google
+                    <button id="login-google" className="login-button" onClick={handleAuthWithGoogle} disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                <span className="login-spinner" />
+                                Loading...
+                            </>
+                        ) : (
+                            <>
+                                <FcGoogle className="google-icon" /> Continue with Google
+                            </>
+                        )}
                     </button>
+                    <div className="login-auth-label">One-click authentication</div>
                 </div>
             </div>
         </div>
