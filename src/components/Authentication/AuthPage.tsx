@@ -1,48 +1,86 @@
-import "./AuthPage.css";
-import { FaGoogle } from "react-icons/fa";
+import { FaMicrochip } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { getGoogleOauthUrl } from "./AuthService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { useNavigate } from 'react-router'
+import { useNavigate } from "react-router";
 import CookieConstant from "../../Utilities/CookieConstant";
 
 const AuthPage = () => {
+  const [cookies] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-    const [cookies] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
-    const navigate = useNavigate();
+  useEffect(() => {
+    if (cookies.jwtToken) {
+      navigate("/");
+      return;
+    }
+  }, [cookies.jwtToken, navigate]);
 
-    useEffect(() => {
-        if (cookies.jwtToken) {
-            navigate("/");
-            return
-        }
-    }, []);
-
-    const handleAuthWithGoogle = async () => {
-        const oauthUrl = await getGoogleOauthUrl();
-        window.open(oauthUrl, "_self");
+  const handleAuthWithGoogle = async () => {
+    if (isLoading) {
+      return;
     }
 
-    return (
-        <div className="login-page">
-            <div className="login-background">
-                <div className="left-semi-circle"/>
-                <div className="traingle" />
-            </div>
+    setIsLoading(true);
 
-            <div className="login-content">
-                <div className="login-content-header">
-                    <h1 className="login-title">Revisor</h1>
-                    <div className="login-description">Revisor is a simple app designed to keeping track of tasks to review and revise.</div>
-                </div>
-                <div className="login-button-container">
-                    <button id="login-google" className="login-button" onClick={handleAuthWithGoogle}>
-                        <FaGoogle /> Login with Google
-                    </button>
-                </div>
-            </div>
+    try {
+      const oauthUrl = await getGoogleOauthUrl();
+
+      window.open(
+        oauthUrl,
+        "oauthWindow",
+        "popup=yes,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=700",
+      );
+    } catch (error) {
+      console.error("Error fetching Google OAuth URL:", error);
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="min-h-screen w-screen flex items-center justify-center overflow-hidden bg-background"
+      style={{ backgroundImage: "bg-app-gradient" }}
+    >
+      <div className="w-[min(88vw,320px)] flex flex-col gap-8 text-center text-on-surface">
+        <div className="flex flex-col items-center gap-4">
+          <h1 className="flex items-center justify-center gap-3 text-surface-tint font-bold text-3xl leading-none m-0">
+            <FaMicrochip className="text-tertiary-fixed-dim text-2xl" />
+            Revisor
+          </h1>
+          <div className="text-on-surface-variant font-regular text-sm">
+            Secure access to your workspace
+          </div>
         </div>
-    )
-}
+
+        <div className="p-8 bg-surface-container/40 border border-surface-tint/10 rounded-lg shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+          <button
+            id="login-google"
+            onClick={handleAuthWithGoogle}
+            disabled={isLoading}
+            className="w-full min-h-[44px] px-4 rounded-[6px] border-1 border-outline-variant/30 bg-surface-container-low/50 text-on-surface text-sm font-semibold flex items-center justify-center gap-3 transition duration-150 hover:bg-surface-dim hover:border-primary disabled:cursor-wait disabled:opacity-80 focus-visible:outline focus-visible:outline-primary focus-visible:outline-2 focus-visible:outline-offset-3"
+          >
+            {isLoading ? (
+              <>
+                <span className="inline-block w-3.5 h-3.5 rounded-full border-2 border-on-surface-variant border-t-primary animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                <FcGoogle className="text-base" /> Continue with Google
+              </>
+            )}
+          </button>
+
+          <div className="relative inline-block mx-auto mt-6 text-xs uppercase font-bold tracking-[0.03em] text-outline-variant after:absolute after:left-1/2 after:top-full after:mt-2 after:-translate-x-1/2 after:h-px after:w-8 after:bg-gradient-to-r after:from-transparent after:via-surface-bright after:to-transparent">
+            One-click authentication
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default AuthPage;

@@ -1,6 +1,6 @@
 import apiClient from "../../../Network/ApiClient";
 import { RevisionItemEndpoint } from "../../../Network/Endpoints";
-import { NewRevisionItem, RevisionItemSchema, RevisionItem } from "../Models/RevisionItem";
+import type { NewRevisionItem, RevisionItemSchema, RevisionItem } from "../Models/RevisionItem";
 import z from 'zod';
 
 export default class RevisionItemService {
