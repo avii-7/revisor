@@ -8,7 +8,7 @@ const nonJWTEndpoints: string[] = [AuthenticationEndpoint.oauthGoogle];
 const cookies = new Cookies();
 
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: import.meta.env.REACT_APP_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

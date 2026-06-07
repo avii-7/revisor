@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import "./HomePage.css";
 import { FaPlusCircle } from "react-icons/fa";
 import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
-import { RevisionItem } from "./Models/RevisionItem";
+import type { RevisionItem } from "./Models/RevisionItem";
 import ListItem from "./ListItem/ListItem";
 import Difficulty from "./TagsMenu/Difficulty";
 import { useCookies } from "react-cookie";
