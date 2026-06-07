@@ -1,0 +1,152 @@
+import {
+  FaChartBar,
+  FaCheckCircle,
+  FaEllipsisV,
+  FaRedoAlt,
+  FaCog,
+  FaUserCircle,
+} from "react-icons/fa";
+import DashboardService from "./Services/DashboardService";
+
+const dashboardService = new DashboardService();
+
+const statIcons = {
+  "total-problems": FaChartBar,
+  "total-revisions": FaRedoAlt,
+  "success-rate": FaChartBar,
+};
+
+const DashboardPage = () => {
+  const dashboardData = dashboardService.hardCodeValuesDemo();
+  const revisionInfo = dashboardData.revisionInfo;
+
+  return (
+    <main className="min-h-screen bg-app-gradient font-[var(--revisor-font-family-primary)] text-on-surface">
+      <nav className="border-b border-outline-variant/45 bg-surface-container-lowest/70">
+        <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-5">
+          <div className="flex h-full items-center gap-8">
+            <span className="text-[length:var(--revisor-typography-body-md-font-size)] font-semibold leading-[var(--revisor-typography-body-md-line-height)] text-primary">
+              Revisor
+            </span>
+            <a
+              className="flex h-full items-center border-b border-primary px-1 text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface"
+              href="/"
+            >
+              Dashboard
+            </a>
+          </div>
+          <div className="flex items-center gap-5">
+            <button
+              className="grid size-8 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
+              aria-label="Open settings"
+              type="button"
+            >
+              <FaCog aria-hidden="true" className="size-4" />
+            </button>
+            <button
+              className="grid size-8 place-items-center rounded-full border border-outline-variant bg-surface-container text-primary transition hover:border-primary"
+              aria-label="Open profile"
+              type="button"
+            >
+              <FaUserCircle aria-hidden="true" className="size-5" />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <section className="mx-auto max-w-[1200px] px-5 py-8">
+        <div className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-7 shadow-[0_24px_80px_rgba(49,57,77,0.28)] sm:flex sm:items-center sm:justify-between sm:p-8">
+          <div>
+            <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)] text-primary">
+              {revisionInfo?.topText}
+            </p>
+            <h1 className="mt-3 text-[length:var(--revisor-typography-headline-md-font-size)] font-semibold leading-[var(--revisor-typography-headline-md-line-height)] text-on-surface">
+              {revisionInfo?.title}
+            </h1>
+            <p className="mt-2 text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
+              {revisionInfo?.subtitle}
+            </p>
+          </div>
+          <button
+            className="mt-6 rounded-md bg-primary-container px-8 py-3 text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface shadow-[0_18px_44px_rgba(77,142,255,0.28)] transition hover:bg-primary hover:text-on-primary sm:mt-0"
+            type="button"
+          >
+            {revisionInfo?.ctaText}
+          </button>
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          {dashboardData.revisionStats.map((stat) => {
+            const Icon = statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
+            return (
+              <article
+                className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-6"
+                key={stat.id}
+              >
+                <div className="flex items-center gap-3 text-on-surface-variant">
+                  <Icon aria-hidden="true" className="size-4 text-primary" />
+                  <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)]">
+                    {stat.title}
+                  </p>
+                </div>
+                <p className="mt-2 text-[length:var(--revisor-typography-headline-md-font-size)] font-normal leading-[var(--revisor-typography-headline-md-line-height)] text-on-surface">
+                  {stat.value}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="mt-9 flex items-center justify-between">
+          <h2 className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
+            Recent Mastery
+          </h2>
+          <a
+            className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-primary transition hover:text-on-surface"
+            href="/"
+          >
+            View all &rarr;
+          </a>
+        </div>
+
+        <section className="mt-4 overflow-hidden rounded-lg border border-outline-variant/70 bg-surface-container-low">
+          {dashboardData.recentMastery.map((item) => (
+            <article
+              className="flex items-center gap-5 border-b border-outline-variant/45 px-6 py-5 last:border-b-0"
+              key={item.id}
+            >
+              <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-surface-container-high text-primary">
+                <FaCheckCircle aria-hidden="true" className="size-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate text-[length:var(--revisor-typography-label-sm-font-size)] font-semibold leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface">
+                  {item.title}
+                </h3>
+                <p className="mt-1 truncate text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
+                  {item.subtitle}
+                </p>
+              </div>
+              <div className="hidden text-right sm:block">
+                <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)] text-on-surface-variant">
+                  Streak
+                </p>
+                <p className="mt-1 text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface">
+                  {item.streak}
+                </p>
+              </div>
+              <button
+                className="grid size-8 shrink-0 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
+                aria-label={`Open actions for ${item.title}`}
+                type="button"
+              >
+                <FaEllipsisV aria-hidden="true" className="size-3" />
+              </button>
+            </article>
+          ))}
+        </section>
+      </section>
+    </main>
+  );
+};
+
+export default DashboardPage;

@@ -1,11 +1,11 @@
 import z from 'zod';
-import Difficulty from '../TagsMenu/Difficulty';
+import { type Difficulty as DifficultyValue } from '../TagsMenu/Difficulty';
 
 interface BaseRevisionItem {
   title: string;
   content: string
   revisionCount: number;
-  difficulty: Difficulty;
+  difficulty: DifficultyValue;
 };
 
 interface RevisionItem extends BaseRevisionItem {

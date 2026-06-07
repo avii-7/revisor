@@ -14,7 +14,7 @@ export class RevisionItemDB extends DatabaseManager {
         
         const cursorOpenRequest = index.openCursor(null, "next");
 
-        cursorOpenRequest.onsuccess = (event) => {
+        cursorOpenRequest.onsuccess = () => {
           const result = cursorOpenRequest.result;
           if (result) {
             resolve(result.value);

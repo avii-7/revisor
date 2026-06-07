@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Difficulty from "./Difficulty";
+import Difficulty, { type Difficulty as DifficultyValue } from "./Difficulty";
 import "./TagsMenu.css";
 
 type TagsMenuProps = {
-  selectedTag: Difficulty;
-  onTagChange: (tag: Difficulty) => void;
+  selectedTag: DifficultyValue;
+  onTagChange: (tag: DifficultyValue) => void;
 };
 
 const TagsMenu = (props: TagsMenuProps) => {
