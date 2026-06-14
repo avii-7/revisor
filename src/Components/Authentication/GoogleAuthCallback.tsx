@@ -15,7 +15,7 @@ const GoogleAuthCallback = () => {
       setCookie(CookieConstant.jwtToken, token)
       navigate("/");
     }
-  }, []);
+  }, [navigate, setCookie, token]);
 
   return (
     <div>

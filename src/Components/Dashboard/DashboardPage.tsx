@@ -7,8 +7,17 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import DashboardService from "./Services/DashboardService";
+import { useCookies } from "react-cookie";
+import CookieConstant from "../../Utilities/CookieConstant";
+import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { type DashboardResponseType } from "./Models/DashboardResponse";
+import RevisionItemService from "./Services/RevisionItemService";
+import type { RevisionItemType } from "./Models/RevisionItem";
 
 const dashboardService = new DashboardService();
+
+const revisionItemService = new RevisionItemService();
 
 const statIcons = {
   "total-problems": FaChartBar,
@@ -17,8 +26,42 @@ const statIcons = {
 };
 
 const DashboardPage = () => {
-  const dashboardData = dashboardService.hardCodeValuesDemo();
-  const revisionInfo = dashboardData.revisionInfo;
+  const [cookies] = useCookies([CookieConstant.jwtToken]);
+
+  const [dashboard, setDashboard] = useState<DashboardResponseType>();
+  const [items, setItems] = useState<RevisionItemType[]>([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!cookies.jwtToken) {
+      navigate("/auth");
+      return;
+    }
+  }, [navigate, cookies.jwtToken]);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const data = await dashboardService.getDashboardData();
+        setDashboard(data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    const fetchRevisionItems = async () => {
+      try {
+        const data = await revisionItemService.getRevisionItems();
+        setItems(data);
+      } catch (error) {
+        console.error("Error fetching revision items:", error);
+      }
+    };
+
+    fetchDashboardData();
+    fetchRevisionItems();
+  }, []);
 
   return (
     <main className="min-h-screen bg-app-gradient font-[var(--revisor-font-family-primary)] text-on-surface">
@@ -58,26 +101,27 @@ const DashboardPage = () => {
         <div className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-7 shadow-[0_24px_80px_rgba(49,57,77,0.28)] sm:flex sm:items-center sm:justify-between sm:p-8">
           <div>
             <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)] text-primary">
-              {revisionInfo?.topText}
+              {dashboard?.revisionInfo?.topText}
             </p>
             <h1 className="mt-3 text-[length:var(--revisor-typography-headline-md-font-size)] font-semibold leading-[var(--revisor-typography-headline-md-line-height)] text-on-surface">
-              {revisionInfo?.title}
+              {dashboard?.revisionInfo?.title}
             </h1>
             <p className="mt-2 text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
-              {revisionInfo?.subtitle}
+              {dashboard?.revisionInfo?.subtitle}
             </p>
           </div>
           <button
             className="mt-6 rounded-md bg-primary-container px-8 py-3 text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface shadow-[0_18px_44px_rgba(77,142,255,0.28)] transition hover:bg-primary hover:text-on-primary sm:mt-0"
             type="button"
           >
-            {revisionInfo?.ctaText}
+            {dashboard?.revisionInfo?.ctaText}
           </button>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {dashboardData.revisionStats.map((stat) => {
-            const Icon = statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
+          {dashboard?.revisionStats.map((stat) => {
+            const Icon =
+              statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
             return (
               <article
                 className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-6"
@@ -110,7 +154,7 @@ const DashboardPage = () => {
         </div>
 
         <section className="mt-4 overflow-hidden rounded-lg border border-outline-variant/70 bg-surface-container-low">
-          {dashboardData.recentMastery.map((item) => (
+          {items.map((item) => (
             <article
               className="flex items-center gap-5 border-b border-outline-variant/45 px-6 py-5 last:border-b-0"
               key={item.id}
@@ -131,7 +175,7 @@ const DashboardPage = () => {
                   Streak
                 </p>
                 <p className="mt-1 text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface">
-                  {item.streak}
+                  {item.streak} Revisions
                 </p>
               </div>
               <button

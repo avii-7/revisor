@@ -1,5 +1,5 @@
 const AuthenticationEndpoint = {
-  oauthGoogle: "auth/google",
+  oauthGoogle: "/auth/google",
 } as const;
 
 const ProfileEndpoint = {

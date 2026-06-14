@@ -16,6 +16,7 @@ const AuthPage = () => {
       navigate("/");
       return;
     }
+
   }, [cookies.jwtToken, navigate]);
 
   const handleAuthWithGoogle = async () => {
@@ -28,12 +29,11 @@ const AuthPage = () => {
     try {
       const oauthUrl = await getGoogleOauthUrl();
 
-      window.open(
-        oauthUrl,
-        "oauthWindow",
-        "popup=yes,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=700",
-      );
-    } catch (error) {
+      console.log("Received OAuth URL:", oauthUrl);
+
+       window.location.href = oauthUrl;
+    } 
+    catch (error) {
       console.error("Error fetching Google OAuth URL:", error);
       setIsLoading(false);
     }

@@ -1,6 +1,7 @@
 import z from "zod";
 
 const ProfileResponseSchema = z.object({
+  userId: z.uuid(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
@@ -30,5 +31,7 @@ export {
   DashboardResponse,
   ProfileResponseSchema,
   RevisionInfoSchema,
-  RevisionStatSchema,
+  RevisionStatSchema
 };
+
+export type DashboardResponseType = z.infer<typeof DashboardResponse>;

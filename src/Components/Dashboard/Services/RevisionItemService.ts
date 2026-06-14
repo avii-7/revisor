@@ -1,25 +1,13 @@
 import apiClient from "../../../Network/ApiClient";
 import { RevisionItemEndpoint } from "../../../Network/Endpoints";
-import type { NewRevisionItem, RevisionItemSchema, RevisionItem } from "../Models/RevisionItem";
+import { RevisionItemSchema, type NewRevisionItem, type RevisionItem, type RevisionItemType } from "../Models/RevisionItem";
 import z from 'zod';
 
 export default class RevisionItemService {
 
-    async getRevisionItems() {
-        type schema = z.infer<typeof RevisionItemSchema>
-        const response = await apiClient.get<schema[]>(RevisionItemEndpoint.revisionItems);
-
-        const items = response.data.map<RevisionItem>(item => {
-             return {
-                id: item.id,
-                title: item.title,
-                content: item.content,
-                revisionCount: item.revision_count,
-                difficulty: item.difficulty
-            }
-        });
-
-        return items;
+    async getRevisionItems(): Promise<RevisionItemType[]> {
+        const response = await apiClient.get(RevisionItemEndpoint.revisionItems);
+        return z.array(RevisionItemSchema).parse(response.data);
     }
 
     async create(item: NewRevisionItem) {
