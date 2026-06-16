@@ -11,10 +11,10 @@
 // export type { Difficulty };
 
 export const DifficultyValues = [
-  "Default",
-  "Easy",
-  "Medium",
-  "Hard",
+  "default",
+  "easy",
+  "medium",
+  "hard",
 ] as const;
 
 export type Difficulty =

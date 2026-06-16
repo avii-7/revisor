@@ -8,7 +8,7 @@ const ProfileEndpoint = {
 
 const RevisionItemEndpoint = {
   // Get All & Create
-  revisionItems: "revise-items",
+  revisionItems: "revision-items",
 } as const;
 
 const DashboardEndpoint = {

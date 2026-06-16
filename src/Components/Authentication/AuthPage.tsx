@@ -4,7 +4,8 @@ import { getGoogleOauthUrl } from "./AuthService";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
-import CookieConstant from "../../Utilities/CookieConstant";
+import CookieConstant from "../../utilities/CookieConstant";
+import DotGridBackground from "../common/DotGridBackground";
 
 const AuthPage = () => {
   const [cookies] = useCookies([CookieConstant.jwtToken]);
@@ -31,8 +32,8 @@ const AuthPage = () => {
 
       console.log("Received OAuth URL:", oauthUrl);
 
-       window.location.href = oauthUrl;
-    } 
+      window.location.href = oauthUrl;
+    }
     catch (error) {
       console.error("Error fetching Google OAuth URL:", error);
       setIsLoading(false);
@@ -41,9 +42,11 @@ const AuthPage = () => {
 
   return (
     <div
-      className="min-h-screen w-screen flex items-center justify-center overflow-hidden bg-background"
+      className="min-h-screen w-screen flex items-center justify-center overflow-hidden bg-background relative"
       style={{ backgroundImage: "bg-app-gradient" }}
     >
+      <DotGridBackground />
+
       <div className="w-[min(88vw,320px)] flex flex-col gap-8 text-center text-on-surface">
         <div className="flex flex-col items-center gap-4">
           <h1 className="flex items-center justify-center gap-3 text-surface-tint font-bold text-3xl leading-none m-0">

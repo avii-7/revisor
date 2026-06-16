@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import "./HomePage.css";
 import { FaPlusCircle } from "react-icons/fa";
-import { RevisionItemsManager } from "../../Database/RevisionItem/RevisionItemManager";
-import type { RevisionItem } from "./Models/RevisionItem";
-import ListItem from "./ListItem/ListItem";
+import { RevisionItemsManager } from "../../database/RevisionItem/RevisionItemManager";
+import type { RevisionItem } from "./models/RevisionItem";
+import ListItem from "./listItem/ListItem";
 import Difficulty, { type Difficulty as DifficultyValue } from "./TagsMenu/Difficulty";
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router'
-import CookieConstant from "../../Utilities/CookieConstant";
-import ProfileService from "../Profile/Network/ProfileService";
+import CookieConstant from "../../utilities/CookieConstant";
+import ProfileService from "../profile/Network/ProfileService";
 import { v4 as uuidv4 } from "uuid";
-import RevisionItemService from "./Services/RevisionItemService";
-import { useDebounce } from "../../Utilities/useDebounce";
+import RevisionItemService from "./services/RevisionItemService";
+import { useDebounce } from "../../utilities/useDebounce";
 
 interface Modal<T> {
   isVisible: boolean;

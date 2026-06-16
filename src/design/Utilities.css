@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@utility bg-app-gradient {
+  background-image: radial-gradient(circle at center,
+      var(--color-surface-container-low) 0%,
+      var(--color-surface-container-lowest) 100%);
+}

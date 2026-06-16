@@ -1,5 +1,5 @@
-@import "./DesignSystem/colors.css";
-@import "./DesignSystem/typography.css";
-@import "./DesignSystem/utilities.css";
+@import "./design/colors.css";
+@import "./design/typography.css";
+@import "./design/utilities.css";
 
 @import "tailwindcss";

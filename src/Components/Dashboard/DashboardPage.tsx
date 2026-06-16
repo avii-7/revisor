@@ -5,15 +5,17 @@ import {
   FaRedoAlt,
   FaCog,
   FaUserCircle,
+  FaPlus,
 } from "react-icons/fa";
-import DashboardService from "./Services/DashboardService";
+import DashboardService from "./services/DashboardService";
 import { useCookies } from "react-cookie";
-import CookieConstant from "../../Utilities/CookieConstant";
+import CookieConstant from "../../utilities/CookieConstant";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { type DashboardResponseType } from "./Models/DashboardResponse";
-import RevisionItemService from "./Services/RevisionItemService";
-import type { RevisionItemType } from "./Models/RevisionItem";
+import { type DashboardResponseType } from "./models/DashboardResponse";
+import RevisionItemService from "./services/RevisionItemService";
+import type { RevisionItemType } from "./models/RevisionItem";
+import DotGridBackground from "../common/DotGridBackground";
 
 const dashboardService = new DashboardService();
 
@@ -64,21 +66,28 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-app-gradient font-[var(--revisor-font-family-primary)] text-on-surface">
+    <main className="min-h-screen bg-app-gradient relative font-primary text-on-surface">
+
+      <DotGridBackground />
+
       <nav className="border-b border-outline-variant/45 bg-surface-container-lowest/70">
         <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-5">
           <div className="flex h-full items-center gap-8">
-            <span className="text-[length:var(--revisor-typography-body-md-font-size)] font-semibold leading-[var(--revisor-typography-body-md-line-height)] text-primary">
+            <span className="text-body-md font-semibold text-primary">
               Revisor
             </span>
-            <a
-              className="flex h-full items-center border-b border-primary px-1 text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface"
-              href="/"
-            >
-              Dashboard
-            </a>
           </div>
           <div className="flex items-center gap-5">
+            <button
+              onClick={() => navigate("/create")}
+              className="flex items-center gap-2 rounded-md px-7 py-3
+              text-label-sm font-medium 
+              text-on-surface-variant border border-outline-variant
+              transition hover:bg-surface-container-high hover:text-on-surface"
+            >
+              <FaPlus /> Create New Item
+            </button>
+
             <button
               className="grid size-8 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
               aria-label="Open settings"
@@ -100,18 +109,18 @@ const DashboardPage = () => {
       <section className="mx-auto max-w-[1200px] px-5 py-8">
         <div className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-7 shadow-[0_24px_80px_rgba(49,57,77,0.28)] sm:flex sm:items-center sm:justify-between sm:p-8">
           <div>
-            <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)] text-primary">
+            <p className="text-label-sm font-medium uppercase text-primary">
               {dashboard?.revisionInfo?.topText}
             </p>
-            <h1 className="mt-3 text-[length:var(--revisor-typography-headline-md-font-size)] font-semibold leading-[var(--revisor-typography-headline-md-line-height)] text-on-surface">
+            <h1 className="mt-3 text-headline-md font-semibold text-on-surface">
               {dashboard?.revisionInfo?.title}
             </h1>
-            <p className="mt-2 text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
+            <p className="mt-2 text-label-sm font-normal text-on-surface-variant">
               {dashboard?.revisionInfo?.subtitle}
             </p>
           </div>
           <button
-            className="mt-6 rounded-md bg-primary-container px-8 py-3 text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface shadow-[0_18px_44px_rgba(77,142,255,0.28)] transition hover:bg-primary hover:text-on-primary sm:mt-0"
+            className="mt-6 rounded-md bg-primary-container px-8 py-3 text-label-sm font-medium text-on-surface shadow-[0_18px_44px_rgba(77,142,255,0.28)] transition hover:bg-primary hover:text-on-primary sm:mt-0"
             type="button"
           >
             {dashboard?.revisionInfo?.ctaText}
@@ -129,11 +138,11 @@ const DashboardPage = () => {
               >
                 <div className="flex items-center gap-3 text-on-surface-variant">
                   <Icon aria-hidden="true" className="size-4 text-primary" />
-                  <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)]">
+                  <p className="text-label-sm font-medium uppercase">
                     {stat.title}
                   </p>
                 </div>
-                <p className="mt-2 text-[length:var(--revisor-typography-headline-md-font-size)] font-normal leading-[var(--revisor-typography-headline-md-line-height)] text-on-surface">
+                <p className="mt-2 text-headline-md font-normal text-on-surface">
                   {stat.value}
                 </p>
               </article>
@@ -142,11 +151,11 @@ const DashboardPage = () => {
         </div>
 
         <div className="mt-9 flex items-center justify-between">
-          <h2 className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
+          <h2 className="text-label-sm font-medium text-on-surface-variant">
             Recent Mastery
           </h2>
           <a
-            className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium leading-[var(--revisor-typography-label-sm-line-height)] text-primary transition hover:text-on-surface"
+            className="text-label-sm font-medium text-primary transition hover:text-on-surface"
             href="/"
           >
             View all &rarr;
@@ -163,18 +172,18 @@ const DashboardPage = () => {
                 <FaCheckCircle aria-hidden="true" className="size-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-[length:var(--revisor-typography-label-sm-font-size)] font-semibold leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface">
+                <h3 className="truncate text-label-sm font-semibold text-on-surface">
                   {item.title}
                 </h3>
-                <p className="mt-1 truncate text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface-variant">
+                <p className="mt-1 truncate text-label-sm font-normal text-on-surface-variant">
                   {item.subtitle}
                 </p>
               </div>
               <div className="hidden text-right sm:block">
-                <p className="text-[length:var(--revisor-typography-label-sm-font-size)] font-medium uppercase leading-[var(--revisor-typography-label-sm-line-height)] tracking-[var(--revisor-typography-label-sm-letter-spacing)] text-on-surface-variant">
+                <p className="text-label-sm font-medium uppercase text-on-surface-variant">
                   Streak
                 </p>
-                <p className="mt-1 text-[length:var(--revisor-typography-label-sm-font-size)] font-normal leading-[var(--revisor-typography-label-sm-line-height)] text-on-surface">
+                <p className="mt-1 text-label-sm font-normal text-on-surface">
                   {item.streak} Revisions
                 </p>
               </div>

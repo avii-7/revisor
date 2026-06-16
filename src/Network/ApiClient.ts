@@ -1,5 +1,5 @@
 import axios from "axios";
-import CookieConstant from "../Utilities/CookieConstant";
+import CookieConstant from "../utilities/CookieConstant";
 import { Cookies } from "react-cookie";
 import { AuthenticationEndpoint } from "./Endpoints";
 import humps from "humps";
@@ -33,9 +33,9 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => {
-    
+
     const contentType = response.headers["content-type"];
-    
+
     if (
       response.data &&
       contentType?.toString().includes("application/json")

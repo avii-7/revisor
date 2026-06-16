@@ -1,5 +1,5 @@
 import { DatabaseManager } from "../DatabaseManager";
-import type { RevisionItem } from "../../Components/Dashboard/Models/RevisionItem";
+import type { RevisionItem } from "../../components/dashboard/models/RevisionItem";
 
 export class RevisionItemDB extends DatabaseManager {
   private objectStore = "RevisionItems";
@@ -11,7 +11,7 @@ export class RevisionItemDB extends DatabaseManager {
         const store = transaction.objectStore(this.objectStore);
 
         const index = store.index("revision_item");
-        
+
         const cursorOpenRequest = index.openCursor(null, "next");
 
         cursorOpenRequest.onsuccess = () => {
@@ -22,7 +22,7 @@ export class RevisionItemDB extends DatabaseManager {
             reject(null);
           }
         };
-        
+
         cursorOpenRequest.onerror = () => {
           reject(cursorOpenRequest.error);
         };
