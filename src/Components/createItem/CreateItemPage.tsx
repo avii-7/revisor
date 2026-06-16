@@ -12,8 +12,9 @@ import {
 import { useNavigate } from "react-router";
 import RevisionItemService from "../dashboard/services/RevisionItemService";
 import type { NewRevisionItem } from "../dashboard/models/RevisionItem";
-import type { Difficulty } from "../dashboard/TagsMenu/Difficulty";
+import { DifficultyValues, type Difficulty } from "../dashboard/TagsMenu/Difficulty";
 import DotGridBackground from "../common/DotGridBackground";
+import { capitalize } from "../../utilities/CommonUtility";
 
 const revisionItemService = new RevisionItemService();
 
@@ -204,26 +205,27 @@ const CreateItemPage = () => {
               Difficulty
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {(["default", "easy", "medium", "hard"] as const).map((level) => {
+
+              {DifficultyValues.map((level) => {
                 const isActive = difficulty === level;
                 let activeStyles = "";
                 let hoverStyles = "";
                 let labelText = "";
 
-                if (level === "default") {
-                  labelText = "Default";
+                if (level === DifficultyValues[0]) {
+                  labelText = capitalize(level);
                   activeStyles = "bg-slate-500/25 text-slate-200 border-slate-500/50 shadow-[0_0_15px_rgba(148,163,184,0.15)]";
                   hoverStyles = "hover:bg-slate-500/10 hover:border-slate-500/35 text-slate-400";
-                } else if (level === "easy") {
-                  labelText = "Easy";
+                } else if (level === DifficultyValues[1]) {
+                  labelText = capitalize(level);
                   activeStyles = "bg-emerald-500/25 text-emerald-300 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]";
                   hoverStyles = "hover:bg-emerald-500/10 hover:border-emerald-500/35 text-emerald-400";
-                } else if (level === "medium") {
-                  labelText = "Medium";
+                } else if (level === DifficultyValues[2]) {
+                  labelText = capitalize(level);
                   activeStyles = "bg-amber-500/25 text-amber-300 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)]";
                   hoverStyles = "hover:bg-amber-500/10 hover:border-amber-500/35 text-amber-400";
-                } else if (level === "hard") {
-                  labelText = "Hard";
+                } else if (level === DifficultyValues[3]) {
+                  labelText = capitalize(level);
                   activeStyles = "bg-rose-500/25 text-rose-300 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.15)]";
                   hoverStyles = "hover:bg-rose-500/10 hover:border-rose-500/35 text-rose-400";
                 }
