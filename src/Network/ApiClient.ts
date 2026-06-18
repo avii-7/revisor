@@ -1,7 +1,7 @@
 import axios from "axios";
-import { AuthenticationEndpoint } from "./Endpoints";
+import { AuthenticationEndpoint } from "./Endpoints.ts";
 import humps from "humps";
-import CookieManager, { CookieConstant } from "../utilities/CookieConstant";
+import CookieManager, { CookieConstant } from "../utilities/CookieConstant.ts";
 
 const nonJWTEndpoints: string[] = [AuthenticationEndpoint.oauthGoogle];
 
