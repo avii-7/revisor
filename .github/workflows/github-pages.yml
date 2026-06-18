@@ -2,7 +2,7 @@ name: Dev Deployment # name of the workflow
 run-name: Uploading on Github pages 🚀
 on:
   push:
-      branches: ["dev"]
+      branches: ["master"]
       paths-ignore:
         - '**/README.md'
 
@@ -34,7 +34,7 @@ jobs:
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "build/"
+          path: "dist/"
 
  # Deployment job
   deploy:
