@@ -10,20 +10,14 @@ import {
   FaListUl,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import RevisionItemService from "../dashboard/services/RevisionItemService";
-import type { NewRevisionItem } from "../dashboard/models/RevisionItem";
-import { DifficultyValues, type Difficulty } from "../dashboard/TagsMenu/Difficulty";
-import DotGridBackground from "../common/DotGridBackground";
-import { capitalize } from "../../utilities/CommonUtility";
+import RevisionItemService from "../dashboard/services/RevisionItemService.ts";
+import type { NewRevisionItem } from "../dashboard/models/RevisionItem.ts";
+import { DifficultyValues, type Difficulty } from "../dashboard/TagsMenu/Difficulty.ts";
+import DotGridBackground from "../common/DotGridBackground.tsx";
+import { capitalize } from "../../utilities/CommonUtility.ts";
+import { Tab } from "./Tab";
 
 const revisionItemService = new RevisionItemService();
-
-export const Tab = {
-  intuition: "intuition",
-  code: "code",
-} as const;
-
-export type Tab = (typeof Tab)[keyof typeof Tab];
 
 const CreateItemPage = () => {
   const navigate = useNavigate();
@@ -212,7 +206,7 @@ const CreateItemPage = () => {
                 const isActive = difficulty === level;
                 let activeStyles = "";
                 let hoverStyles = "";
-                let labelText = capitalize(level);
+                const labelText = capitalize(level);
 
                 if (level === DifficultyValues[0]) {
                   activeStyles = "bg-slate-500/25 text-slate-200 border-slate-500/50 shadow-[0_0_15px_rgba(148,163,184,0.15)]";

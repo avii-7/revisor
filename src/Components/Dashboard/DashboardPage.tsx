@@ -8,16 +8,17 @@ import {
   FaPlus,
   FaSignOutAlt,
 } from "react-icons/fa";
-import DashboardService from "./services/DashboardService";
+import DashboardService from "./services/DashboardService.ts";
 import { useCookies } from "react-cookie";
-import { CookieConstant } from "../../utilities/CookieConstant";
+import { CookieConstant } from "../../utilities/CookieConstant.ts";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { type DashboardResponseType } from "./models/DashboardResponse";
-import RevisionItemService from "./services/RevisionItemService";
-import type { RevisionItemType } from "./models/RevisionItem";
-import DotGridBackground from "../common/DotGridBackground";
-import AuthManager from "../../utilities/AuthManager";
+import { type DashboardResponseType } from "./models/DashboardResponse.ts";
+import RevisionItemService from "./services/RevisionItemService.ts";
+import type { RevisionItemType } from "./models/RevisionItem.ts";
+
+import AuthManager from "../../utilities/AuthManager.ts";
+import DotGridBackground from "../common/DotGridBackground.tsx";
 
 const dashboardService = new DashboardService();
 
