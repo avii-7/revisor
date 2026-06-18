@@ -1,4 +1,4 @@
-import { RevisionItem } from "./RevisionItem";
+import { type RevisionItem } from "../../components/dashboard/models/RevisionItem";
 import { RevisionItemDB } from "./RevisionItemDB";
 
 export class RevisionItemsManager {
@@ -6,7 +6,7 @@ export class RevisionItemsManager {
   private genericDB = new RevisionItemDB();
 
   private objectStore = "RevisionItems";
-  
+
   async insert(item: RevisionItem) {
     return await this.genericDB.insert<RevisionItem>(this.objectStore, item);
   }
@@ -25,7 +25,7 @@ export class RevisionItemsManager {
     const result = await this.genericDB.update(this.objectStore, item);
     return result;
   }
-  
+
   async delete(id: string) {
     return await this.genericDB.delete(this.objectStore, id);
   }

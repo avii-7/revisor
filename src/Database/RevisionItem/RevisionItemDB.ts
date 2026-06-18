@@ -1,5 +1,5 @@
 import { DatabaseManager } from "../DatabaseManager";
-import { RevisionItem } from "./RevisionItem";
+import type { RevisionItem } from "../../components/dashboard/models/RevisionItem";
 
 export class RevisionItemDB extends DatabaseManager {
   private objectStore = "RevisionItems";
@@ -7,22 +7,22 @@ export class RevisionItemDB extends DatabaseManager {
   getAnItemToRevise() {
     return new Promise<RevisionItem>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
-        let transaction = db.transaction(this.objectStore, "readonly");
-        let store = transaction.objectStore(this.objectStore);
+        const transaction = db.transaction(this.objectStore, "readonly");
+        const store = transaction.objectStore(this.objectStore);
 
-        let index = store.index("revision_item");
-        
-        let cursorOpenRequest = index.openCursor(null, "next");
+        const index = store.index("revision_item");
 
-        cursorOpenRequest.onsuccess = (event) => {
-          let result = cursorOpenRequest.result;
+        const cursorOpenRequest = index.openCursor(null, "next");
+
+        cursorOpenRequest.onsuccess = () => {
+          const result = cursorOpenRequest.result;
           if (result) {
             resolve(result.value);
           } else {
             reject(null);
           }
         };
-        
+
         cursorOpenRequest.onerror = () => {
           reject(cursorOpenRequest.error);
         };
