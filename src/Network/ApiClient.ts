@@ -1,12 +1,9 @@
 import axios from "axios";
-import CookieConstant from "../utilities/CookieConstant";
-import { Cookies } from "react-cookie";
 import { AuthenticationEndpoint } from "./Endpoints";
 import humps from "humps";
+import CookieManager, { CookieConstant } from "../utilities/CookieConstant";
 
 const nonJWTEndpoints: string[] = [AuthenticationEndpoint.oauthGoogle];
-
-const cookies = new Cookies();
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -19,7 +16,7 @@ apiClient.interceptors.request.use(
   (config) => {
     if (config.url) {
       if (!nonJWTEndpoints.includes(config.url)) {
-        const token = cookies.get(CookieConstant.jwtToken);
+        const token = CookieManager.get(CookieConstant.jwtToken);
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
@@ -51,7 +48,7 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      cookies.remove(CookieConstant.jwtToken, { path: "/" });
+      CookieManager.remove(CookieConstant.jwtToken);
       window.location.href = "/auth";
     }
     return Promise.reject(error);

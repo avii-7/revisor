@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from 'react-router'
-import CookieConstant from '../../utilities/CookieConstant';
+import { CookieConstant } from '../../utilities/CookieConstant';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 

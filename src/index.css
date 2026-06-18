@@ -3,3 +3,10 @@
 @import "./design/utilities.css";
 
 @import "tailwindcss";
+
+html,
+body,
+#root {
+    min-height: 100%;
+    background-color: var(--color-surface-container-lowest);
+}

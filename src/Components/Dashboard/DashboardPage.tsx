@@ -6,16 +6,18 @@ import {
   FaCog,
   FaUserCircle,
   FaPlus,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import DashboardService from "./services/DashboardService";
 import { useCookies } from "react-cookie";
-import CookieConstant from "../../utilities/CookieConstant";
+import { CookieConstant } from "../../utilities/CookieConstant";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { type DashboardResponseType } from "./models/DashboardResponse";
 import RevisionItemService from "./services/RevisionItemService";
 import type { RevisionItemType } from "./models/RevisionItem";
 import DotGridBackground from "../common/DotGridBackground";
+import AuthManager from "../../utilities/AuthManager";
 
 const dashboardService = new DashboardService();
 
@@ -32,6 +34,7 @@ const DashboardPage = () => {
 
   const [dashboard, setDashboard] = useState<DashboardResponseType>();
   const [items, setItems] = useState<RevisionItemType[]>([]);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,6 +68,11 @@ const DashboardPage = () => {
     fetchRevisionItems();
   }, []);
 
+  const handleLogout = () => {
+    AuthManager.logout();
+    navigate("/auth");
+  }
+
   return (
     <main className="min-h-screen bg-app-gradient relative font-primary text-on-surface">
 
@@ -77,31 +85,64 @@ const DashboardPage = () => {
               Revisor
             </span>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5 relative">
             <button
               onClick={() => navigate("/create")}
-              className="flex items-center gap-2 rounded-md px-7 py-3
-              text-label-sm font-medium 
-              text-on-surface-variant border border-outline-variant
-              transition hover:bg-surface-container-high hover:text-on-surface"
+              className="
+                  flex items-center gap-2
+                  rounded-lg px-5 py-2.5
+                  text-label-sm font-medium
+                  text-on-surface
+                  bg-surface-container
+                  border border-outline/30
+                  transition-colors
+                  hover:bg-surface-container-high
+                "
             >
-              <FaPlus /> Create New Item
+              <FaPlus className="text-sm" />
+              Create Item
             </button>
 
-            <button
+            {/* <button
               className="grid size-8 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
               aria-label="Open settings"
               type="button"
             >
               <FaCog aria-hidden="true" className="size-4" />
-            </button>
+            </button> */}
             <button
+              onClick={() => setIsProfileOpen((previous) => !previous)}
+              className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant active:scale-95 transition-transform cursor-pointer"
+            >
+              <FaUserCircle className="w-full h-full text-on-surface-variant" />
+            </button>
+
+            {isProfileOpen && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-surface-container-high border border-outline-variant rounded-lg shadow-lg overflow-hidden z-50">
+                <div className="py-1">
+                  <button
+                    className="w-full flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-highest transition-colors text-label-sm">
+                    <FaCog className="text-base" />
+                    Settings
+                  </button>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-error hover:bg-error-container/20 transition-colors text-label-sm">
+                    <FaSignOutAlt className="text-base" />
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* <button
               className="grid size-8 place-items-center rounded-full border border-outline-variant bg-surface-container text-primary transition hover:border-primary"
               aria-label="Open profile"
               type="button"
             >
               <FaUserCircle aria-hidden="true" className="size-5" />
-            </button>
+            </button> */}
           </div>
         </div>
       </nav>
@@ -129,8 +170,7 @@ const DashboardPage = () => {
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           {dashboard?.revisionStats.map((stat) => {
-            const Icon =
-              statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
+            const Icon = statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
             return (
               <article
                 className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-6"
