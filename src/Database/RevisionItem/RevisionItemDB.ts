@@ -1,5 +1,5 @@
-import { DatabaseManager } from "../DatabaseManager";
-import type { RevisionItem } from "../../components/dashboard/models/RevisionItem";
+import { DatabaseManager } from "../DatabaseManager.ts";
+import type { RevisionItem } from "../../components/dashboard/models/RevisionItem.ts";
 
 export class RevisionItemDB extends DatabaseManager {
   private objectStore = "RevisionItems";

@@ -1,5 +1,5 @@
-import { type RevisionItem } from "../../components/dashboard/models/RevisionItem";
-import { RevisionItemDB } from "./RevisionItemDB";
+import { type RevisionItem } from "../../components/dashboard/models/RevisionItem.ts";
+import { RevisionItemDB } from "./RevisionItemDB.ts";
 
 export class RevisionItemsManager {
 

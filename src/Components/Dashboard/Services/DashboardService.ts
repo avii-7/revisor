@@ -1,6 +1,6 @@
-import apiClient from "../../../network/ApiClient";
-import { DashboardEndpoint } from "../../../network/Endpoints";
-import { DashboardResponse, type DashboardResponseType } from "../models/DashboardResponse";
+import apiClient from "../../../network/ApiClient.ts";
+import { DashboardEndpoint } from "../../../network/Endpoints.ts";
+import { DashboardResponse, type DashboardResponseType } from "../models/DashboardResponse.ts";
 
 class DashboardService {
 

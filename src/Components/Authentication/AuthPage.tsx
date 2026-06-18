@@ -1,11 +1,11 @@
 import { FaMicrochip } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { getGoogleOauthUrl } from "./AuthService";
+import { getGoogleOauthUrl } from "./AuthService.ts";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
-import CookieConstant from "../../utilities/CookieConstant";
-import DotGridBackground from "../common/DotGridBackground";
+import { CookieConstant } from "../../utilities/CookieConstant.ts";
+import DotGridBackground from "../common/DotGridBackground.tsx";
 
 const AuthPage = () => {
   const [cookies] = useCookies([CookieConstant.jwtToken]);

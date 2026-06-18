@@ -1,4 +1,4 @@
-import CookieManager, { CookieConstant } from "./CookieConstant";
+import CookieManager, { CookieConstant } from "./CookieConstant.ts";
 
 export default class AuthManager {
 

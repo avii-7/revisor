@@ -1,6 +1,6 @@
-import apiClient from "../../../network/ApiClient";
-import { ProfileEndpoint } from "../../../network/Endpoints";
-import ProfileResponse from "../Models/Profile";
+import apiClient from "../../../network/ApiClient.ts";
+import { ProfileEndpoint } from "../../../network/Endpoints.ts";
+import ProfileResponse from "../Models/Profile.ts";
 
 export default class ProfileService {
   async getProfile() {
