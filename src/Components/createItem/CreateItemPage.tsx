@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router";
 import RevisionItemService from "../dashboard/services/RevisionItemService.ts";
 import type { NewRevisionItem } from "../dashboard/models/RevisionItem.ts";
-import { DifficultyValues, type Difficulty } from "../dashboard/TagsMenu/Difficulty.ts";
+import { DifficultyValues, type Difficulty } from "../dashboard/tagsMenu/Difficulty.ts";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 import { capitalize } from "../../utilities/CommonUtility.ts";
 import { Tab } from "./Tab";
