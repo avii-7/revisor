@@ -1,4 +1,4 @@
-name: Dev Deployment # name of the workflow
+name: Github Pages Deployment # name of the workflow
 run-name: Uploading on Github pages 🚀
 on:
   push:
