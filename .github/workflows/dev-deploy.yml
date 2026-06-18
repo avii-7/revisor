@@ -2,8 +2,7 @@ name: Dev Deployment # name of the workflow
 run-name: Uploading on Github pages 🚀
 on:
   push:
-      # branches: ["dev"]
-      branches: []
+      branches: ["dev"]
       paths-ignore:
         - '**/README.md'
 
