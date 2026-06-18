@@ -1,11 +1,11 @@
 import { useNavigate, useSearchParams } from 'react-router'
-import CookieConstant from '../../Utilities/CookieConstant';
+import { CookieConstant } from '../../utilities/CookieConstant';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 
 const GoogleAuthCallback = () => {
 
-  const [_, setCookie] = useCookies<CookieConstant>([CookieConstant.jwtToken]);
+  const [, setCookie] = useCookies([CookieConstant.jwtToken]);
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const GoogleAuthCallback = () => {
       setCookie(CookieConstant.jwtToken, token)
       navigate("/");
     }
-  }, []);
+  }, [navigate, setCookie, token]);
 
   return (
     <div>

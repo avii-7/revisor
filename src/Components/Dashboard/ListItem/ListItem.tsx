@@ -1,5 +1,5 @@
 import "./ListItem.css";
-import type { RevisionItem } from "../Models/RevisionItem";
+import type { RevisionItem } from "../models/RevisionItem";
 import {
   FaTrash,
   FaPlusCircle,

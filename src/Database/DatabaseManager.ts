@@ -1,21 +1,19 @@
 export class DatabaseManager {
   private dbName = "RevisorDB";
 
-  private dbVersion = 1;
-
   constructor() {
     this.openConnection();
   }
 
   openConnection() {
     return new Promise<IDBDatabase>((resolve, reject) => {
-      let openRequest = indexedDB.open(this.dbName, 1);
+      const openRequest = indexedDB.open(this.dbName, 1);
 
       openRequest.onupgradeneeded = () => {
-        let db = openRequest.result;
+        const db = openRequest.result;
 
         if (!db.objectStoreNames.contains("RevisionItems")) {
-          let store = db.createObjectStore("RevisionItems", { keyPath: "id" });
+          const store = db.createObjectStore("RevisionItems", { keyPath: "id" });
           store.createIndex("revision_item", ["count", "dateAdded"], { unique: false });          
         }
       };
@@ -35,10 +33,10 @@ export class DatabaseManager {
   insert<T>(storeName: string, data: T) {
     return new Promise<boolean>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
-        let transaction = db.transaction(storeName, "readwrite");
-        let store = transaction.objectStore(storeName);
+        const transaction = db.transaction(storeName, "readwrite");
+        const store = transaction.objectStore(storeName);
 
-        let request = store.add(data);
+        const request = store.add(data);
 
         request.onsuccess = () => {
           resolve(true);
@@ -55,10 +53,10 @@ export class DatabaseManager {
   getAll<T>(storeName: string) {
     return new Promise<T[]>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
-        let transaction = db.transaction(storeName, "readonly");
-        let store = transaction.objectStore(storeName);
+        const transaction = db.transaction(storeName, "readonly");
+        const store = transaction.objectStore(storeName);
 
-        let request = store.getAll();
+        const request = store.getAll();
 
         request.onsuccess = () => {
           resolve(request.result);
@@ -75,10 +73,10 @@ export class DatabaseManager {
   get<T>(storeName: string, key: string) {
     return new Promise<T>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
-        let transaction = db.transaction(storeName, "readonly");
-        let store = transaction.objectStore(storeName);
+        const transaction = db.transaction(storeName, "readonly");
+        const store = transaction.objectStore(storeName);
 
-        let request = store.get(key);
+        const request = store.get(key);
 
         request.onsuccess = () => {
           resolve(request.result);
@@ -95,10 +93,10 @@ export class DatabaseManager {
   delete(storeName: string, key: string) {
     return new Promise<boolean>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
-        let transaction = db.transaction(storeName, "readwrite");
-        let store = transaction.objectStore(storeName);
+        const transaction = db.transaction(storeName, "readwrite");
+        const store = transaction.objectStore(storeName);
 
-        let request = store.delete(key);
+        const request = store.delete(key);
 
         request.onsuccess = () => {
           resolve(true);
@@ -115,10 +113,10 @@ export class DatabaseManager {
   update<T>(storeName: string, value: T) {
     return new Promise<boolean>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
-        let transaction = db.transaction(storeName, "readwrite");
-        let store = transaction.objectStore(storeName);
+        const transaction = db.transaction(storeName, "readwrite");
+        const store = transaction.objectStore(storeName);
 
-        let request = store.put(value);
+        const request = store.put(value);
 
         request.onsuccess = () => {
           resolve(true);

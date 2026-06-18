@@ -1,5 +1,5 @@
-import apiClient from "../../../Network/ApiClient";
-import { ProfileEndpoint } from "../../../Network/Endpoints";
+import apiClient from "../../../network/ApiClient";
+import { ProfileEndpoint } from "../../../network/Endpoints";
 import ProfileResponse from "../Models/Profile";
 
 export default class ProfileService {

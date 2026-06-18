@@ -1,18 +1,18 @@
-enum AuthenticationEndpoint {
-  oauthGoogle = "auth/google"
-}
+const AuthenticationEndpoint = {
+  oauthGoogle: "/auth/google",
+} as const;
 
-enum ProfileEndpoint {
-  profile = "profile"
-}
+const ProfileEndpoint = {
+  profile: "profile",
+} as const;
 
-enum RevisionItemEndpoint {
+const RevisionItemEndpoint = {
   // Get All & Create
-  revisionItems = "revise-items"
-}
+  revisionItems: "revision-items",
+} as const;
 
-enum DashboardEndpoint {
-  dashboard = "dashboard",
-}
+const DashboardEndpoint = {
+  dashboard: "dashboard",
+} as const;
 
 export { DashboardEndpoint, AuthenticationEndpoint, ProfileEndpoint, RevisionItemEndpoint };

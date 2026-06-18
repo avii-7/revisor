@@ -1,8 +1,21 @@
-enum Difficulty {
-  default = "Default",
-  easy = "Easy",
-  medium = "Medium",
-  hard = "Hard",
-}
+// const Difficulty = {
+//   default: "Default",
+//   easy: "Easy",
+//   medium: "Medium",
+//   hard: "Hard",
+// } as const;
 
-export default Difficulty;
+// type Difficulty = (typeof Difficulty)[keyof typeof Difficulty];
+
+// export default Difficulty;
+// export type { Difficulty };
+
+export const DifficultyValues = [
+  "default",
+  "easy",
+  "medium",
+  "hard",
+] as const;
+
+export type Difficulty =
+  (typeof DifficultyValues)[number];

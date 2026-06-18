@@ -1,5 +1,12 @@
 import z from "zod";
-import ProfileResponse from "../../Profile/Models/Profile";
+
+const ProfileResponseSchema = z.object({
+  userId: z.uuid(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  profilePicture: z.string(),
+});
 
 const RevisionStatSchema = z.object({
   id: z.string(),
@@ -15,9 +22,16 @@ const RevisionInfoSchema = z.object({
 });
 
 const DashboardResponse = z.object({
-  profile: ProfileResponse,
+  profile: ProfileResponseSchema,
   revisionInfo: RevisionInfoSchema.nullish(),
-  revisionStats: z.array(RevisionStatSchema),
+  revisionStats: z.array(RevisionStatSchema)
 });
 
-export { DashboardResponse, RevisionInfoSchema, RevisionStatSchema };
+export {
+  DashboardResponse,
+  ProfileResponseSchema,
+  RevisionInfoSchema,
+  RevisionStatSchema
+};
+
+export type DashboardResponseType = z.infer<typeof DashboardResponse>;

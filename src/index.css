@@ -1,5 +1,12 @@
-@import "./DesignSystem/colors.css";
-@import "./DesignSystem/typography.css";
-@import "./DesignSystem/utilities.css";
+@import "./design/colors.css";
+@import "./design/typography.css";
+@import "./design/utilities.css";
 
 @import "tailwindcss";
+
+html,
+body,
+#root {
+    min-height: 100%;
+    background-color: var(--color-surface-container-lowest);
+}

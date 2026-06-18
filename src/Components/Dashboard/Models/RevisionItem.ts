@@ -1,26 +1,32 @@
 import z from 'zod';
-import Difficulty from '../TagsMenu/Difficulty';
+import { DifficultyValues, type Difficulty } from '../TagsMenu/Difficulty';
 
 interface BaseRevisionItem {
+  id: string;
   title: string;
-  content: string
   revisionCount: number;
   difficulty: Difficulty;
 };
 
-interface RevisionItem extends BaseRevisionItem {
-  id: string;
-}
+interface RevisionItem extends BaseRevisionItem { }
 
-interface NewRevisionItem extends BaseRevisionItem { }
+interface NewRevisionItem {
+  title: string;
+  platformUrl?: string;
+  difficulty: Difficulty;
+  keyIntuition?: string;
+  solutionCode?: string;
+}
 
 const RevisionItemSchema = z.object({
   id: z.uuid(),
   title: z.string(),
-  content: z.string(),
-  revision_count: z.number(),
-  difficulty: z.nativeEnum(Difficulty)
+  subtitle: z.string(),
+  streak: z.number(),
+  content: z.string().nullish(),
+  revisionCount: z.number(),
+  difficulty: z.enum(DifficultyValues)
 });
 
-
 export { type RevisionItem, type NewRevisionItem, RevisionItemSchema };
+export type RevisionItemType = z.infer<typeof RevisionItemSchema>;
