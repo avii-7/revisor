@@ -18,12 +18,19 @@ import { capitalize } from "../../utilities/CommonUtility";
 
 const revisionItemService = new RevisionItemService();
 
+export const Tab = {
+  intuition: "intuition",
+  code: "code",
+} as const;
+
+export type Tab = (typeof Tab)[keyof typeof Tab];
+
 const CreateItemPage = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  const [difficulty, setDifficulty] = useState<Difficulty>("default");
-  const [activeTab, setActiveTab] = useState<"intuition" | "code">("intuition");
+  const [difficulty, setDifficulty] = useState<Difficulty>(DifficultyValues[0]);
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.intuition);
   const [intuition, setIntuition] = useState("");
   const [code, setCode] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -70,26 +77,21 @@ const CreateItemPage = () => {
       setError("Problem title is required.");
       return;
     }
-    if (!intuition.trim()) {
-      setError("Key intuition is required.");
-      return;
-    }
+
+    // if (!intuition.trim()) {
+    //   setError("Key intuition is required.");
+    //   return;
+    // }
 
     setIsSaving(true);
     setError(null);
 
-    // Combine intuition, code, and url into a structured format
-    const contentPayload = JSON.stringify({
-      url: url.trim(),
-      intuition: intuition.trim(),
-      code: code.trim(),
-    });
-
     const newItem: NewRevisionItem = {
       title: title.trim(),
-      content: contentPayload,
-      revisionCount: 0,
+      platformUrl: url.trim(),
       difficulty: difficulty,
+      keyIntuition: intuition.trim(),
+      solutionCode: code.trim()
     };
 
     try {
@@ -210,22 +212,18 @@ const CreateItemPage = () => {
                 const isActive = difficulty === level;
                 let activeStyles = "";
                 let hoverStyles = "";
-                let labelText = "";
+                let labelText = capitalize(level);
 
                 if (level === DifficultyValues[0]) {
-                  labelText = capitalize(level);
                   activeStyles = "bg-slate-500/25 text-slate-200 border-slate-500/50 shadow-[0_0_15px_rgba(148,163,184,0.15)]";
                   hoverStyles = "hover:bg-slate-500/10 hover:border-slate-500/35 text-slate-400";
                 } else if (level === DifficultyValues[1]) {
-                  labelText = capitalize(level);
                   activeStyles = "bg-emerald-500/25 text-emerald-300 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]";
                   hoverStyles = "hover:bg-emerald-500/10 hover:border-emerald-500/35 text-emerald-400";
                 } else if (level === DifficultyValues[2]) {
-                  labelText = capitalize(level);
                   activeStyles = "bg-amber-500/25 text-amber-300 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)]";
                   hoverStyles = "hover:bg-amber-500/10 hover:border-amber-500/35 text-amber-400";
                 } else if (level === DifficultyValues[3]) {
-                  labelText = capitalize(level);
                   activeStyles = "bg-rose-500/25 text-rose-300 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.15)]";
                   hoverStyles = "hover:bg-rose-500/10 hover:border-rose-500/35 text-rose-400";
                 }
@@ -253,8 +251,8 @@ const CreateItemPage = () => {
             <div className="flex border-b border-outline-variant/35">
               <button
                 type="button"
-                onClick={() => setActiveTab("intuition")}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 text-xs font-semibold uppercase tracking-[0.08em] transition-all border-b-2 cursor-pointer focus:outline-none ${activeTab === "intuition"
+                onClick={() => setActiveTab(Tab.intuition)}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 text-xs font-semibold uppercase tracking-[0.08em] transition-all border-b-2 cursor-pointer focus:outline-none ${activeTab === Tab.intuition
                   ? "border-primary-container text-primary bg-surface-container-high/20"
                   : "border-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/10"
                   }`}
@@ -263,7 +261,7 @@ const CreateItemPage = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab("code")}
+                onClick={() => setActiveTab(Tab.code)}
                 className={`flex-1 flex items-center justify-center gap-2 py-4 text-xs font-semibold uppercase tracking-[0.08em] transition-all border-b-2 cursor-pointer focus:outline-none ${activeTab === "code"
                   ? "border-primary-container text-primary bg-surface-container-high/20"
                   : "border-transparent text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/10"
@@ -275,7 +273,7 @@ const CreateItemPage = () => {
 
             {/* Content Area */}
             <div className="flex-1 flex flex-col relative">
-              {activeTab === "intuition" ? (
+              {activeTab === Tab.intuition ? (
                 <div className="flex-1 flex flex-col p-6 min-h-[300px]">
                   <textarea
                     ref={intuitionRef}

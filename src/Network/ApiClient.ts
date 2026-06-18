@@ -24,6 +24,10 @@ apiClient.interceptors.request.use(
       }
     }
 
+    if (config.data) {
+      config.data = humps.decamelizeKeys(config.data);
+    }
+
     return config;
   },
   (error) => {

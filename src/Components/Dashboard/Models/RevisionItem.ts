@@ -2,24 +2,28 @@ import z from 'zod';
 import { DifficultyValues, type Difficulty } from '../TagsMenu/Difficulty';
 
 interface BaseRevisionItem {
+  id: string;
   title: string;
-  content: string
   revisionCount: number;
   difficulty: Difficulty;
 };
 
-interface RevisionItem extends BaseRevisionItem {
-  id: string;
-}
+interface RevisionItem extends BaseRevisionItem { }
 
-interface NewRevisionItem extends BaseRevisionItem { }
+interface NewRevisionItem {
+  title: string;
+  platformUrl?: string;
+  difficulty: Difficulty;
+  keyIntuition?: string;
+  solutionCode?: string;
+}
 
 const RevisionItemSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   subtitle: z.string(),
   streak: z.number(),
-  content: z.string(),
+  content: z.string().nullish(),
   revisionCount: z.number(),
   difficulty: z.enum(DifficultyValues)
 });
