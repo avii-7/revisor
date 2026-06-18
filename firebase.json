@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "revisor-free",
-    "public": "build",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
