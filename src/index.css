@@ -1,6 +1,6 @@
-@import "./design/colors.css";
-@import "./design/typography.css";
-@import "./design/utilities.css";
+@import "./design/Colors.css";
+@import "./design/Typography.css";
+@import "./design/Utilities.css";
 
 @import "tailwindcss";
 

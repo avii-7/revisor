@@ -28,6 +28,9 @@ const AuthPage = () => {
     setIsLoading(true);
 
     try {
+
+      console.log(import.meta.env.VITE_API_BASE_URL, "baseUrl");
+
       const oauthUrl = await getGoogleOauthUrl();
 
       console.log("Received OAuth URL:", oauthUrl);

@@ -1,5 +1,5 @@
 import z from 'zod';
-import { DifficultyValues, type Difficulty } from '../TagsMenu/Difficulty.ts';
+import { DifficultyValues, type Difficulty } from '../tagsMenu/Difficulty.ts';
 
 interface BaseRevisionItem {
   id: string;
