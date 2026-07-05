@@ -1,28 +1,17 @@
-import {
-  FaChartBar,
-  FaCheckCircle,
-  FaEllipsisV,
-  FaRedoAlt,
-  FaCog,
-  FaUserCircle,
-  FaPlus,
-  FaSignOutAlt,
-} from "react-icons/fa";
-import DashboardService from "./services/DashboardService.ts";
+import { FaChartBar, FaRedoAlt } from "react-icons/fa";
 import { useCookies } from "react-cookie";
-import { CookieConstant } from "../../utilities/CookieConstant.ts";
+import { CookieConstant } from "../../shared/utilities/CookieConstant.ts";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { type DashboardResponseType } from "./models/DashboardResponse.ts";
-import RevisionItemService from "./services/RevisionItemService.ts";
-import type { RevisionItemType } from "./models/RevisionItem.ts";
-
-import AuthManager from "../../utilities/AuthManager.ts";
 import DotGridBackground from "../common/DotGridBackground.tsx";
-
-const dashboardService = new DashboardService();
-
-const revisionItemService = new RevisionItemService();
+import Header from "../common/Header.tsx";
+import Hero from "./Hero.tsx";
+import RevisionHero from "./RevisionHero.tsx";
+import type { DashboardModel } from "./services/DashboardPresenter.ts";
+import { dashboardPresenter, revisionPresetner } from "../../shared/container.ts";
+import type { RevisionItemModel } from "../../shared/presenters/RevisionPresenter.ts";
+import DashboardEmptyState from "./components/DashboardEmptyState.tsx";
+import DashboardItemsList from "./components/DashboardItemsList.tsx";
 
 const statIcons = {
   "total-problems": FaChartBar,
@@ -33,9 +22,8 @@ const statIcons = {
 const DashboardPage = () => {
   const [cookies] = useCookies([CookieConstant.jwtToken]);
 
-  const [dashboard, setDashboard] = useState<DashboardResponseType>();
-  const [items, setItems] = useState<RevisionItemType[]>([]);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [dashboard, setDashboard] = useState<DashboardModel>();
+  const [items, setItems] = useState<RevisionItemModel[]>([]);
 
   const navigate = useNavigate();
 
@@ -49,7 +37,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const data = await dashboardService.getDashboardData();
+        const data = await dashboardPresenter.load();
         setDashboard(data);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -58,7 +46,7 @@ const DashboardPage = () => {
 
     const fetchRevisionItems = async () => {
       try {
-        const data = await revisionItemService.getRevisionItems();
+        const data = await revisionPresetner.loadRevisionItems();
         setItems(data);
       } catch (error) {
         console.error("Error fetching revision items:", error);
@@ -69,108 +57,26 @@ const DashboardPage = () => {
     fetchRevisionItems();
   }, []);
 
-  const handleLogout = () => {
-    AuthManager.logout();
-    navigate("/auth");
-  }
+  const handleCreateProblem = () => {
+    navigate("/create");
+  };
 
   return (
     <main className="min-h-screen bg-app-gradient relative font-primary text-on-surface">
 
       <DotGridBackground />
 
-      <nav className="border-b border-outline-variant/45 bg-surface-container-lowest/70">
-        <div className="mx-auto flex h-14 max-w-[1200px] items-center justify-between px-5">
-          <div className="flex h-full items-center gap-8">
-            <span className="text-body-md font-semibold text-primary">
-              Revisor
-            </span>
-          </div>
-          <div className="flex items-center gap-5 relative">
-            <button
-              onClick={() => navigate("/create")}
-              className="
-                  flex items-center gap-2
-                  rounded-lg px-5 py-2.5
-                  text-label-sm font-medium
-                  text-on-surface
-                  bg-surface-container
-                  border border-outline/30
-                  transition-colors
-                  hover:bg-surface-container-high
-                "
-            >
-              <FaPlus className="text-sm" />
-              Create Item
-            </button>
-
-            {/* <button
-              className="grid size-8 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
-              aria-label="Open settings"
-              type="button"
-            >
-              <FaCog aria-hidden="true" className="size-4" />
-            </button> */}
-            <button
-              onClick={() => setIsProfileOpen((previous) => !previous)}
-              className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant active:scale-95 transition-transform cursor-pointer"
-            >
-              <FaUserCircle className="w-full h-full text-on-surface-variant" />
-            </button>
-
-            {isProfileOpen && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-surface-container-high border border-outline-variant rounded-lg shadow-lg overflow-hidden z-50">
-                <div className="py-1">
-                  <button
-                    className="w-full flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-highest transition-colors text-label-sm">
-                    <FaCog className="text-base" />
-                    Settings
-                  </button>
-
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-error hover:bg-error-container/20 transition-colors text-label-sm">
-                    <FaSignOutAlt className="text-base" />
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* <button
-              className="grid size-8 place-items-center rounded-full border border-outline-variant bg-surface-container text-primary transition hover:border-primary"
-              aria-label="Open profile"
-              type="button"
-            >
-              <FaUserCircle aria-hidden="true" className="size-5" />
-            </button> */}
-          </div>
-        </div>
-      </nav>
+      <Header showCreateButton />
 
       <section className="mx-auto max-w-[1200px] px-5 py-8">
-        <div className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-7 shadow-[0_24px_80px_rgba(49,57,77,0.28)] sm:flex sm:items-center sm:justify-between sm:p-8">
-          <div>
-            <p className="text-label-sm font-medium uppercase text-primary">
-              {dashboard?.revisionInfo?.topText}
-            </p>
-            <h1 className="mt-3 text-headline-md font-semibold text-on-surface">
-              {dashboard?.revisionInfo?.title}
-            </h1>
-            <p className="mt-2 text-label-sm font-normal text-on-surface-variant">
-              {dashboard?.revisionInfo?.subtitle}
-            </p>
-          </div>
-          <button
-            className="mt-6 rounded-md bg-primary-container px-8 py-3 text-label-sm font-medium text-on-surface shadow-[0_18px_44px_rgba(77,142,255,0.28)] transition hover:bg-primary hover:text-on-primary sm:mt-0"
-            type="button"
-          >
-            {dashboard?.revisionInfo?.ctaText}
-          </button>
-        </div>
+        {dashboard?.revisionInfo ? (
+          <RevisionHero revisionInfo={dashboard.revisionInfo} />
+        ) : (
+          <Hero />
+        )}
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {dashboard?.revisionStats.map((stat) => {
+          {dashboard?.revisionStats.map((stat: { id: string; title: string; value: string }) => {
             const Icon = statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
             return (
               <article
@@ -191,53 +97,11 @@ const DashboardPage = () => {
           })}
         </div>
 
-        <div className="mt-9 flex items-center justify-between">
-          <h2 className="text-label-sm font-medium text-on-surface-variant">
-            Recent Mastery
-          </h2>
-          <a
-            className="text-label-sm font-medium text-primary transition hover:text-on-surface"
-            href="/"
-          >
-            View all &rarr;
-          </a>
-        </div>
-
-        <section className="mt-4 overflow-hidden rounded-lg border border-outline-variant/70 bg-surface-container-low">
-          {items.map((item) => (
-            <article
-              className="flex items-center gap-5 border-b border-outline-variant/45 px-6 py-5 last:border-b-0"
-              key={item.id}
-            >
-              <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-surface-container-high text-primary">
-                <FaCheckCircle aria-hidden="true" className="size-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="truncate text-label-sm font-semibold text-on-surface">
-                  {item.title}
-                </h3>
-                <p className="mt-1 truncate text-label-sm font-normal text-on-surface-variant">
-                  {item.subtitle}
-                </p>
-              </div>
-              <div className="hidden text-right sm:block">
-                <p className="text-label-sm font-medium uppercase text-on-surface-variant">
-                  Streak
-                </p>
-                <p className="mt-1 text-label-sm font-normal text-on-surface">
-                  {item.streak} Revisions
-                </p>
-              </div>
-              <button
-                className="grid size-8 shrink-0 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
-                aria-label={`Open actions for ${item.title}`}
-                type="button"
-              >
-                <FaEllipsisV aria-hidden="true" className="size-3" />
-              </button>
-            </article>
-          ))}
-        </section>
+        {items.length === 0 ? (
+          <DashboardEmptyState onCreateProblem={handleCreateProblem} />
+        ) : (
+          <DashboardItemsList items={items} />
+        )}
       </section>
     </main>
   );

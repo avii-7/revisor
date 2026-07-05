@@ -14,16 +14,23 @@ const RevisionStatSchema = z.object({
   value: z.string(),
 });
 
+const RevisionStateShema = ["ready", "completed"] as const;
+
+const RevisionItemPreviewSchema = z.object({
+  id: z.uuid(),
+  title: z.string()
+});
+
 const RevisionInfoSchema = z.object({
-  title: z.string(),
-  subtitle: z.string(),
-  ctaText: z.string(),
-  topText: z.string(),
+  state: z.enum(RevisionStateShema),
+  dueItemCount: z.number(),
+  nextItem: RevisionItemPreviewSchema.nullish(),
+  nextRevisionAt: z.string().nullish(),
 });
 
 const DashboardResponse = z.object({
   profile: ProfileResponseSchema,
-  revisionInfo: RevisionInfoSchema.nullish(),
+  revisionInfo: RevisionInfoSchema,
   revisionStats: z.array(RevisionStatSchema)
 });
 
@@ -31,7 +38,9 @@ export {
   DashboardResponse,
   ProfileResponseSchema,
   RevisionInfoSchema,
+  RevisionStateShema as RevisionState,
   RevisionStatSchema
 };
 
+export type RevisionStateShema = typeof RevisionStateShema[number];
 export type DashboardResponseType = z.infer<typeof DashboardResponse>;

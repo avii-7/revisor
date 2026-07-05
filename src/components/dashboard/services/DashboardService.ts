@@ -4,7 +4,7 @@ import { DashboardResponse, type DashboardResponseType } from "../models/Dashboa
 
 class DashboardService {
 
-  async getDashboardData(): Promise<DashboardResponseType> {
+  async dashboardData(): Promise<DashboardResponseType> {
     const response = await apiClient.get(DashboardEndpoint.dashboard);
     return DashboardResponse.parse(response.data);
   }

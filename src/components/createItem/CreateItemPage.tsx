@@ -9,21 +9,18 @@ import {
   FaItalic,
   FaListUl,
 } from "react-icons/fa";
-import { useNavigate } from "react-router";
-import RevisionItemService from "../dashboard/services/RevisionItemService.ts";
-import type { NewRevisionItem } from "../dashboard/models/RevisionItem.ts";
-import { DifficultyValues, type Difficulty } from "../dashboard/tagsMenu/Difficulty.ts";
-import DotGridBackground from "../common/DotGridBackground.tsx";
-import { capitalize } from "../../utilities/CommonUtility.ts";
-import { Tab } from "./Tab";
 
-const revisionItemService = new RevisionItemService();
+import { useNavigate } from "react-router";
+import DotGridBackground from "../common/DotGridBackground.tsx";
+import Header from "../common/Header.tsx";
+import { Tab } from "./Tab";
+import { revisionPresetner } from "../../shared/container.ts";
+import type { NewRevisionItemRequest } from "../../shared/presenters/RevisionPresenter.ts";
 
 const CreateItemPage = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  const [difficulty, setDifficulty] = useState<Difficulty>(DifficultyValues[0]);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.intuition);
   const [intuition, setIntuition] = useState("");
   const [code, setCode] = useState("");
@@ -80,16 +77,16 @@ const CreateItemPage = () => {
     setIsSaving(true);
     setError(null);
 
-    const newItem: NewRevisionItem = {
+    const newItem: NewRevisionItemRequest = {
       title: title.trim(),
+      content: null,
       platformUrl: url.trim(),
-      difficulty: difficulty,
       keyIntuition: intuition.trim(),
-      solutionCode: code.trim()
+      solutionCode: code.trim(),
     };
 
     try {
-      await revisionItemService.create(newItem);
+      await revisionPresetner.create(newItem);
       navigate("/");
     } catch (err) {
       console.error("Failed to save problem:", err);
@@ -103,6 +100,8 @@ const CreateItemPage = () => {
     <main className="min-h-screen bg-app-gradient font-primary text-on-surface relative overflow-x-hidden">
       {/* Subtle Dot Grid Overlay for Premium Aesthetic */}
       <DotGridBackground />
+
+      <Header />
 
       <div className="relative z-10 mx-auto max-w-[900px] px-5 py-8">
         {/* Navigation & Header */}
@@ -192,50 +191,6 @@ const CreateItemPage = () => {
                   className="w-full bg-white text-surface-container-lowest placeholder:text-outline/70 border border-outline-variant/40 rounded-lg pl-11 pr-4 py-3.5 text-base font-normal shadow-inner transition focus:outline-none focus:ring-2 focus:ring-primary/45 focus:border-transparent"
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Card: Difficulty Selection */}
-          <div className="bg-surface-container-low/65 backdrop-blur-md border border-outline-variant/35 rounded-xl p-6 shadow-md flex flex-col gap-4">
-            <label className="text-label-sm font-semibold tracking-[0.05em] text-primary-fixed-dim uppercase">
-              Difficulty
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-
-              {DifficultyValues.map((level) => {
-                const isActive = difficulty === level;
-                let activeStyles = "";
-                let hoverStyles = "";
-                const labelText = capitalize(level);
-
-                if (level === DifficultyValues[0]) {
-                  activeStyles = "bg-slate-500/25 text-slate-200 border-slate-500/50 shadow-[0_0_15px_rgba(148,163,184,0.15)]";
-                  hoverStyles = "hover:bg-slate-500/10 hover:border-slate-500/35 text-slate-400";
-                } else if (level === DifficultyValues[1]) {
-                  activeStyles = "bg-emerald-500/25 text-emerald-300 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]";
-                  hoverStyles = "hover:bg-emerald-500/10 hover:border-emerald-500/35 text-emerald-400";
-                } else if (level === DifficultyValues[2]) {
-                  activeStyles = "bg-amber-500/25 text-amber-300 border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)]";
-                  hoverStyles = "hover:bg-amber-500/10 hover:border-amber-500/35 text-amber-400";
-                } else if (level === DifficultyValues[3]) {
-                  activeStyles = "bg-rose-500/25 text-rose-300 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.15)]";
-                  hoverStyles = "hover:bg-rose-500/10 hover:border-rose-500/35 text-rose-400";
-                }
-
-                return (
-                  <button
-                    key={level}
-                    type="button"
-                    onClick={() => setDifficulty(level)}
-                    className={`py-3 px-4 rounded-lg font-medium text-sm border transition-all text-center cursor-pointer focus:outline-none ${isActive
-                      ? activeStyles
-                      : `bg-surface-container-high/40 border-outline-variant/30 ${hoverStyles}`
-                      }`}
-                  >
-                    {labelText}
-                  </button>
-                );
-              })}
             </div>
           </div>
 

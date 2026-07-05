@@ -4,7 +4,7 @@ import { getGoogleOauthUrl } from "./AuthService.ts";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
-import { CookieConstant } from "../../utilities/CookieConstant.ts";
+import { CookieConstant } from "../../shared/utilities/CookieConstant.ts";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 
 const AuthPage = () => {

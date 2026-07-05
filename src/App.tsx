@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter } from "react-router"
 import DashboardPage from "./components/dashboard/DashboardPage.tsx";
 import CallbackHandlePage from "./components/authentication/GoogleAuthCallback.tsx";
 import CreateItemPage from "./components/createItem/CreateItemPage.tsx";
+import RevisionSessionPage from "./components/revisionSession/RevisionSessionPage.tsx";
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="create" element={<CreateItemPage />} />
+        <Route path="revision" element={<RevisionSessionPage />} />
         <Route path="auth" >
           <Route index element={<AuthPage />} />
           <Route path="google/callback" element={<CallbackHandlePage />} />

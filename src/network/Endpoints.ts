@@ -6,13 +6,13 @@ const ProfileEndpoint = {
   profile: "profile",
 } as const;
 
-const RevisionItemEndpoint = {
-  // Get All & Create
+const RevisionEndpoint = {
   revisionItems: "revision-items",
+  dueRevisionItems: "revision-items/due",
 } as const;
 
 const DashboardEndpoint = {
   dashboard: "dashboard",
 } as const;
 
-export { DashboardEndpoint, AuthenticationEndpoint, ProfileEndpoint, RevisionItemEndpoint };
+export { DashboardEndpoint, AuthenticationEndpoint, ProfileEndpoint, RevisionEndpoint };

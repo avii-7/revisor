@@ -1,14 +1,6 @@
-export default class ProfileResponse {
-
+export default interface ProfileModel {
     firstName: string;
     lastName: string;
     email: string;
     profilePicture: string;
-
-    constructor(firstName: string, lastName: string, email: string, profilePicture: string) {
-        this.firstName = firstName
-        this.lastName = lastName
-        this.email = email
-        this.profilePicture = profilePicture
-    }
 }
