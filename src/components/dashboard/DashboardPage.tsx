@@ -1,6 +1,4 @@
 import { FaChartBar, FaRedoAlt } from "react-icons/fa";
-import { useCookies } from "react-cookie";
-import { CookieConstant } from "../../shared/utilities/CookieConstant.ts";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import DotGridBackground from "../common/DotGridBackground.tsx";
@@ -20,21 +18,15 @@ const statIcons = {
 };
 
 const DashboardPage = () => {
-  const [cookies] = useCookies([CookieConstant.jwtToken]);
 
   const [dashboard, setDashboard] = useState<DashboardModel>();
+  
   const [items, setItems] = useState<RevisionItemModel[]>([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!cookies.jwtToken) {
-      navigate("/auth");
-      return;
-    }
-  }, [navigate, cookies.jwtToken]);
 
-  useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const data = await dashboardPresenter.load();
@@ -44,9 +36,9 @@ const DashboardPage = () => {
       }
     };
 
-    const fetchRevisionItems = async () => {
+    const fetchPreviewRevisionItems = async () => {
       try {
-        const data = await revisionPresetner.loadRevisionItems();
+        const data = await revisionPresetner.previewRevisionItems();
         setItems(data);
       } catch (error) {
         console.error("Error fetching revision items:", error);
@@ -54,7 +46,7 @@ const DashboardPage = () => {
     };
 
     fetchDashboardData();
-    fetchRevisionItems();
+    fetchPreviewRevisionItems();
   }, []);
 
   const handleCreateProblem = () => {

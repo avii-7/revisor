@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useCookies } from "react-cookie";
 import {
   FaArrowLeft,
   FaFileAlt,
@@ -11,19 +10,18 @@ import {
   FaSpinner,
   FaUndo,
 } from "react-icons/fa";
-import { CookieConstant } from "../../shared/utilities/CookieConstant.ts";
 import RevisionService from "../dashboard/services/RevisionItemService.ts";
 import type { RevisionItemType } from "../dashboard/models/RevisionItem.ts";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 import Header from "../common/Header.tsx";
 import { capitalize } from "../../shared/utilities/CommonUtility.ts";
 import { RatingValues, type Rating } from "../dashboard/tagsMenu/Rating.ts";
-import { relativeTime } from "../../shared/utilities/dateutils.ts";
+import { relativeTime } from "../../shared/utilities/dateUtils.ts";
 
 const revisionItemService = new RevisionService();
 
 export default function RevisionSessionPage() {
-  const [cookies] = useCookies([CookieConstant.jwtToken]);
+
   const navigate = useNavigate();
 
   const [items, setItems] = useState<RevisionItemType[]>([]);
@@ -33,13 +31,6 @@ export default function RevisionSessionPage() {
   const [seconds, setSeconds] = useState<number>(0);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [sessionRevisedCount, setSessionRevisedCount] = useState<number>(0);
-
-  // Authentication check
-  useEffect(() => {
-    if (!cookies.jwtToken) {
-      navigate("/auth");
-    }
-  }, [navigate, cookies.jwtToken]);
 
   // Fetch revision items
   useEffect(() => {

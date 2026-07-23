@@ -4,9 +4,7 @@ import RevisionService from "../components/dashboard/services/RevisionItemServic
 import { RevisionPresnter } from "./presenters/RevisionPresenter";
 
 const revisionItemService = new RevisionService();
-
-const dashboardService = new DashboardService()
+const dashboardService = new DashboardService();
 
 export const revisionPresetner = new RevisionPresnter(revisionItemService);
-
 export const dashboardPresenter = new DashboardPresenter(dashboardService);

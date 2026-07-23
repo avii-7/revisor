@@ -1,10 +1,11 @@
 import { Cookies } from "react-cookie";
 
-export const CookieConstant = {
-    jwtToken: "jwtToken",
+export const CookiesConstant = {
+    jwtToken: "jwt_token",
+    refreshToken: "refresh_token"
 } as const;
 
-export type CookieKey = (typeof CookieConstant)[keyof typeof CookieConstant];
+export type CookieKey = (typeof CookiesConstant)[keyof typeof CookiesConstant];
 
 class CookieManager {
 

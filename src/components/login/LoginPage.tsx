@@ -1,24 +1,21 @@
 import { FaMicrochip } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { getGoogleOauthUrl } from "./AuthService.ts";
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
-import { CookieConstant } from "../../shared/utilities/CookieConstant.ts";
 import DotGridBackground from "../common/DotGridBackground.tsx";
+import { authenticationService } from "../../shared/authentication/index.ts";
+import UserManager from "../../shared/utilities/UserManager.ts";
 
-const AuthPage = () => {
-  const [cookies] = useCookies([CookieConstant.jwtToken]);
+const LoginPage = () => {
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (cookies.jwtToken) {
+    if (UserManager.isAuthenticated()) {
       navigate("/");
-      return;
     }
-
-  }, [cookies.jwtToken, navigate]);
+  }, [navigate]);
 
   const handleAuthWithGoogle = async () => {
     if (isLoading) {
@@ -28,13 +25,7 @@ const AuthPage = () => {
     setIsLoading(true);
 
     try {
-
-      console.log(import.meta.env.VITE_API_BASE_URL, "baseUrl");
-
-      const oauthUrl = await getGoogleOauthUrl();
-
-      console.log("Received OAuth URL:", oauthUrl);
-
+      const oauthUrl = await authenticationService.googleOauthUrl();
       window.location.href = oauthUrl;
     }
     catch (error) {
@@ -89,4 +80,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default LoginPage;

@@ -1,5 +1,6 @@
 const AuthenticationEndpoint = {
   oauthGoogle: "/auth/google",
+  refreshToken: "auth/refresh-token"
 } as const;
 
 const ProfileEndpoint = {
@@ -7,12 +8,29 @@ const ProfileEndpoint = {
 } as const;
 
 const RevisionEndpoint = {
-  revisionItems: "revision-items",
-  dueRevisionItems: "revision-items/due",
+  items: "revision-items/",
+  dueItems: "revision-items/due/",
+  previewItems: "revision-items/preview/",
 } as const;
 
 const DashboardEndpoint = {
   dashboard: "dashboard",
 } as const;
 
-export { DashboardEndpoint, AuthenticationEndpoint, ProfileEndpoint, RevisionEndpoint };
+const HeaderConstantKey = {
+  contentType: "Content-Type",
+} as const;
+
+const HeaderConstantValue = {
+  applicationJson: "application/json",
+} as const;
+
+
+export {
+  DashboardEndpoint,
+  AuthenticationEndpoint,
+  ProfileEndpoint,
+  RevisionEndpoint,
+  HeaderConstantKey,
+  HeaderConstantValue,
+};

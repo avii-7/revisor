@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaCog, FaUserCircle, FaSignOutAlt, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import AuthManager from "../../shared/utilities/AuthManager.ts";
+import AuthManager from "../../shared/utilities/UserManager.ts";
 
 interface HeaderProps {
   children?: React.ReactNode;
