@@ -31,13 +31,11 @@ function App() {
   return (
 
     <Routes>
-
-      <Route path="/" element={<ProtectedRoute />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="create" element={<CreateItemPage />} />
-        <Route path="problems" element={<ProblemLibraryPage />} />
-        <Route path="revision" element={<RevisionSessionPage />} />
-      </Route>
+      
+      <Route index element={<DashboardPage />} />
+      <Route path="create" element={<CreateItemPage />} />
+      <Route path="problems" element={<ProblemLibraryPage />} />
+      <Route path="revision" element={<RevisionSessionPage />} />
 
       <Route path="/auth" >
         <Route index element={<LoginPage />} />

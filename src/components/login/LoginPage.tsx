@@ -4,18 +4,27 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 import { authenticationService } from "../../shared/authentication/index.ts";
-import UserManager from "../../shared/utilities/UserManager.ts";
 
 const LoginPage = () => {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (UserManager.isAuthenticated()) {
-      navigate("/");
+  const checkAuthentication = async () => {
+    try {
+      const isAuthenticated = await authenticationService.session();
+      if (isAuthenticated) {
+        navigate("/");
+      }
     }
-  }, [navigate]);
+    catch (error) {
+      console.error("Error checking authentication:", error);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
 
   const handleAuthWithGoogle = async () => {
     if (isLoading) {

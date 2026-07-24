@@ -7,15 +7,8 @@ const GoogleAuthCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     console.log("Auth callback started")
-
-    if (UserManager.isAuthenticated()) {
-      navigate("/");
-    }
-    else {
-      navigate("/auth");
-    }
+    navigate("/");
   });
 
   return (

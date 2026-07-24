@@ -70,4 +70,9 @@ export class AuthenticationService {
         const response = await apiClient.get<string>(AuthenticationEndpoint.oauthGoogle);
         return response.data;
     }
+
+    async session(): Promise<boolean> {
+        const response = await apiClient.get(AuthenticationEndpoint.session);
+        return response.status == 200
+    }
 }

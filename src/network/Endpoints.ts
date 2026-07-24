@@ -1,6 +1,7 @@
 const AuthenticationEndpoint = {
   oauthGoogle: "/auth/google",
-  refreshToken: "auth/refresh-token"
+  refreshToken: "auth/refresh-token",
+  session: "auth/session",
 } as const;
 
 const ProfileEndpoint = {
