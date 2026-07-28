@@ -30,7 +30,7 @@ const RevisionInfoSchema = z.object({
 
 const DashboardResponse = z.object({
   profile: ProfileResponseSchema,
-  revisionInfo: RevisionInfoSchema,
+  revisionInfo: RevisionInfoSchema.nullish(),
   revisionStats: z.array(RevisionStatSchema)
 });
 

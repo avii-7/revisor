@@ -15,11 +15,11 @@ const RevisionEndpoint = {
 } as const;
 
 const DashboardEndpoint = {
-  dashboard: "dashboard",
+  dashboard: "dashboard/",
 } as const;
 
 const HeaderConstantKey = {
-  contentType: "Content-Type",
+  contentType: "content-type",
 } as const;
 
 const HeaderConstantValue = {

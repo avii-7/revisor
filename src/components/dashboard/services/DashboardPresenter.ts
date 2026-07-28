@@ -36,7 +36,7 @@ export class DashboardPresenter {
 
         let info: RevisionInfoModel | null = null;
 
-        if (response.revisionInfo.state == "ready" && response.revisionInfo.nextItem?.title) {
+        if (response.revisionInfo && response.revisionInfo.state == "ready" && response.revisionInfo.nextItem?.title) {
             info = {
                 title: response.revisionInfo.nextItem?.title,
                 ctaText: "Start",

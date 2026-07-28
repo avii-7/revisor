@@ -19,7 +19,8 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log(error);
+    // console.log(error);
+    return Promise.reject(error);
   },
 );
 
@@ -37,7 +38,9 @@ apiClient.interceptors.response.use(
 
     return response;
   },
-  (error) => { console.log(error); },
+  (error) => {
+    return Promise.reject(error);
+  },
 );
 
 export default apiClient;
