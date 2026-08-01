@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   FaArrowLeft,
   FaLink,
@@ -10,7 +10,7 @@ import {
   FaListUl,
 } from "react-icons/fa";
 
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 import Header from "../common/Header.tsx";
 import { Tab } from "./Tab";
@@ -19,13 +19,35 @@ import type { NewRevisionItemRequest } from "../../shared/presenters/RevisionPre
 
 const CreateItemPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [activeTab, setActiveTab] = useState<Tab>(Tab.intuition);
   const [intuition, setIntuition] = useState("");
   const [code, setCode] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    const fetchItemDetails = async () => {
+      setIsLoading(true);
+      try {
+        const item = await revisionPresetner.loadItem(id);
+        setTitle(item.title);
+        setUrl(item.platformUrl || "");
+        setIntuition(item.keyIntuition || "");
+        setCode(item.solutionCode || "");
+      } catch (err) {
+        console.error("Failed to load problem details:", err);
+        setError("Failed to load problem details. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchItemDetails();
+  }, [id]);
 
   const intuitionRef = useRef<HTMLTextAreaElement>(null);
 
@@ -77,16 +99,24 @@ const CreateItemPage = () => {
     setIsSaving(true);
     setError(null);
 
-    const newItem: NewRevisionItemRequest = {
-      title: title.trim(),
-      content: null,
-      platformUrl: url.trim(),
-      keyIntuition: intuition.trim(),
-      solutionCode: code.trim(),
-    };
-
     try {
-      await revisionPresetner.create(newItem);
+      if (id) {
+        await revisionPresetner.update(id, {
+          title: title.trim(),
+          platformUrl: url.trim() || null,
+          keyIntuition: intuition.trim(),
+          solutionCode: code.trim(),
+        });
+      } else {
+        const newItem: NewRevisionItemRequest = {
+          title: title.trim(),
+          content: null,
+          platformUrl: url.trim(),
+          keyIntuition: intuition.trim(),
+          solutionCode: code.trim(),
+        };
+        await revisionPresetner.create(newItem);
+      }
       navigate("/");
     } catch (err) {
       console.error("Failed to save problem:", err);
@@ -116,10 +146,10 @@ const CreateItemPage = () => {
             </div>
             <div>
               <h1 className="text-headline-md font-semibold text-on-surface">
-                Add Problem
+                {id ? "Edit Problem" : "Add Problem"}
               </h1>
               <p className="text-label-sm font-normal text-on-surface-variant mt-0.5">
-                Create a new entry in your DSA recall library
+                {id ? "Update details of your DSA recall library entry" : "Create a new entry in your DSA recall library"}
               </p>
             </div>
           </button>
@@ -138,7 +168,7 @@ const CreateItemPage = () => {
               disabled={isSaving}
               className="flex items-center gap-2 rounded-lg bg-primary-container px-6 py-2.5 text-label-sm font-semibold text-on-primary-container shadow-[0_12px_30px_rgba(77,142,255,0.22)] transition hover:bg-primary hover:text-on-primary hover:shadow-[0_12px_36px_rgba(77,142,255,0.35)] active:scale-[0.98] disabled:opacity-50 focus:outline-none cursor-pointer"
             >
-              <FaSave className="size-4" /> Save Problem
+              <FaSave className="size-4" /> {id ? "Save Changes" : "Save Problem"}
             </button>
           </div>
         </header>
@@ -149,8 +179,12 @@ const CreateItemPage = () => {
           </div>
         )}
 
-        {/* Form Fields Container */}
-        <form onSubmit={handleSave} className="mt-8 flex flex-col gap-6">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <form onSubmit={handleSave} className="mt-8 flex flex-col gap-6">
           {/* Card 1: Title and URL */}
           <div className="bg-surface-container-low/65 backdrop-blur-md border border-outline-variant/35 rounded-xl p-6 shadow-md flex flex-col gap-5">
             <div className="flex flex-col">
@@ -274,6 +308,7 @@ const CreateItemPage = () => {
             </div>
           </div>
         </form>
+        )}
       </div>
     </main>
   );

@@ -25,29 +25,33 @@ const DashboardPage = () => {
 
   const navigate = useNavigate();
 
+  const fetchDashboardData = async () => {
+    try {
+      const data = await dashboardPresenter.load();
+      setDashboard(data);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
+
+  const fetchPreviewRevisionItems = async () => {
+    try {
+      const data = await revisionPresetner.previewRevisionItems();
+      setItems(data);
+    } catch (error) {
+      console.error("Error fetching revision items:", error);
+    }
+  };
+
   useEffect(() => {
-
-    const fetchDashboardData = async () => {
-      try {
-        const data = await dashboardPresenter.load();
-        setDashboard(data);
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
-      }
-    };
-
-    const fetchPreviewRevisionItems = async () => {
-      try {
-        const data = await revisionPresetner.previewRevisionItems();
-        setItems(data);
-      } catch (error) {
-        console.error("Error fetching revision items:", error);
-      }
-    };
-
     fetchDashboardData();
     fetchPreviewRevisionItems();
   }, []);
+
+  const handleActionSuccess = () => {
+    fetchDashboardData();
+    fetchPreviewRevisionItems();
+  };
 
   const handleCreateProblem = () => {
     navigate("/create");
@@ -92,7 +96,7 @@ const DashboardPage = () => {
         {items.length === 0 ? (
           <DashboardEmptyState onCreateProblem={handleCreateProblem} />
         ) : (
-          <DashboardItemsList items={items} />
+          <DashboardItemsList items={items} onDeleteSuccess={handleActionSuccess} />
         )}
       </section>
     </main>

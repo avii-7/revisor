@@ -8,6 +8,7 @@ import ProblemLibraryFilterBar from "./components/ProblemLibraryFilterBar.tsx";
 import ProblemCard from "./components/ProblemCard.tsx";
 import ProblemLibraryPagination from "./components/ProblemLibraryPagination.tsx";
 import ProblemLibraryEmptyState from "./components/ProblemLibraryEmptyState.tsx";
+import type { PageRequestType } from "../dashboard/services/RevisionItemService.ts";
 
 const defaultFilters = {
   categories: [] as string[],
@@ -34,23 +35,24 @@ export default function ProblemLibraryPage() {
     const loadPage = async () => {
       setIsPageLoading(true);
 
+      const pageRequest: PageRequestType = { page: page, size: 20 }
+
       try {
-        const data = await revisionPresetner.loadProblemLibrary({
-          page,
-          category: selectedCategory || undefined,
-          level: selectedLevel || undefined,
-        });
+        const data = await revisionPresetner.loadProblemLibrary(pageRequest);
 
         if (!active) {
           return;
         }
 
         setPageData(data);
-        setFilters({
-          categories: data.categories,
-          levels: data.levels,
-        });
+
+        // setFilters({
+        //   categories: data.categories,
+        //   levels: data.levels,
+        // });
+
         setError(null);
+
       } catch (loadError) {
         console.error("Failed to load problem library page:", loadError);
         if (active) {
@@ -165,7 +167,11 @@ export default function ProblemLibraryPage() {
           <>
             <section className={`mt-10 space-y-5 transition ${isBusy ? "opacity-75" : "opacity-100"}`}>
               {pageData?.items.map((problem) => (
-                <ProblemCard key={problem.id} item={problem} />
+                <ProblemCard
+                  key={problem.id}
+                  item={problem}
+                  onDeleteSuccess={() => setReloadToken(curr => curr + 1)}
+                />
               ))}
             </section>
 

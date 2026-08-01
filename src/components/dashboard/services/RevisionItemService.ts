@@ -2,11 +2,11 @@ import apiClient from "../../../network/ApiClient.ts";
 import { RevisionEndpoint } from "../../../network/Endpoints.ts";
 import {
     RevisionItemSchema,
-    RevisionItemsPageSchema,
     type RevisionItemType,
-    type RevisionItemsPageType,
+    type PaginatedRevisionItemType,
     type CreateRevisionItemType,
     type ReviewRequest,
+    PaginatedRevisionItemSchema,
 } from "../models/RevisionItem.ts";
 import z from 'zod';
 
@@ -27,9 +27,9 @@ export default class RevisionService {
         return z.array(RevisionItemSchema).parse(response.data);
     }
 
-    async revisionItems(pageRequest: PageRequestType): Promise<RevisionItemsPageType> {
-        const response = await apiClient.post(RevisionEndpoint.items, pageRequest)
-        return RevisionItemsPageSchema.parse(response.data);
+    async revisionItems(pageRequest: PageRequestType): Promise<PaginatedRevisionItemType> {
+        const response = await apiClient.get(RevisionEndpoint.items, { params: pageRequest })
+        return PaginatedRevisionItemSchema.parse(response.data);
     }
 
     async create(item: CreateRevisionItemType) {
@@ -45,6 +45,11 @@ export default class RevisionService {
     async submitReview(request: ReviewRequest) {
         const response = await apiClient.post(`${RevisionEndpoint.items}/${request.itemID}/review/`, { rating: request.rating });
         console.log(response.status);
+    }
+
+    async getRevisionItem(itemId: string): Promise<RevisionItemType> {
+        const response = await apiClient.get(`${RevisionEndpoint.items}/${itemId}`);
+        return RevisionItemSchema.parse(response.data);
     }
 
     async delete(itemId: string) {

@@ -36,6 +36,7 @@ function App() {
 
       <Route index element={<DashboardPage />} />
       <Route path="create" element={<CreateItemPage />} />
+      <Route path="edit/:id" element={<CreateItemPage />} />
       <Route path="problems" element={<ProblemLibraryPage />} />
       <Route path="revision" element={<RevisionSessionPage />} />
 

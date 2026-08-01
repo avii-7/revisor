@@ -3,7 +3,8 @@ import type { PageRequestType } from "../../components/dashboard/services/Revisi
 import type {
     RevisionItemType,
     NextRevisionType,
-    RevisionItemsPageType,
+    PaginatedRevisionItemType,
+    PreviewRevisionItemType,
 } from "../../components/dashboard/models/RevisionItem";
 import type RevisionService from "../../components/dashboard/services/RevisionItemService";
 
@@ -33,6 +34,26 @@ export class RevisionPresnter {
     async create(item: NewRevisionItemRequest) {
         await this.service.create(item);
     }
+
+    async loadItem(id: string): Promise<RevisionItemModel> {
+        return toRevisionItemModel(await this.service.getRevisionItem(id));
+    }
+
+    async update(id: string, updatedFields: Partial<RevisionItemModel>): Promise<void> {
+        const currentItem = await this.service.getRevisionItem(id);
+        const merged = {
+            ...currentItem,
+            title: updatedFields.title ?? currentItem.title,
+            platformUrl: updatedFields.platformUrl !== undefined ? updatedFields.platformUrl : currentItem.platformUrl,
+            keyIntuition: updatedFields.keyIntuition !== undefined ? updatedFields.keyIntuition : currentItem.keyIntuition,
+            solutionCode: updatedFields.solutionCode !== undefined ? updatedFields.solutionCode : currentItem.solutionCode,
+        };
+        await this.service.update(merged);
+    }
+
+    async delete(id: string): Promise<void> {
+        await this.service.delete(id);
+    }
 }
 
 function toRevisionItemModel(response: RevisionItemType): RevisionItemModel {
@@ -46,21 +67,31 @@ function toRevisionItemModel(response: RevisionItemType): RevisionItemModel {
         nextRevision: toNextRevisionModel(response.nextRevision),
         due: response.due,
         lastReview: response.lastReview,
-        category: response.category,
-        level: response.level,
         revisionCount: response.revisionCount ?? 0,
-        createdAt: response.createdAt,
-        tags: response.tags ?? [],
+        tags: response.tags?.map(t => t.name) ?? [],
     }
 }
 
-function toProblemLibraryModel(response: RevisionItemsPageType): ProblemLibraryModel {
+function toPreviewRevisionItemModel(response: PreviewRevisionItemType): PreviewRevisionItemModel {
     return {
-        items: response.items.map(toRevisionItemModel),
-        page: response.page,
-        pageSize: response.pageSize,
-        totalItems: response.totalItems,
-        totalPages: response.totalPages,
+        id: response.id,
+        title: response.title,
+        subtitle: response.subtitle,
+        lastReview: response.lastReview,
+        revisionCount: response.revisionCount ?? 0,
+        tags: response.tags?.map(t => t.name) ?? [],
+    }
+}
+
+function toProblemLibraryModel(response: PaginatedRevisionItemType): ProblemLibraryModel {
+    return {
+        items: response.items.map(toPreviewRevisionItemModel),
+        page: response.metadata.page,
+        pageSize: response.metadata.per,
+        totalItems: response.metadata.total,
+        totalPages: response.metadata.pageCount,
+        categories: [],
+        levels: [],
     };
 }
 
@@ -76,6 +107,15 @@ function toNextRevisionModel(response: NextRevisionType | null | undefined): Nex
     }
 }
 
+export interface PreviewRevisionItemModel {
+    id: string;
+    title: string;
+    subtitle?: string | null;
+    lastReview?: string | null;
+    revisionCount?: number;
+    tags?: string[];
+}
+
 export interface RevisionItemModel {
     id: string;
     title: string;
@@ -87,9 +127,7 @@ export interface RevisionItemModel {
     due?: string;
     lastReview?: string | null;
     category?: string | null;
-    level?: string | null;
     revisionCount?: number;
-    createdAt?: string | null;
     tags?: string[];
 }
 
@@ -118,10 +156,6 @@ export interface NewRevisionItemRequest {
     solutionCode: string | null,
 }
 
-export function getProblemLevelLabel(item: RevisionItemModel): string {
-    return normalizeLabel(item.level || "unknown");
-}
-
 export function getProblemCategoryLabel(item: RevisionItemModel): string {
     return item.category || "Uncategorized";
 }
@@ -139,10 +173,6 @@ export function getProblemRevisionSummary(item: RevisionItemModel): string {
 export function getProblemActivitySummary(item: RevisionItemModel): string {
     if (item.lastReview) {
         return `Last revised ${relativeTime(item.lastReview)}`;
-    }
-
-    if (item.createdAt) {
-        return `Created ${relativeTime(item.createdAt)}`;
     }
 
     return "No revision activity yet";

@@ -7,7 +7,21 @@ const NextRevisionSchema = z.object({
   again: z.string()
 });
 
-const RevisionItemSchema = z.object({
+export const TagSchema = z.object({
+  id: z.uuid(),
+  name: z.string()
+})
+
+export const PreviewRevisionItemSchema = z.object({
+  id: z.uuid(),
+  title: z.string(),
+  subtitle: z.string().nullish(),
+  lastReview: z.string().nullish(),
+  revisionCount: z.number(),
+  tags: z.array(TagSchema).nullish(),
+});
+
+export const RevisionItemSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   content: z.string().optional(),
@@ -17,22 +31,22 @@ const RevisionItemSchema = z.object({
   nextRevision: NextRevisionSchema.nullish(),
   due: z.string(),
   lastReview: z.string().nullish(),
-  category: z.string().nullish(),
-  level: z.string().nullish(),
-  revisionCount: z.coerce.number().optional(),
-  createdAt: z.string().nullish(),
-  tags: z.array(z.string()).optional(),
+  revisionCount: z.number(),
+  tags: z.array(TagSchema).nullish(),
 });
 
-const RevisionItemsPageSchema = z.object({
-  items: z.array(RevisionItemSchema),
-  page: z.coerce.number(),
-  pageSize: z.coerce.number(),
-  totalItems: z.coerce.number(),
-  totalPages: z.coerce.number(),
-  categories: z.array(z.string()).default([]),
-  levels: z.array(z.string()).default([]),
+export const PageMetadataSchema = z.object({
+  page: z.number(),
+  per: z.number(),
+  total: z.number(),
+  pageCount: z.number(),
 });
+
+export const PaginatedSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+  z.object({
+    items: z.array(itemSchema),
+    metadata: PageMetadataSchema,
+  });
 
 const CreateRevisionItemSchema = z.object({
   title: z.string(),
@@ -49,8 +63,9 @@ export interface ReviewRequest {
   rating: typeof RatingSchema[number];
 }
 
-export { RevisionItemSchema, RevisionItemsPageSchema, type NextRevisionSchema, type CreateRevisionItemSchema };
 export type RevisionItemType = z.infer<typeof RevisionItemSchema>;
-export type RevisionItemsPageType = z.infer<typeof RevisionItemsPageSchema>;
+export const PaginatedRevisionItemSchema = PaginatedSchema(PreviewRevisionItemSchema);
+export type PaginatedRevisionItemType = z.infer<typeof PaginatedRevisionItemSchema>;
+export type PreviewRevisionItemType = z.infer<typeof PreviewRevisionItemSchema>;
 export type NextRevisionType = z.infer<typeof NextRevisionSchema>;
 export type CreateRevisionItemType = z.infer<typeof CreateRevisionItemSchema>;

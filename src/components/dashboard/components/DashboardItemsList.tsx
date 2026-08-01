@@ -4,9 +4,10 @@ import ProblemCard from "../../problemLibrary/components/ProblemCard.tsx";
 
 interface DashboardItemsListProps {
   items: RevisionItemModel[];
+  onDeleteSuccess?: () => void;
 }
 
-export default function DashboardItemsList({ items }: DashboardItemsListProps) {
+export default function DashboardItemsList({ items, onDeleteSuccess }: DashboardItemsListProps) {
   return (
     <>
       <div className="mt-9 flex items-center justify-between">
@@ -23,7 +24,7 @@ export default function DashboardItemsList({ items }: DashboardItemsListProps) {
 
       <section className="mt-4 overflow-hidden rounded-lg border border-outline-variant/70 bg-surface-container-low">
         {items.map((item) => (
-          <ProblemCard key={item.id} item={item} variant="compact" />
+          <ProblemCard key={item.id} item={item} variant="compact" onDeleteSuccess={onDeleteSuccess} />
         ))}
       </section>
     </>
