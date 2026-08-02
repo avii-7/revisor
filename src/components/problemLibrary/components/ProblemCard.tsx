@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import {
-  FaCheckCircle,
   FaClock,
   FaEllipsisV,
   FaHistory,
@@ -15,13 +14,11 @@ import { revisionPresetner } from "../../../shared/container.ts";
 
 interface ProblemCardProps {
   item: RevisionItemModel;
-  variant?: "library" | "compact";
   onDeleteSuccess?: () => void;
 }
 
 export default function ProblemCard({
   item,
-  variant = "library",
   onDeleteSuccess,
 }: ProblemCardProps) {
   const navigate = useNavigate();
@@ -47,70 +44,6 @@ export default function ProblemCard({
       }
     }
   };
-
-  if (variant === "compact") {
-    return (
-      <article className="flex items-center gap-5 border-b border-outline-variant/45 px-6 py-5 last:border-b-0">
-        <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-surface-container-high text-primary">
-          <FaCheckCircle aria-hidden="true" className="size-4" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h3 className="truncate text-label-sm font-semibold text-on-surface">
-            {item.title}
-          </h3>
-          <p className="mt-1 truncate text-label-sm font-normal text-on-surface-variant">
-            {item.content || item.keyIntuition || ""}
-          </p>
-        </div>
-        <div className="hidden text-right sm:block">
-          <p className="text-label-sm font-medium uppercase text-on-surface-variant">
-            Streak
-          </p>
-        </div>
-        <div className="relative">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsMenuOpen((prev) => !prev);
-            }}
-            className="grid size-8 shrink-0 place-items-center rounded-md text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface cursor-pointer"
-            aria-label={`Open actions for ${item.title}`}
-            type="button"
-          >
-            <FaEllipsisV aria-hidden="true" className="size-3" />
-          </button>
-          {isMenuOpen && (
-            <div className="absolute right-0 top-full mt-1 w-32 bg-surface-container-high/95 backdrop-blur-xl border border-outline/25 rounded-lg shadow-2xl overflow-hidden z-50">
-              <div className="py-1">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsMenuOpen(false);
-                    navigate(`/edit/${item.id}`);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container-highest transition-colors text-label-sm text-left cursor-pointer font-medium"
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsMenuOpen(false);
-                    handleDelete();
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-error hover:bg-error-container/20 transition-colors text-label-sm text-left cursor-pointer font-medium"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </article>
-    );
-  }
 
   return (
     <article className="rounded-[28px] border border-outline-variant/45 bg-surface-container-low/95 px-6 py-6 shadow-[0_20px_60px_rgba(6,14,32,0.32)] transition hover:border-primary/30 sm:px-8">

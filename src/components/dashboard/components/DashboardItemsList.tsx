@@ -22,9 +22,9 @@ export default function DashboardItemsList({ items, onDeleteSuccess }: Dashboard
         </Link>
       </div>
 
-      <section className="mt-4 overflow-hidden rounded-lg border border-outline-variant/70 bg-surface-container-low">
+      <section className="mt-4 space-y-5">
         {items.map((item) => (
-          <ProblemCard key={item.id} item={item} variant="compact" onDeleteSuccess={onDeleteSuccess} />
+          <ProblemCard key={item.id} item={item} onDeleteSuccess={onDeleteSuccess} />
         ))}
       </section>
     </>
