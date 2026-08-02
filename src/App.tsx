@@ -7,7 +7,6 @@ import ProblemLibraryPage from "./components/problemLibrary/ProblemLibraryPage.t
 import RevisionSessionPage from "./components/revisionSession/RevisionSessionPage.tsx";
 import { useEffect } from "react";
 import { authenticationService } from "./shared/authentication/index.ts";
-import UserManager from "./shared/utilities/UserManager.ts";
 
 function App() {
 
@@ -15,9 +14,16 @@ function App() {
 
   useEffect(() => {
 
-    const handler = () => {
-      UserManager.logout();
-      navigate("/auth");
+    const handler = async () => {
+      try {
+        await authenticationService.logout();
+      }
+      catch (err) {
+        console.error("Error logging out:", err);
+      }
+      finally {
+        navigate("/auth");
+      }
     };
 
     console.log("Setting up handlers");

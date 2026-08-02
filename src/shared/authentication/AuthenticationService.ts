@@ -75,4 +75,8 @@ export class AuthenticationService {
         const response = await apiClient.get(AuthenticationEndpoint.session);
         return response.status == 200
     }
+
+    async logout() {
+        await apiClient.get(AuthenticationEndpoint.logout);
+    }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaCog, FaUserCircle, FaSignOutAlt, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import AuthManager from "../../shared/utilities/UserManager.ts";
+import { authenticationService } from "../../shared/authentication";
 
 interface HeaderProps {
   children?: React.ReactNode;
@@ -25,9 +25,15 @@ export default function Header({
     }
   };
 
-  const handleLogout = () => {
-    AuthManager.logout();
-    navigate("/auth");
+  const handleLogout = async () => {
+    try {
+      await authenticationService.logout();
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+    finally {
+      navigate("/auth");
+    }
   };
 
   return (

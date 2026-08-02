@@ -1,15 +1,8 @@
-import CookieManager, { CookiesConstant } from "./CookiesConstant.ts";
+// import { authenticationService } from "../authentication";
 
-export default class UserManager {
+// export default class UserManager {
 
-    static isAuthenticated(): boolean {
-        return CookieManager.get(CookiesConstant.jwtToken) !== undefined &&
-            CookieManager.get(CookiesConstant.refreshToken) !== undefined;
-    }
-
-    static logout(): void {
-        CookieManager.remove(CookiesConstant.jwtToken);
-        CookieManager.remove(CookiesConstant.refreshToken);
-        console.log("user logout")
-    }
-}
+//     static async logout() {
+//         await authenticationService.logout();
+//     }
+// }

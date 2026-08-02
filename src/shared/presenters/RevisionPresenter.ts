@@ -19,8 +19,8 @@ export class RevisionPresnter {
         return (await this.service.dueRevisionItems()).map(toRevisionItemModel);
     }
 
-    async previewRevisionItems(): Promise<RevisionItemModel[]> {
-        return (await this.service.previewRevisionItems()).map(toRevisionItemModel);
+    async previewRevisionItems(): Promise<PreviewRevisionItemModel[]> {
+        return (await this.service.previewRevisionItems()).map(toPreviewRevisionItemModel);
     }
 
     // async loadRevisionItems(): Promise<RevisionItemModel[]> {

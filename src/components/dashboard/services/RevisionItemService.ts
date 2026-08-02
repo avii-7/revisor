@@ -7,6 +7,8 @@ import {
     type CreateRevisionItemType,
     type ReviewRequest,
     PaginatedRevisionItemSchema,
+    type PreviewRevisionItemType,
+    PreviewRevisionItemSchema,
 } from "../models/RevisionItem.ts";
 import z from 'zod';
 
@@ -22,9 +24,9 @@ export default class RevisionService {
         return z.array(RevisionItemSchema).parse(response.data);
     }
 
-    async previewRevisionItems(): Promise<RevisionItemType[]> {
+    async previewRevisionItems(): Promise<PreviewRevisionItemType[]> {
         const response = await apiClient.get(RevisionEndpoint.previewItems);
-        return z.array(RevisionItemSchema).parse(response.data);
+        return z.array(PreviewRevisionItemSchema).parse(response.data);
     }
 
     async revisionItems(pageRequest: PageRequestType): Promise<PaginatedRevisionItemType> {

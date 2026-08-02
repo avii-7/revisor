@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router'
 import { useEffect } from 'react';
-import UserManager from '../../shared/utilities/UserManager';
 
 const GoogleAuthCallback = () => {
 
