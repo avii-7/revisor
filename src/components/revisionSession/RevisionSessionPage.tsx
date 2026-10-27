@@ -86,14 +86,6 @@ export default function RevisionSessionPage() {
     }
   };
 
-  const handlePrev = () => {
-    reset();
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-      setIsRevealed(false);
-    }
-  };
-
   const handleExitSession = () => {
     navigate("/");
   };
@@ -136,7 +128,6 @@ export default function RevisionSessionPage() {
             hasSubmissionError={submission.status === "error"}
             onReveal={() => setIsRevealed(true)}
             onAssess={handleAssess}
-            onPrevious={handlePrev}
             onNext={handleNext}
           />
         )}

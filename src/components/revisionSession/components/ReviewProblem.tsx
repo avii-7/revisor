@@ -1,4 +1,4 @@
-import { FaArrowLeft, FaFileAlt, FaLightbulb, FaCode, FaLink } from "react-icons/fa";
+import { FaFileAlt, FaLightbulb, FaCode, FaLink } from "react-icons/fa";
 import type { RevisionItemType } from "../../dashboard/models/RevisionItem.ts";
 import type { Rating } from "../../dashboard/tagsMenu/Rating.ts";
 import ReviewRatingControls from "./ReviewRatingControls.tsx";
@@ -12,13 +12,12 @@ interface ReviewProblemProps {
   hasSubmissionError: boolean;
   onReveal: () => void;
   onAssess: (rating: Rating) => void;
-  onPrevious: () => void;
   onNext: () => void;
 }
 
 export default function ReviewProblem({
   currentItem, currentIndex, totalItems, isRevealed, isSubmitting,
-  hasSubmissionError, onReveal, onAssess, onPrevious, onNext,
+  hasSubmissionError, onReveal, onAssess, onNext,
 }: ReviewProblemProps) {
   return (
     <section className="w-full max-w-[800px] flex flex-col items-center">
@@ -115,16 +114,7 @@ export default function ReviewProblem({
         )}
       </article>
 
-      {/* Bottom Slider controls */}
-      <div className="mt-8 w-full flex items-center justify-between max-w-[800px]">
-        <button
-          onClick={onPrevious}
-          disabled={currentIndex === 0 || isSubmitting}
-          className="flex items-center gap-2  px-5 py-2.5 rounded-lg text-label-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <FaArrowLeft className="size-3" /> Previous
-        </button>
-
+      <div className="mt-8 w-full flex items-center justify-end max-w-[800px]">
         <button
           onClick={onNext}
           disabled={isSubmitting}
