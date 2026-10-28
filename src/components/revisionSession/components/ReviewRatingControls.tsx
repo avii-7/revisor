@@ -87,7 +87,7 @@ export default function ReviewRatingControls({
             className={`flex flex-col items-center justify-center py-2.5 px-4 border rounded-xl transition duration-150 active:scale-[0.98] cursor-pointer disabled:cursor-wait disabled:opacity-50 ${getRatingStyles(rating)}`}
           >
             <span className="font-semibold text-label-sm">{capitalize(rating)}</span>
-            <span className="text-[10px] font-medium mt-0.5"> {getNextRevisionText(rating)} </span>
+            <span className="text-[10px] font-medium mt-0.5">{getNextRevisionText(rating)}</span>
           </button>
         ))}
       </div>

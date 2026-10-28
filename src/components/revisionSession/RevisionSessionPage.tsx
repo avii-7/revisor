@@ -116,6 +116,7 @@ export default function RevisionSessionPage() {
           <RevisionSessionSummary
             duration={formatDuration(seconds)}
             revisedCount={sessionRevisedCount}
+            skippedCount={items.length - sessionRevisedCount}
             onExit={handleExitSession}
           />
         ) : (

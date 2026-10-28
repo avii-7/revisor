@@ -120,7 +120,7 @@ export default function ReviewProblem({
           disabled={isSubmitting}
           className="flex items-center gap-2 rounded-lg bg-surface-container border border-outline-variant/30 px-6 py-2.5 text-label-sm font-semibold text-on-surface transition hover:bg-surface-container-high hover:border-primary/50 active:scale-[0.98] cursor-pointer disabled:cursor-wait disabled:opacity-50"
         >
-          {currentIndex === totalItems - 1 ? "Finish" : "Skip"}
+          {currentIndex === totalItems - 1 ? "Skip & Finish" : "Skip"}
         </button>
       </div>
     </section>
