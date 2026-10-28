@@ -1,5 +1,6 @@
-import { FaArrowLeft, FaSpinner, FaUndo } from "react-icons/fa";
+import { FaArrowLeft, FaUndo } from "react-icons/fa";
 import DotGridBackground from "../../common/DotGridBackground.tsx";
+import RevisionSessionSkeleton from "./RevisionSessionSkeleton.tsx";
 
 interface RevisionSessionFeedbackProps {
   loading: boolean;
@@ -8,15 +9,7 @@ interface RevisionSessionFeedbackProps {
 
 export default function RevisionSessionFeedback({ loading, onExit }: RevisionSessionFeedbackProps) {
   if (loading) {
-    return (
-      <main className="min-h-screen bg-app-gradient relative font-primary text-on-surface flex items-center justify-center">
-        <DotGridBackground />
-        <div className="flex flex-col items-center gap-4 z-10">
-          <FaSpinner className="size-10 text-primary animate-spin" />
-          <span className="text-body-md text-on-surface-variant font-medium">Loading session...</span>
-        </div>
-      </main>
-    );
+    return <RevisionSessionSkeleton onExit={onExit} />;
   }
 
   else {
