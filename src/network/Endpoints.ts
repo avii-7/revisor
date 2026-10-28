@@ -9,8 +9,12 @@ const ProfileEndpoint = {
   profile: "profile",
 } as const;
 
+const revisionItemsPath = "revision-items/";
+
 const RevisionEndpoint = {
-  items: "revision-items/",
+  items: revisionItemsPath,
+  item: (itemId: string) => `${revisionItemsPath}${itemId}`,
+  review: (itemId: string) => `${revisionItemsPath}${itemId}/review/`,
   dueItems: "revision-items/due/",
   previewItems: "revision-items/preview/",
 } as const;

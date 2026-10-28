@@ -45,17 +45,17 @@ export default class RevisionService {
     }
 
     async submitReview(request: ReviewRequest) {
-        const response = await apiClient.post(`${RevisionEndpoint.items}/${request.itemID}/review/`, { rating: request.rating });
+        const response = await apiClient.post(RevisionEndpoint.review(request.itemID), { rating: request.rating });
         console.log(response.status);
     }
 
     async getRevisionItem(itemId: string): Promise<RevisionItemType> {
-        const response = await apiClient.get(`${RevisionEndpoint.items}/${itemId}`);
+        const response = await apiClient.get(RevisionEndpoint.item(itemId));
         return RevisionItemSchema.parse(response.data);
     }
 
     async delete(itemId: string) {
-        const response = await apiClient.delete(`${RevisionEndpoint.items}/${itemId}`);
+        const response = await apiClient.delete(RevisionEndpoint.item(itemId));
         console.log(response.status);
     }
 }
