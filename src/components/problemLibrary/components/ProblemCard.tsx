@@ -14,15 +14,21 @@ import { revisionPresetner } from "../../../shared/container.ts";
 
 interface ProblemCardProps {
   item: RevisionItemModel;
+  tagsById: ReadonlyMap<string, string>;
   onDeleteSuccess?: () => void;
 }
 
 export default function ProblemCard({
   item,
+  tagsById,
   onDeleteSuccess,
 }: ProblemCardProps) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const tags = (item.tagIds ?? []).flatMap((id) => {
+    const name = tagsById.get(id);
+    return name === undefined ? [] : [{ id, name }];
+  });
 
   useEffect(() => {
     if (!isMenuOpen) return;
@@ -65,14 +71,14 @@ export default function ProblemCard({
                 </span>
               </div>
 
-              {(item.tags?.length || 0) > 0 && (
+              {tags.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {item.tags?.map((tag) => (
+                  {tags.map((tag) => (
                     <span
-                      key={tag}
+                      key={tag.id}
                       className="inline-flex items-center rounded-full bg-white px-3 py-1 text-label-sm font-medium text-[#0b1326] border border-outline-variant/20 shadow-sm"
                     >
-                      {tag}
+                      {tag.name}
                     </span>
                   ))}
                 </div>

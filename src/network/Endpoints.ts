@@ -19,6 +19,10 @@ const RevisionEndpoint = {
   previewItems: "revision-items/preview/",
 } as const;
 
+const TagEndpoint = {
+  tags: "tags/",
+} as const;
+
 const DashboardEndpoint = {
   dashboard: "dashboard/",
 } as const;
@@ -37,6 +41,7 @@ export {
   AuthenticationEndpoint,
   ProfileEndpoint,
   RevisionEndpoint,
+  TagEndpoint,
   HeaderConstantKey,
   HeaderConstantValue,
 };

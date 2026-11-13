@@ -1,80 +1,70 @@
-import { FaChevronDown, FaFilter } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import type { LoadStatus } from "../../../shared/utilities/LoadStatus.ts";
+import type { Tag } from "../services/TagService.ts";
+import TagsLoadFeedback from "./TagsLoadFeedback.tsx";
 
 interface ProblemLibraryFilterBarProps {
-  categories: string[];
-  levels: string[];
-  selectedCategory: string;
-  selectedLevel: string;
-  onCategoryChange: (value: string) => void;
-  onLevelChange: (value: string) => void;
-  disabled?: boolean;
-}
-
-function SelectField({
-  value,
-  options,
-  onChange,
-  placeholder,
-  disabled,
-}: {
-  value: string;
-  options: string[];
-  onChange: (value: string) => void;
-  placeholder: string;
-  disabled?: boolean;
-}) {
-  return (
-    <div className="relative min-w-[200px]">
-      <select
-        className="w-full appearance-none rounded-xl border border-outline-variant/35 bg-surface-container-low px-4 py-3 pr-10 text-body-md text-on-surface shadow-[0_16px_40px_rgba(6,14,32,0.18)] outline-none transition focus:border-primary/60 disabled:cursor-not-allowed disabled:opacity-60"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        disabled={disabled}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      <FaChevronDown className="pointer-events-none absolute right-4 top-1/2 size-3 -translate-y-1/2 text-on-surface-variant" />
-    </div>
-  );
+  tags: Tag[];
+  selectedTagIds: string[];
+  onTagsChange: (ids: string[]) => void;
+  loadStatus: LoadStatus;
+  onRetry: () => void;
 }
 
 export default function ProblemLibraryFilterBar({
-  categories,
-  levels,
-  selectedCategory,
-  selectedLevel,
-  onCategoryChange,
-  onLevelChange,
-  disabled = false,
+  tags,
+  selectedTagIds,
+  onTagsChange,
+  loadStatus,
+  onRetry,
 }: ProblemLibraryFilterBarProps) {
+  if (loadStatus !== "success") {
+    return <TagsLoadFeedback loadStatus={loadStatus} onRetry={onRetry} />;
+  }
+
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <SelectField
-        value={selectedCategory}
-        options={categories}
-        onChange={onCategoryChange}
-        placeholder="All Categories"
-        disabled={disabled}
-      />
-      <SelectField
-        value={selectedLevel}
-        options={levels}
-        onChange={onLevelChange}
-        placeholder="All Levels"
-        disabled={disabled}
-      />
-      <button
-        type="button"
-        aria-label="Additional filters"
-        className="grid size-11 place-items-center rounded-xl border border-outline-variant/25 bg-surface-container-low text-on-surface-variant transition hover:border-primary/40 hover:text-on-surface"
-      >
-        <FaFilter className="size-4" />
-      </button>
+    <div className="flex flex-wrap items-start gap-3">
+      <details className="relative min-w-[240px]">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-xl border border-outline-variant/35 bg-surface-container-low px-4 py-3 text-body-md text-on-surface focus-visible:outline-primary">
+          <span>
+            {selectedTagIds.length ? `Tags (${selectedTagIds.length})` : "All Tags"}
+          </span>
+          <FaChevronDown className="size-3 text-on-surface-variant" />
+        </summary>
+        <div className="absolute right-0 z-20 mt-2 w-full rounded-xl border border-outline-variant/35 bg-surface-container-low p-3 shadow-xl">
+          {tags.length === 0 ? (
+            <p className="text-body-md text-on-surface-variant">No tags available</p>
+          ) : (
+            <fieldset className="max-h-64 space-y-1 overflow-y-auto">
+              <legend className="sr-only">Filter problems by tags</legend>
+              {tags.map((tag) => (
+                <label key={tag.id} className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 text-body-md text-on-surface hover:bg-surface-container-high">
+                  <input
+                    type="checkbox"
+                    checked={selectedTagIds.includes(tag.id)}
+                    onChange={(event) => onTagsChange(
+                      event.target.checked
+                        ? [...selectedTagIds, tag.id]
+                        : selectedTagIds.filter((id) => id !== tag.id),
+                    )}
+                    className="size-4 shrink-0 accent-primary"
+                  />
+                  <span className="break-words">{tag.name}</span>
+                </label>
+              ))}
+            </fieldset>
+          )}
+        </div>
+      </details>
+      {selectedTagIds.length > 0 && (
+        <button
+          type="button"
+          onClick={() => onTagsChange([])}
+          className="rounded-xl px-3 py-3 text-body-md text-primary hover:bg-surface-container-high"
+        >
+          Clear filters
+        </button>
+      )}
     </div>
   );
 }

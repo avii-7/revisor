@@ -1,15 +1,36 @@
 import { FaArrowLeft, FaUndo } from "react-icons/fa";
 import DotGridBackground from "../../common/DotGridBackground.tsx";
 import RevisionSessionSkeleton from "./RevisionSessionSkeleton.tsx";
+import LoadErrorState from "../../common/LoadErrorState.tsx";
+import type { LoadStatus } from "../../../shared/utilities/LoadStatus.ts";
 
 interface RevisionSessionFeedbackProps {
-  loading: boolean;
+  loadStatus: LoadStatus;
+  onRetry: () => void;
   onExit: () => void;
 }
 
-export default function RevisionSessionFeedback({ loading, onExit }: RevisionSessionFeedbackProps) {
-  if (loading) {
+export default function RevisionSessionFeedback({ loadStatus, onRetry, onExit }: RevisionSessionFeedbackProps) {
+  if (loadStatus === "loading") {
     return <RevisionSessionSkeleton onExit={onExit} />;
+  }
+
+  if (loadStatus === "error") {
+    return (
+      <main className="min-h-screen bg-app-gradient relative font-primary text-on-surface flex items-center justify-center px-5">
+        <DotGridBackground />
+        <div className="relative z-10 w-full max-w-md">
+          <LoadErrorState
+            title="Couldn't load your revision session"
+            message="Check your connection and try again."
+            onRetry={onRetry}
+          />
+          <button type="button" onClick={onExit} className="mt-4 w-full rounded-lg px-6 py-3 text-label-sm font-semibold text-primary transition hover:bg-surface-container cursor-pointer">
+            Back to Dashboard
+          </button>
+        </div>
+      </main>
+    );
   }
 
   else {

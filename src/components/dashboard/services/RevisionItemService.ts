@@ -15,6 +15,7 @@ import z from 'zod';
 export interface PageRequestType {
     page: number;
     size: number;
+    tagIds?: string[];
 }
 
 export default class RevisionService {
@@ -30,7 +31,13 @@ export default class RevisionService {
     }
 
     async revisionItems(pageRequest: PageRequestType): Promise<PaginatedRevisionItemType> {
-        const response = await apiClient.get(RevisionEndpoint.items, { params: pageRequest })
+        const params = new URLSearchParams({
+            page: String(pageRequest.page),
+            size: String(pageRequest.size),
+        });
+        pageRequest.tagIds?.forEach((id) => params.append("tag_ids", id));
+
+        const response = await apiClient.get(RevisionEndpoint.items, { params });
         return PaginatedRevisionItemSchema.parse(response.data);
     }
 

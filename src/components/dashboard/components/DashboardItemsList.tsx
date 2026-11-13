@@ -2,12 +2,17 @@ import { Link } from "react-router";
 import type { RevisionItemModel } from "../../../shared/presenters/RevisionPresenter.ts";
 import ProblemCard from "../../problemLibrary/components/ProblemCard.tsx";
 
+import { useTags } from "../../problemLibrary/hooks/useTags.ts";
+import TagsLoadFeedback from "../../problemLibrary/components/TagsLoadFeedback.tsx";
+
 interface DashboardItemsListProps {
   items: RevisionItemModel[];
   onDeleteSuccess?: () => void;
 }
 
 export default function DashboardItemsList({ items, onDeleteSuccess }: DashboardItemsListProps) {
+  const { tagsById, loadStatus, retry } = useTags();
+
   return (
     <>
       <div className="mt-9 flex items-center justify-between">
@@ -23,8 +28,9 @@ export default function DashboardItemsList({ items, onDeleteSuccess }: Dashboard
       </div>
 
       <section className="mt-4 space-y-5">
+        <TagsLoadFeedback loadStatus={loadStatus} onRetry={retry} />
         {items.map((item) => (
-          <ProblemCard key={item.id} item={item} onDeleteSuccess={onDeleteSuccess} />
+          <ProblemCard key={item.id} item={item} tagsById={tagsById} onDeleteSuccess={onDeleteSuccess} />
         ))}
       </section>
     </>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import RevisionService from "../dashboard/services/RevisionItemService.ts";
 import type { ReviewRequest, RevisionItemType } from "../dashboard/models/RevisionItem.ts";
@@ -6,6 +6,7 @@ import DotGridBackground from "../common/DotGridBackground.tsx";
 import Header from "../common/Header.tsx";
 import { type Rating } from "../dashboard/tagsMenu/Rating.ts";
 import { useAsyncAction } from "../../shared/utilities/useAsyncAction.ts";
+import type { LoadStatus } from "../../shared/utilities/LoadStatus.ts";
 
 import ReviewProblem from "./components/ReviewProblem.tsx";
 import RevisionSessionSummary from "./components/RevisionSessionSummary.tsx";
@@ -21,38 +22,44 @@ export default function RevisionSessionPage() {
 
   const [items, setItems] = useState<RevisionItemType[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [seconds, setSeconds] = useState<number>(0);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [sessionRevisedCount, setSessionRevisedCount] = useState<number>(0);
   const { state: submission, execute, reset, isPending: isSubmitting } = useAsyncAction(submitReview);
 
-  // Fetch revision items
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const data = await revisionItemService.dueRevisionItems();
+  const loadItems = useCallback(() => {
+    return revisionItemService.dueRevisionItems()
+      .then((data) => {
         setItems(data);
-      } catch (error) {
+        setLoadStatus("success");
+      })
+      .catch((error) => {
+        setLoadStatus("error");
         console.error("Error fetching revision items for session:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchItems();
+      });
   }, []);
+
+  useEffect(() => {
+    loadItems();
+  }, [loadItems]);
+
+  const handleRetry = () => {
+    setLoadStatus("loading");
+    loadItems();
+  };
 
   // Timer effect
   useEffect(() => {
-    if (loading || isCompleted || items.length === 0) return;
+    if (loadStatus !== "success" || isCompleted || items.length === 0) return;
 
     const interval = setInterval(() => {
       setSeconds((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [loading, isCompleted, items.length]);
+  }, [loadStatus, isCompleted, items.length]);
 
   const formatDuration = (totalSecs: number) => {
     const hrs = Math.floor(totalSecs / 3600);
@@ -90,8 +97,14 @@ export default function RevisionSessionPage() {
     navigate("/");
   };
 
-  if (loading || items.length === 0) {
-    return <RevisionSessionFeedback loading={loading} onExit={handleExitSession} />;
+  if (loadStatus !== "success" || items.length === 0) {
+    return (
+      <RevisionSessionFeedback
+        loadStatus={loadStatus}
+        onRetry={handleRetry}
+        onExit={handleExitSession}
+      />
+    );
   }
 
   const currentItem = items[currentIndex];

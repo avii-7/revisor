@@ -10,20 +10,16 @@ import ProblemLibraryPagination from "./components/ProblemLibraryPagination.tsx"
 import ProblemLibraryEmptyState from "./components/ProblemLibraryEmptyState.tsx";
 import type { PageRequestType } from "../dashboard/services/RevisionItemService.ts";
 
-const defaultFilters = {
-  categories: [] as string[],
-  levels: [] as string[],
-};
+import { useTags } from "./hooks/useTags.ts";
 
 export default function ProblemLibraryPage() {
 
   const navigate = useNavigate();
   const [isPending, startTransition] = useTransition();
 
-  const [filters, setFilters] = useState(defaultFilters);
+  const { tags, tagsById, loadStatus: tagsLoadStatus, retry: retryTags } = useTags();
   const [pageData, setPageData] = useState<ProblemLibraryModel>();
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +31,7 @@ export default function ProblemLibraryPage() {
     const loadPage = async () => {
       setIsPageLoading(true);
 
-      const pageRequest: PageRequestType = { page: page, size: 20 }
+      const pageRequest: PageRequestType = { page, size: 20, tagIds: selectedTagIds };
 
       try {
         const data = await revisionPresetner.loadProblemLibrary(pageRequest);
@@ -45,11 +41,6 @@ export default function ProblemLibraryPage() {
         }
 
         setPageData(data);
-
-        // setFilters({
-        //   categories: data.categories,
-        //   levels: data.levels,
-        // });
 
         setError(null);
 
@@ -70,18 +61,11 @@ export default function ProblemLibraryPage() {
     return () => {
       active = false;
     };
-  }, [page, reloadToken, selectedCategory, selectedLevel]);
+  }, [page, reloadToken, selectedTagIds]);
 
-  const handleCategoryChange = (value: string) => {
+  const handleTagsChange = (ids: string[]) => {
     startTransition(() => {
-      setSelectedCategory(value);
-      setPage(1);
-    });
-  };
-
-  const handleLevelChange = (value: string) => {
-    startTransition(() => {
-      setSelectedLevel(value);
+      setSelectedTagIds(ids);
       setPage(1);
     });
   };
@@ -124,13 +108,11 @@ export default function ProblemLibraryPage() {
           </div>
 
           <ProblemLibraryFilterBar
-            categories={filters.categories}
-            levels={filters.levels}
-            selectedCategory={selectedCategory}
-            selectedLevel={selectedLevel}
-            onCategoryChange={handleCategoryChange}
-            onLevelChange={handleLevelChange}
-            disabled={isBusy}
+            tags={tags}
+            selectedTagIds={selectedTagIds}
+            onTagsChange={handleTagsChange}
+            loadStatus={tagsLoadStatus}
+            onRetry={retryTags}
           />
         </header>
 
@@ -170,6 +152,7 @@ export default function ProblemLibraryPage() {
                 <ProblemCard
                   key={problem.id}
                   item={problem}
+                  tagsById={tagsById}
                   onDeleteSuccess={() => setReloadToken(curr => curr + 1)}
                 />
               ))}

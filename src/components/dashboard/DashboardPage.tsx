@@ -11,6 +11,8 @@ import type { RevisionItemModel } from "../../shared/presenters/RevisionPresente
 import DashboardEmptyState from "./components/DashboardEmptyState.tsx";
 import DashboardItemsList from "./components/DashboardItemsList.tsx";
 import DashboardSkeleton from "./components/DashboardSkeleton.tsx";
+import LoadErrorState from "../common/LoadErrorState.tsx";
+import type { LoadStatus } from "../../shared/utilities/LoadStatus.ts";
 
 const statIcons = {
   "total-problems": FaChartBar,
@@ -23,7 +25,7 @@ const DashboardPage = () => {
   const [dashboard, setDashboard] = useState<DashboardModel>();
   
   const [items, setItems] = useState<RevisionItemModel[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
 
   const navigate = useNavigate();
 
@@ -45,13 +47,18 @@ const DashboardPage = () => {
         console.error("Error fetching revision items:", itemsResult.reason);
       }
 
-      setIsLoading(false);
+      setLoadStatus(dashboardResult.status === "rejected" || itemsResult.status === "rejected" ? "error" : "success");
     });
   }, []);
 
   useEffect(() => {
     loadDashboard();
   }, [loadDashboard]);
+
+  const handleRetry = () => {
+    setLoadStatus("loading");
+    loadDashboard();
+  };
 
   const handleCreateProblem = () => {
     navigate("/create");
@@ -65,7 +72,13 @@ const DashboardPage = () => {
       <Header showCreateButton />
 
       <section className="mx-auto max-w-[1200px] px-5 py-8">
-        {isLoading ? <DashboardSkeleton /> : (
+        {loadStatus === "loading" ? <DashboardSkeleton /> : loadStatus === "error" ? (
+          <LoadErrorState
+            title="Couldn't load your dashboard"
+            message="Check your connection and try again."
+            onRetry={handleRetry}
+          />
+        ) : (
           <>
             {dashboard?.revisionInfo ? (
               <RevisionHero revisionInfo={dashboard.revisionInfo} />

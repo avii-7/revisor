@@ -16,7 +16,7 @@ export default function ProblemLibraryEmptyState({
         No problems found
       </h2>
       <p className="mx-auto mt-3 max-w-xl text-body-lg text-on-surface-variant">
-        Try a different category or level, or add a new problem to your library.
+        Try changing your tag filters, or add a new problem to your library.
       </p>
       <button
         type="button"

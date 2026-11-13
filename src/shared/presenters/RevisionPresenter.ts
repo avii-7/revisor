@@ -68,7 +68,7 @@ function toRevisionItemModel(response: RevisionItemType): RevisionItemModel {
         due: response.due,
         lastReview: response.lastReview,
         revisionCount: response.revisionCount ?? 0,
-        tags: response.tags?.map(t => t.name) ?? [],
+        tagIds: response.tagIds ?? [],
     }
 }
 
@@ -79,7 +79,7 @@ function toPreviewRevisionItemModel(response: PreviewRevisionItemType): PreviewR
         subtitle: response.subtitle,
         lastReview: response.lastReview,
         revisionCount: response.revisionCount ?? 0,
-        tags: response.tags?.map(t => t.name) ?? [],
+        tagIds: response.tagIds ?? [],
     }
 }
 
@@ -90,8 +90,6 @@ function toProblemLibraryModel(response: PaginatedRevisionItemType): ProblemLibr
         pageSize: response.metadata.per,
         totalItems: response.metadata.total,
         totalPages: response.metadata.pageCount,
-        categories: [],
-        levels: [],
     };
 }
 
@@ -113,7 +111,7 @@ export interface PreviewRevisionItemModel {
     subtitle?: string | null;
     lastReview?: string | null;
     revisionCount?: number;
-    tags?: string[];
+    tagIds?: string[];
 }
 
 export interface RevisionItemModel {
@@ -126,9 +124,8 @@ export interface RevisionItemModel {
     nextRevision?: NextRevisionModel | null;
     due?: string;
     lastReview?: string | null;
-    category?: string | null;
     revisionCount?: number;
-    tags?: string[];
+    tagIds?: string[];
 }
 
 export interface ProblemLibraryModel {
@@ -137,8 +134,6 @@ export interface ProblemLibraryModel {
     pageSize: number;
     totalItems: number;
     totalPages: number;
-    categories: string[];
-    levels: string[];
 }
 
 export interface NextRevisionModel {
@@ -154,10 +149,6 @@ export interface NewRevisionItemRequest {
     platformUrl: string | null,
     keyIntuition: string | null,
     solutionCode: string | null,
-}
-
-export function getProblemCategoryLabel(item: RevisionItemModel): string {
-    return item.category || "Uncategorized";
 }
 
 export function getProblemRevisionSummary(item: RevisionItemModel): string {
@@ -176,8 +167,4 @@ export function getProblemActivitySummary(item: RevisionItemModel): string {
     }
 
     return "No revision activity yet";
-}
-
-function normalizeLabel(value: string): string {
-    return value.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }

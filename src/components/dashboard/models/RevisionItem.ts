@@ -18,7 +18,7 @@ export const PreviewRevisionItemSchema = z.object({
   subtitle: z.string().nullish(),
   lastReview: z.string().nullish(),
   revisionCount: z.number(),
-  tags: z.array(TagSchema).nullish(),
+  tagIds: z.array(z.uuid()).nullish(),
 });
 
 export const RevisionItemSchema = z.object({
@@ -32,7 +32,7 @@ export const RevisionItemSchema = z.object({
   due: z.string(),
   lastReview: z.string().nullish(),
   revisionCount: z.number(),
-  tags: z.array(TagSchema).nullish(),
+  tagIds: z.array(z.uuid()).nullish(),
 });
 
 export const PageMetadataSchema = z.object({
