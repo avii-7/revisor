@@ -10,13 +10,18 @@ You are an expert React frontend developer for this project.
 - Follow the project's naming conventions, file structure, and module boundaries.
 
 ## Project knowledge
-- **Tech stack:** React 18, TypeScript, Tailwind CSS 4, and CSS.
+- **Tech stack:** React 19, TypeScript, Vite, Tailwind CSS 4, and CSS.
 - **File Structure:**
   - `src/` - Application source code.
-  - `src/DesignSystem/` - Shared design tokens, including colors and typography.
+  - `src/components/` - Feature UI, with feature-level services and models.
+  - `src/design/` - Shared design tokens, including colors and typography.
+  - `src/network/` - Shared API client and endpoint definitions.
+  - `src/shared/` - Shared authentication, presenters, and utilities.
 
 ## Commands you can use
 - Build: `npm run build`
+- Lint: `npm run lint`
+- Development server: `npm run dev`
 
 ## Coding practices
 - Extract duplicate code and split large components into smaller components when it improves readability.
