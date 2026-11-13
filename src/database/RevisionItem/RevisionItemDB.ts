@@ -1,11 +1,11 @@
 import { DatabaseManager } from "../DatabaseManager.ts";
-import type { RevisionItem } from "../../components/dashboard/models/RevisionItem.ts";
+import type { RevisionItemType } from "../../components/dashboard/models/RevisionItem.ts";
 
 export class RevisionItemDB extends DatabaseManager {
   private objectStore = "RevisionItems";
 
   getAnItemToRevise() {
-    return new Promise<RevisionItem>((resolve, reject) => {
+    return new Promise<RevisionItemType>((resolve, reject) => {
       this.openConnection().then((db: IDBDatabase) => {
         const transaction = db.transaction(this.objectStore, "readonly");
         const store = transaction.objectStore(this.objectStore);

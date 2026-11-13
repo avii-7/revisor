@@ -1,26 +1,17 @@
 import axios from "axios";
-import { AuthenticationEndpoint } from "./Endpoints.ts";
 import humps from "humps";
-import CookieManager, { CookieConstant } from "../utilities/CookieConstant.ts";
-
-const nonJWTEndpoints: string[] = [AuthenticationEndpoint.oauthGoogle];
+import { HeaderConstantKey, HeaderConstantValue } from "./Endpoints";
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    [HeaderConstantKey.contentType]: HeaderConstantValue.applicationJson,
   },
+  withCredentials: true
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    if (config.url) {
-      if (!nonJWTEndpoints.includes(config.url)) {
-        const token = CookieManager.get(CookieConstant.jwtToken);
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-
     if (config.data) {
       config.data = humps.decamelizeKeys(config.data);
     }
@@ -28,18 +19,19 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log(error);
+    // console.log(error);
+    return Promise.reject(error);
   },
 );
 
 apiClient.interceptors.response.use(
   (response) => {
 
-    const contentType = response.headers["content-type"];
+    const contentType = response.headers[HeaderConstantKey.contentType];
 
     if (
       response.data &&
-      contentType?.toString().includes("application/json")
+      contentType?.toString().includes(HeaderConstantValue.applicationJson)
     ) {
       response.data = humps.camelizeKeys(response.data);
     }
@@ -47,10 +39,6 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      CookieManager.remove(CookieConstant.jwtToken);
-      window.location.href = "/auth";
-    }
     return Promise.reject(error);
   },
 );

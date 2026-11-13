@@ -1,28 +1,68 @@
 import apiClient from "../../../network/ApiClient.ts";
-import { RevisionItemEndpoint } from "../../../network/Endpoints.ts";
-import { RevisionItemSchema, type NewRevisionItem, type RevisionItem, type RevisionItemType } from "../models/RevisionItem.ts";
+import { RevisionEndpoint } from "../../../network/Endpoints.ts";
+import {
+    RevisionItemSchema,
+    type RevisionItemType,
+    type PaginatedRevisionItemType,
+    type CreateRevisionItemType,
+    type ReviewRequest,
+    PaginatedRevisionItemSchema,
+    type PreviewRevisionItemType,
+    PreviewRevisionItemSchema,
+} from "../models/RevisionItem.ts";
 import z from 'zod';
 
-export default class RevisionItemService {
+export interface PageRequestType {
+    page: number;
+    size: number;
+    tagIds?: string[];
+}
 
-    async getRevisionItems(): Promise<RevisionItemType[]> {
-        const response = await apiClient.get(RevisionItemEndpoint.revisionItems);
+export default class RevisionService {
+
+    async dueRevisionItems(): Promise<RevisionItemType[]> {
+        const response = await apiClient.get(RevisionEndpoint.dueItems);
         return z.array(RevisionItemSchema).parse(response.data);
     }
 
-    async create(item: NewRevisionItem) {
-        const response = await apiClient.post<NewRevisionItem>(RevisionItemEndpoint.revisionItems, item);
+    async previewRevisionItems(): Promise<PreviewRevisionItemType[]> {
+        const response = await apiClient.get(RevisionEndpoint.previewItems);
+        return z.array(PreviewRevisionItemSchema).parse(response.data);
+    }
+
+    async revisionItems(pageRequest: PageRequestType): Promise<PaginatedRevisionItemType> {
+        const params = new URLSearchParams({
+            page: String(pageRequest.page),
+            size: String(pageRequest.size),
+        });
+        pageRequest.tagIds?.forEach((id) => params.append("tag_ids", id));
+
+        const response = await apiClient.get(RevisionEndpoint.items, { params });
+        return PaginatedRevisionItemSchema.parse(response.data);
+    }
+
+    async create(item: CreateRevisionItemType) {
+        const response = await apiClient.post<CreateRevisionItemType>(RevisionEndpoint.items, item);
         console.log(response.status);
     }
 
-    async update(item: RevisionItem) {
-        console.log("Execute !!");
-        const response = await apiClient.patch(RevisionItemEndpoint.revisionItems, item);
+    async update(item: RevisionItemType) {
+        const response = await apiClient.patch(RevisionEndpoint.items, item);
         console.log(response.status);
+    }
+
+    async submitReview(request: ReviewRequest) {
+        const response = await apiClient.post(RevisionEndpoint.review(request.itemID), { rating: request.rating });
+        console.log(response.status);
+    }
+
+    async getRevisionItem(itemId: string): Promise<RevisionItemType> {
+        const response = await apiClient.get(RevisionEndpoint.item(itemId));
+        return RevisionItemSchema.parse(response.data);
     }
 
     async delete(itemId: string) {
-        const response = await apiClient.delete(`${RevisionItemEndpoint.revisionItems}/${itemId}`);
+        const response = await apiClient.delete(RevisionEndpoint.item(itemId));
         console.log(response.status);
     }
 }
