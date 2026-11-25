@@ -58,17 +58,18 @@ export default function Header({
                   flex items-center gap-2
                   rounded-lg px-5 py-3
                   text-label-sm font-medium
-                  text-on-primary-container
-                  bg-primary-container
+                  text-primary-fixed
+                  bg-inverse-primary
                   border border-primary/30
-                  shadow-[0_12px_32px_rgba(77,142,255,0.22)]
+                  shadow-lg shadow-primary-container/20
                   transition
-                  hover:brightness-110
+                  hover:bg-on-primary-fixed-variant
+                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
                   active:scale-95
                   cursor-pointer
                 "
             >
-              <FaPlus className="text-sm" />
+              <FaPlus aria-hidden="true" className="text-sm" />
               Create Item
             </button>
           )}
