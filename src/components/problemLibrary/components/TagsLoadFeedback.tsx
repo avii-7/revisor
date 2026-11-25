@@ -2,10 +2,11 @@ import type { LoadStatus } from "../../../shared/utilities/LoadStatus.ts";
 
 interface TagsLoadFeedbackProps {
   loadStatus: LoadStatus;
+  errorReason: string | undefined;
   onRetry: () => void;
 }
 
-export default function TagsLoadFeedback({ loadStatus, onRetry }: TagsLoadFeedbackProps) {
+export default function TagsLoadFeedback({ loadStatus, errorReason, onRetry }: TagsLoadFeedbackProps) {
   if (loadStatus === "success") return null;
 
   if (loadStatus === "loading") {
@@ -22,7 +23,7 @@ export default function TagsLoadFeedback({ loadStatus, onRetry }: TagsLoadFeedba
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-body-md">
-      <p role="alert" className="text-on-surface-variant">Couldn't load tags.</p>
+      <p role="alert" className="text-on-surface-variant">{errorReason ?? "Couldn't load tags."}</p>
       <button
         type="button"
         onClick={onRetry}

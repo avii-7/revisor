@@ -21,6 +21,7 @@ const RevisionEndpoint = {
 
 const TagEndpoint = {
   tags: "tags/",
+  tag: (tagId: string) => `tags/${tagId}`,
 } as const;
 
 const DashboardEndpoint = {

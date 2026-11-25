@@ -2,6 +2,7 @@ import { relativeTime } from "../utilities/dateUtils.ts";
 import type { PageRequestType } from "../../components/dashboard/services/RevisionItemService";
 import type {
     RevisionItemType,
+    CreateRevisionItemType,
     NextRevisionType,
     PaginatedRevisionItemType,
     PreviewRevisionItemType,
@@ -31,7 +32,7 @@ export class RevisionPresnter {
         return toProblemLibraryModel(await this.service.revisionItems(query));
     }
 
-    async create(item: NewRevisionItemRequest) {
+    async create(item: CreateRevisionItemType) {
         await this.service.create(item);
     }
 
@@ -47,6 +48,7 @@ export class RevisionPresnter {
             platformUrl: updatedFields.platformUrl !== undefined ? updatedFields.platformUrl : currentItem.platformUrl,
             keyIntuition: updatedFields.keyIntuition !== undefined ? updatedFields.keyIntuition : currentItem.keyIntuition,
             solutionCode: updatedFields.solutionCode !== undefined ? updatedFields.solutionCode : currentItem.solutionCode,
+            tagIds: updatedFields.tagIds ?? currentItem.tagIds,
         };
         await this.service.update(merged);
     }
@@ -141,14 +143,6 @@ export interface NextRevisionModel {
     good: string;
     hard: string;
     again: string;
-}
-
-export interface NewRevisionItemRequest {
-    title: string;
-    content: string | null,
-    platformUrl: string | null,
-    keyIntuition: string | null,
-    solutionCode: string | null,
 }
 
 export function getProblemRevisionSummary(item: RevisionItemModel): string {

@@ -17,7 +17,7 @@ export default function ProblemLibraryPage() {
   const navigate = useNavigate();
   const [isPending, startTransition] = useTransition();
 
-  const { tags, tagsById, loadStatus: tagsLoadStatus, retry: retryTags } = useTags();
+  const { tags, tagsById, loadStatus: tagsLoadStatus, errorReason: tagsErrorReason, retry: retryTags } = useTags();
   const [pageData, setPageData] = useState<ProblemLibraryModel>();
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [page, setPage] = useState(1);
@@ -112,6 +112,7 @@ export default function ProblemLibraryPage() {
             selectedTagIds={selectedTagIds}
             onTagsChange={handleTagsChange}
             loadStatus={tagsLoadStatus}
+            errorReason={tagsErrorReason}
             onRetry={retryTags}
           />
         </header>

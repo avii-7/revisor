@@ -8,6 +8,7 @@ interface ProblemLibraryFilterBarProps {
   selectedTagIds: string[];
   onTagsChange: (ids: string[]) => void;
   loadStatus: LoadStatus;
+  errorReason: string | undefined;
   onRetry: () => void;
 }
 
@@ -16,10 +17,11 @@ export default function ProblemLibraryFilterBar({
   selectedTagIds,
   onTagsChange,
   loadStatus,
+  errorReason,
   onRetry,
 }: ProblemLibraryFilterBarProps) {
   if (loadStatus !== "success") {
-    return <TagsLoadFeedback loadStatus={loadStatus} onRetry={onRetry} />;
+    return <TagsLoadFeedback loadStatus={loadStatus} errorReason={errorReason} onRetry={onRetry} />;
   }
 
   return (

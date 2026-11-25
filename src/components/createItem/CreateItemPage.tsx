@@ -15,41 +15,61 @@ import DotGridBackground from "../common/DotGridBackground.tsx";
 import Header from "../common/Header.tsx";
 import { Tab } from "./Tab";
 import { revisionPresetner } from "../../shared/container.ts";
-import type { NewRevisionItemRequest } from "../../shared/presenters/RevisionPresenter.ts";
+import { getApiErrorReason } from "../../network/getApiErrorReason.ts";
+import type { LoadStatus } from "../../shared/utilities/LoadStatus.ts";
+import ItemTagsField from "./ItemTagsField.tsx";
 
-const CreateItemPage = () => {
-  const navigate = useNavigate();
+export default function CreateItemPage() {
   const { id } = useParams<{ id: string }>();
+  return <RevisionItemForm key={id ?? "create"} id={id} />;
+}
+
+function RevisionItemForm({ id }: { id?: string }) {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [activeTab, setActiveTab] = useState<Tab>(Tab.intuition);
   const [intuition, setIntuition] = useState("");
   const [code, setCode] = useState("");
+  const [savedTagIds, setSavedTagIds] = useState<string[]>([]);
+  const [draftTagIds, setDraftTagIds] = useState<string[]>();
   const [isSaving, setIsSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>(id ? "loading" : "success");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
+    let active = true;
     const fetchItemDetails = async () => {
-      setIsLoading(true);
       try {
         const item = await revisionPresetner.loadItem(id);
+        if (!active) return;
         setTitle(item.title);
         setUrl(item.platformUrl || "");
         setIntuition(item.keyIntuition || "");
         setCode(item.solutionCode || "");
+        setSavedTagIds([...new Set(item.tagIds)]);
+        setLoadStatus("success");
       } catch (err) {
+        if (!active) return;
         console.error("Failed to load problem details:", err);
-        setError("Failed to load problem details. Please try again.");
-      } finally {
-        setIsLoading(false);
+        setError(getApiErrorReason(err) ?? "Failed to load problem details. Please try again.");
+        setLoadStatus("error");
       }
     };
-    fetchItemDetails();
+    void fetchItemDetails();
+    return () => { active = false; };
   }, [id]);
 
   const intuitionRef = useRef<HTMLTextAreaElement>(null);
+
+  const changeTagSelection = (tagId: string, selected: boolean) => {
+    setDraftTagIds((draft) => {
+      const current = draft ?? savedTagIds;
+      if (selected === current.includes(tagId)) return draft;
+      return selected ? [...current, tagId] : current.filter((id) => id !== tagId);
+    });
+  };
 
   const insertMarkdown = (syntax: string) => {
     const textarea = intuitionRef.current;
@@ -86,6 +106,7 @@ const CreateItemPage = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loadStatus !== "success" || isSaving) return;
     if (!title.trim()) {
       setError("Problem title is required.");
       return;
@@ -95,27 +116,25 @@ const CreateItemPage = () => {
     setError(null);
 
     try {
+      const fields = {
+        title: title.trim(),
+        platformUrl: url.trim(),
+        keyIntuition: intuition.trim(),
+        solutionCode: code.trim(),
+      };
       if (id) {
         await revisionPresetner.update(id, {
-          title: title.trim(),
-          platformUrl: url.trim() || null,
-          keyIntuition: intuition.trim(),
-          solutionCode: code.trim(),
+          ...fields,
+          platformUrl: fields.platformUrl || null,
+          tagIds: draftTagIds,
         });
       } else {
-        const newItem: NewRevisionItemRequest = {
-          title: title.trim(),
-          content: null,
-          platformUrl: url.trim(),
-          keyIntuition: intuition.trim(),
-          solutionCode: code.trim(),
-        };
-        await revisionPresetner.create(newItem);
+        await revisionPresetner.create({ ...fields, content: null, tagIds: draftTagIds });
       }
       navigate("/");
     } catch (err) {
       console.error("Failed to save problem:", err);
-      setError("Failed to save the problem. Please check your connection and try again.");
+      setError(getApiErrorReason(err) ?? "Failed to save the problem. Please check your connection and try again.");
     } finally {
       setIsSaving(false);
     }
@@ -160,7 +179,7 @@ const CreateItemPage = () => {
             <button
               type="button"
               onClick={handleSave}
-              disabled={isSaving}
+              disabled={isSaving || loadStatus !== "success"}
               className="flex items-center gap-2 rounded-lg bg-primary-container px-6 py-2.5 text-label-sm font-semibold text-on-primary-container shadow-[0_12px_30px_rgba(77,142,255,0.22)] transition hover:bg-primary hover:text-on-primary hover:shadow-[0_12px_36px_rgba(77,142,255,0.35)] active:scale-[0.98] disabled:opacity-50 focus:outline-none cursor-pointer"
             >
               <FaSave className="size-4" /> {id ? "Save Changes" : "Save Problem"}
@@ -169,18 +188,19 @@ const CreateItemPage = () => {
         </header>
 
         {error && (
-          <div className="mt-6 p-4 rounded-lg bg-error-container/20 border border-error/30 text-error text-body-md">
+          <div role="alert" className="mt-6 p-4 rounded-lg bg-error-container/20 border border-error/30 text-error text-body-md">
             {error}
           </div>
         )}
 
-        {isLoading ? (
+        {loadStatus === "loading" && (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
-        ) : (
+        )}
+        {loadStatus === "success" && (
           <form onSubmit={handleSave} className="mt-8 flex flex-col gap-6">
-          {/* Card 1: Title and URL */}
+          {/* Card 1: Problem details */}
           <div className="bg-surface-container-low/65 backdrop-blur-md border border-outline-variant/35 rounded-xl p-6 shadow-md flex flex-col gap-5">
             <div className="flex flex-col">
               <label
@@ -221,6 +241,8 @@ const CreateItemPage = () => {
                 />
               </div>
             </div>
+
+            <ItemTagsField selectedIds={draftTagIds ?? savedTagIds} onSelectionChange={changeTagSelection} disabled={isSaving} />
           </div>
 
           {/* Card 2: Tabs and Main Intuition/Code editors */}
@@ -307,6 +329,4 @@ const CreateItemPage = () => {
       </div>
     </main>
   );
-};
-
-export default CreateItemPage;
+}

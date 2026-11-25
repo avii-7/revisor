@@ -11,7 +11,7 @@ interface DashboardItemsListProps {
 }
 
 export default function DashboardItemsList({ items, onDeleteSuccess }: DashboardItemsListProps) {
-  const { tagsById, loadStatus, retry } = useTags();
+  const { tagsById, loadStatus, errorReason, retry } = useTags();
 
   return (
     <>
@@ -28,7 +28,7 @@ export default function DashboardItemsList({ items, onDeleteSuccess }: Dashboard
       </div>
 
       <section className="mt-4 space-y-5">
-        <TagsLoadFeedback loadStatus={loadStatus} onRetry={retry} />
+        <TagsLoadFeedback loadStatus={loadStatus} errorReason={errorReason} onRetry={retry} />
         {items.map((item) => (
           <ProblemCard key={item.id} item={item} tagsById={tagsById} onDeleteSuccess={onDeleteSuccess} />
         ))}

@@ -53,7 +53,8 @@ const CreateRevisionItemSchema = z.object({
   content: z.string().nullable(),
   platformUrl: z.string().nullable(),
   keyIntuition: z.string().nullable(),
-  solutionCode: z.string().nullable()
+  solutionCode: z.string().nullable(),
+  tagIds: z.array(z.uuid()).optional(),
 });
 
 const RatingSchema = ["easy", "good", "hard", "again"] as const;
