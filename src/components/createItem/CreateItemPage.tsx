@@ -61,8 +61,8 @@ const CreateItemPage = () => {
     const before = text.substring(0, start);
     const after = text.substring(end, text.length);
 
-    let newText = "";
-    let cursorOffset = 0;
+    let newText: string;
+    let cursorOffset: number;
 
     if (syntax === "\n- ") {
       newText = `${before}\n- ${after}`;
@@ -90,11 +90,6 @@ const CreateItemPage = () => {
       setError("Problem title is required.");
       return;
     }
-
-    // if (!intuition.trim()) {
-    //   setError("Key intuition is required.");
-    //   return;
-    // }
 
     setIsSaving(true);
     setError(null);
