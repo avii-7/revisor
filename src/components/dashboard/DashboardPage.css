@@ -1,0 +1,15 @@
+@media (prefers-reduced-motion: no-preference) {
+  .dashboard-refresh__indicator {
+    animation: dashboard-refresh 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes dashboard-refresh {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(300%);
+  }
+}

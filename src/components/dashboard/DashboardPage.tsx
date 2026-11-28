@@ -1,5 +1,5 @@
 import { FaChartBar, FaRedoAlt } from "react-icons/fa";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 import Header from "../common/Header.tsx";
 import RevisionHero from "./RevisionHero.tsx";
@@ -8,46 +8,68 @@ import { dashboardPresenter, revisionPresetner } from "../../shared/container.ts
 import type { RevisionItemModel } from "../../shared/presenters/RevisionPresenter.ts";
 import DashboardEmptyState from "./components/DashboardEmptyState.tsx";
 import DashboardItemsList from "./components/DashboardItemsList.tsx";
-import DashboardSkeleton from "./components/DashboardSkeleton.tsx";
+import DashboardSkeleton, { DashboardItemsSkeleton } from "./components/DashboardSkeleton.tsx";
 import LoadErrorState from "../common/LoadErrorState.tsx";
 import type { LoadStatus } from "../../shared/utilities/LoadStatus.ts";
+import "./DashboardPage.css";
+
+type DashboardLoadStatus = LoadStatus | "refreshing";
 
 const DashboardPage = () => {
 
   const [dashboard, setDashboard] = useState<DashboardModel>();
-  
-  const [items, setItems] = useState<RevisionItemModel[]>([]);
-  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
-
-  const loadDashboard = useCallback(() => {
-    return Promise.allSettled([
-      dashboardPresenter.load(),
-      revisionPresetner.previewRevisionItems(),
-    ]).then(([dashboardResult, itemsResult]) => {
-
-      if (dashboardResult.status === "fulfilled") {
-        setDashboard(dashboardResult.value);
-      } else {
-        console.error("Error fetching dashboard data:", dashboardResult.reason);
-      }
-
-      if (itemsResult.status === "fulfilled") {
-        setItems(itemsResult.value);
-      } else {
-        console.error("Error fetching revision items:", itemsResult.reason);
-      }
-
-      setLoadStatus(dashboardResult.status === "rejected" || itemsResult.status === "rejected" ? "error" : "success");
-    });
-  }, []);
+  const [items, setItems] = useState<RevisionItemModel[]>();
+  const [dashboardStatus, setDashboardStatus] = useState<DashboardLoadStatus>("loading");
+  const [itemsStatus, setItemsStatus] = useState<DashboardLoadStatus>("loading");
+  const [dashboardReload, setDashboardReload] = useState(0);
+  const [itemsReload, setItemsReload] = useState(0);
+  const isRefreshing = dashboardStatus === "refreshing" || itemsStatus === "refreshing";
 
   useEffect(() => {
-    loadDashboard();
-  }, [loadDashboard]);
+    let active = true;
 
-  const handleRetry = () => {
-    setLoadStatus("loading");
-    loadDashboard();
+    dashboardPresenter.load().then((data) => {
+      if (!active) return;
+      setDashboard(data);
+      setDashboardStatus("success");
+    }, (error) => {
+      if (!active) return;
+      console.error("Error fetching dashboard data:", error);
+      setDashboardStatus("error");
+    });
+
+    return () => { active = false; };
+  }, [dashboardReload]);
+
+  useEffect(() => {
+    let active = true;
+
+    revisionPresetner.previewRevisionItems().then((data) => {
+      if (!active) return;
+      setItems(data);
+      setItemsStatus("success");
+    }, (error) => {
+      if (!active) return;
+      console.error("Error fetching revision items:", error);
+      setItemsStatus("error");
+    });
+
+    return () => { active = false; };
+  }, [itemsReload]);
+
+  const retryDashboard = () => {
+    setDashboardStatus("refreshing");
+    setDashboardReload((current) => current + 1);
+  };
+
+  const retryItems = () => {
+    setItemsStatus("refreshing");
+    setItemsReload((current) => current + 1);
+  };
+
+  const refreshAfterDelete = () => {
+    retryDashboard();
+    retryItems();
   };
 
   return (
@@ -57,12 +79,22 @@ const DashboardPage = () => {
 
       <Header showCreateButton />
 
+      {isRefreshing && (
+        <div
+          role="progressbar"
+          aria-label="Refreshing dashboard"
+          className="pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 overflow-hidden bg-primary/20"
+        >
+          <div className="dashboard-refresh__indicator h-full w-full bg-primary motion-safe:w-1/3" />
+        </div>
+      )}
+
       <section className="mx-auto max-w-[1200px] px-5 py-8">
-        {loadStatus === "loading" ? <DashboardSkeleton /> : loadStatus === "error" || !dashboard ? (
+        {dashboardStatus === "loading" ? <DashboardSkeleton /> : !dashboard ? (
           <LoadErrorState
             title="Couldn't load your dashboard"
             message="Check your connection and try again."
-            onRetry={handleRetry}
+            onRetry={retryDashboard}
           />
         ) : dashboard.revisionInfo.state === "empty" ? (
           <DashboardEmptyState revisionInfo={dashboard.revisionInfo} />
@@ -91,9 +123,21 @@ const DashboardPage = () => {
                 );
               })}
             </div>
-
-            <DashboardItemsList items={items} onDeleteSuccess={loadDashboard} />
           </>
+        )}
+
+        {dashboard?.revisionInfo.state !== "empty" && (
+          <div className="mt-9">
+            {itemsStatus === "loading" ? <DashboardItemsSkeleton /> : !items ? (
+              <LoadErrorState
+                title="Couldn't load recent problems"
+                message="Check your connection and try again."
+                onRetry={retryItems}
+              />
+            ) : (
+              <DashboardItemsList items={items} onDeleteSuccess={refreshAfterDelete} />
+            )}
+          </div>
         )}
       </section>
     </main>

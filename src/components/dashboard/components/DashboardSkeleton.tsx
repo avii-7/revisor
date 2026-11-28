@@ -19,8 +19,17 @@ export default function DashboardSkeleton() {
             </div>
           ))}
         </div>
+      </div>
+    </>
+  );
+}
 
-        <div className="mt-9 flex items-center justify-between gap-4">
+export function DashboardItemsSkeleton() {
+  return (
+    <>
+      <div role="status" className="sr-only">Loading recent problems...</div>
+      <div aria-hidden="true" className="motion-safe:animate-pulse">
+        <div className="flex items-center justify-between gap-4">
           <div className="h-4 w-32 rounded bg-surface-container-high" />
           <div className="h-4 w-20 rounded bg-surface-container-high" />
         </div>

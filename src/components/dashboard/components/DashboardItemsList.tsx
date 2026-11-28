@@ -15,7 +15,7 @@ export default function DashboardItemsList({ items, onDeleteSuccess }: Dashboard
 
   return (
     <>
-      <div className="mt-9 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <h2 className="text-label-sm font-medium text-on-surface-variant">
           Recent Mastery
         </h2>
