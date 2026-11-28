@@ -1,9 +1,7 @@
 import { FaChartBar, FaRedoAlt } from "react-icons/fa";
-import { useNavigate } from "react-router";
 import { useCallback, useEffect, useState } from "react";
 import DotGridBackground from "../common/DotGridBackground.tsx";
 import Header from "../common/Header.tsx";
-import Hero from "./Hero.tsx";
 import RevisionHero from "./RevisionHero.tsx";
 import type { DashboardModel } from "./services/DashboardPresenter.ts";
 import { dashboardPresenter, revisionPresetner } from "../../shared/container.ts";
@@ -14,20 +12,12 @@ import DashboardSkeleton from "./components/DashboardSkeleton.tsx";
 import LoadErrorState from "../common/LoadErrorState.tsx";
 import type { LoadStatus } from "../../shared/utilities/LoadStatus.ts";
 
-const statIcons = {
-  "total-problems": FaChartBar,
-  "total-revisions": FaRedoAlt,
-  "success-rate": FaChartBar,
-};
-
 const DashboardPage = () => {
 
   const [dashboard, setDashboard] = useState<DashboardModel>();
   
   const [items, setItems] = useState<RevisionItemModel[]>([]);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading");
-
-  const navigate = useNavigate();
 
   const loadDashboard = useCallback(() => {
     return Promise.allSettled([
@@ -60,10 +50,6 @@ const DashboardPage = () => {
     loadDashboard();
   };
 
-  const handleCreateProblem = () => {
-    navigate("/create");
-  };
-
   return (
     <main className="min-h-screen bg-app-gradient relative font-primary text-on-surface">
 
@@ -72,23 +58,21 @@ const DashboardPage = () => {
       <Header showCreateButton />
 
       <section className="mx-auto max-w-[1200px] px-5 py-8">
-        {loadStatus === "loading" ? <DashboardSkeleton /> : loadStatus === "error" ? (
+        {loadStatus === "loading" ? <DashboardSkeleton /> : loadStatus === "error" || !dashboard ? (
           <LoadErrorState
             title="Couldn't load your dashboard"
             message="Check your connection and try again."
             onRetry={handleRetry}
           />
+        ) : dashboard.revisionInfo.state === "empty" ? (
+          <DashboardEmptyState revisionInfo={dashboard.revisionInfo} />
         ) : (
           <>
-            {dashboard?.revisionInfo ? (
-              <RevisionHero revisionInfo={dashboard.revisionInfo} />
-            ) : (
-              <Hero />
-            )}
+            <RevisionHero revisionInfo={dashboard.revisionInfo} />
 
             <div className="mt-8 grid gap-6 md:grid-cols-3">
-              {dashboard?.revisionStats.map((stat: { id: string; title: string; value: string }) => {
-                const Icon = statIcons[stat.id as keyof typeof statIcons] ?? FaChartBar;
+              {dashboard.revisionStats.map((stat) => {
+                const Icon = stat.id === "due_revision_items" ? FaRedoAlt : FaChartBar;
                 return (
                   <article
                     className="rounded-lg border border-outline-variant/70 bg-surface-container-low p-6"
@@ -108,11 +92,7 @@ const DashboardPage = () => {
               })}
             </div>
 
-            {items.length === 0 ? (
-              <DashboardEmptyState onCreateProblem={handleCreateProblem} />
-            ) : (
-              <DashboardItemsList items={items} onDeleteSuccess={loadDashboard} />
-            )}
+            <DashboardItemsList items={items} onDeleteSuccess={loadDashboard} />
           </>
         )}
       </section>
